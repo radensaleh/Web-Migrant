@@ -15,17 +15,18 @@ class User extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
-        return [
-            'kd_user' =>$this->kd_user,
-            'nama_lengkap' =>$this->nama_lengkap,
-            'jenis_kelamin' =>$this->jenis_kelamin,
-            'nomer_hp' => $this->nomer_hp,
-            'email' => $this->email,
-            'provinsi' => $this->provinsi,
-            'daerah' => $this->daerah,
-            'nama_daerah' => $this->nama_daerah,
-            'detail_alamat' => $this->detail_alamat,
-            'foto_user' => $this->status
-        ];
+            return [
+                'kd_user' =>$this->kd_user,
+                'nama_lengkap' =>$this->nama_lengkap,
+                'jenis_kelamin' =>$this->jenis_kelamin,
+                'nomer_hp' => $this->nomer_hp,
+                'email' => $this->email,
+                'provinsi' => $this->provinsi,
+                'daerah' => $this->daerah,
+                'nama_daerah' => $this->nama_daerah,
+                'detail_alamat' => $this->detail_alamat,
+                'status' =>$this->status,
+                'foto_user' => $this->foto_user
+            ];
     }
 }

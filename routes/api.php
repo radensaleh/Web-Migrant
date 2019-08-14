@@ -16,5 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+//Login
+Route::post("/Login", "API\UserController@login");
 
-Route::post("/Login", "UserController@login");
+//Register
+Route::post("/Register", "API\UserController@register");
+
+//Update data User
+Route::put("/UserUpdate", "API\UserController@updateUser");
