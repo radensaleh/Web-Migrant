@@ -16,7 +16,7 @@ class AdminController extends Controller
       }
     }
 
-    public function dashboardAdmin(Request $request){
+    public function dashboard(Request $request){
       if(!$request->session()->exists('username')){
           return redirect()->route('loginPage');
       }else{
@@ -34,8 +34,8 @@ class AdminController extends Controller
         $auth = auth()->guard('admin');
 
         $credentials = [
-        'username'    => $request->username,
-        'password' => $request->password,
+          'username'    => $request->username,
+          'password' => $request->password,
         ];
 
         $validator = Validator::make($request->all(), [

@@ -47,6 +47,11 @@ return [
             'provider' => 'admin',
         ],
 
+        'koordinator' => [
+            'driver' => 'session',
+            'provider' => 'koordinator',
+        ],
+
 
         'api' => [
             'driver' => 'token',
@@ -82,6 +87,11 @@ return [
         'admin' => [
             'driver' => 'eloquent',
             'model' => App\Admin::class,
+        ],
+
+        'koordinator' => [
+            'driver' => 'eloquent',
+            'model' => App\Koordinator::class,
         ],
 
         // 'users' => [
