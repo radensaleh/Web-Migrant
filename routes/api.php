@@ -26,3 +26,6 @@ Route::post("/Register", "API\UserController@register");
 
 //Update data User
 Route::put("/UserUpdate", "API\UserController@updateUser");
+
+//Register Toko
+Route::post("/RegisterToko", "API\TokoController@register");

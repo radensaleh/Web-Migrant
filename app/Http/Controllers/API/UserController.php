@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\User;
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User as UserResource;
 use App\Http\Controllers\Controller;
 
@@ -20,16 +22,18 @@ class UserController extends Controller
     {
         $email = $request->input('email');
         $password = $request->input('password');
-        $user = User::where('email', '=', $email)->
-        where('password', '=', $password)->get();
+        $user = DB::table('tb_user')->where('email', '=', $email)->
+        where('password', '=', $password)->first();
 
-        if($user->isEmpty()) {
+        if($user==null) {
             return [
                 'status' => '404'
             ];
         }
         else {
-            return UserResource::collection($user);
+            return response()->json([
+                $user
+            ]);
         }
     }
 
