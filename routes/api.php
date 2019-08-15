@@ -18,3 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post("/Login", "UserController@login");
+
+//api validasi tokens
+Route::post("validasiToken", "API\TokenAPIController@checkToken");
