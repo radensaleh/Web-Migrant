@@ -8,8 +8,14 @@ class Token extends Model
 {
     protected $table = 'tb_token';
 
-    protected $fillable = 
+    protected $fillable =
     [
         'id_token', 'token', 'kd_koordinator','status'
     ];
+
+    protected $primaryKey = 'id_token';
+
+    public function koordinator(){
+       return $this->belongsTo('App\Koordinator','kd_koordinator');
+    }
 }

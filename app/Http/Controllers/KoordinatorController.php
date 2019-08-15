@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Toko;
+use App\Token;
 
 class KoordinatorController extends Controller
 {
@@ -25,8 +27,21 @@ class KoordinatorController extends Controller
                 ->where('nomer_hp', $koor)
                 ->orWhere('email', $koor)
                 ->value('nama_lengkap');
+
+        $toko = Toko::count();
+
+        $kd_koordinator = DB::table('tb_koordinator')
+                    ->where('nomer_hp', $koor)
+                    ->orWhere('email', $koor)
+                    ->value('kd_koordinator');
+
+        $token = DB::table('tb_token')
+                 ->join('tb_koordinator', 'tb_koordinator.kd_koordinator', '=', 'tb_token.kd_koordinator')
+                 ->where('tb_token.kd_koordinator', $kd_koordinator)
+                 ->count();
+
         return view('koordinator.dashboard', compact(
-            'name'
+            'name','toko','token'
         ));
       }
     }
@@ -67,7 +82,35 @@ class KoordinatorController extends Controller
     }
 
     public function logoutKoordinator(Request $request){
-      $request->session()->forget('koordinator');
-      return redirect()->route('loginPageKoor');
+        $request->session()->forget('koordinator');
+        return redirect()->route('loginPageKoor');
+    }
+
+
+    //TOKEN
+    public function dataToken(Request $request){
+        if(!$request->session()->exists('koordinator')){
+          return redirect()->route('loginPageKoor');
+        }else{
+          $koor = $request->session()->get('koordinator');
+          $name = DB::table('tb_koordinator')
+                  ->where('nomer_hp', $koor)
+                  ->orWhere('email', $koor)
+                  ->value('nama_lengkap');
+
+          $kd_koordinator = DB::table('tb_koordinator')
+                      ->where('nomer_hp', $koor)
+                      ->orWhere('email', $koor)
+                      ->value('kd_koordinator');
+
+          $token = DB::table('tb_token')
+                   ->join('tb_koordinator', 'tb_koordinator.kd_koordinator', '=', 'tb_token.kd_koordinator')
+                   ->where('tb_token.kd_koordinator', $kd_koordinator)
+                   ->get();
+
+          return view('koordinator.dataToken', compact(
+              'name','token','kd_koordinator'
+          ));
+        }
     }
 }

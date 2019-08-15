@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Koordinator;
+use App\Toko;
+use App\JenisBarang;
+use App\User;
 
 class AdminController extends Controller
 {
@@ -24,8 +28,13 @@ class AdminController extends Controller
           $name  = DB::table('tb_admin')
                       ->where('username', $username)
                       ->value('nama_admin');
+
+          $koordinator = Koordinator::count();
+          $toko = Toko::count();
+          $jenisBarang = JenisBarang::count();
+
           return view('admin.dashboard', compact(
-              'name'
+              'name','koordinator','toko','jenisBarang'
           ));
       }
     }
@@ -66,7 +75,61 @@ class AdminController extends Controller
     }
 
     public function logoutAdmin(Request $request){
-      $request->session()->forget('username');
-      return redirect()->route('loginPage');
+        $request->session()->forget('username');
+        return redirect()->route('loginPage');
     }
+
+
+    //KOORDINATOR
+    public function dataKoordinator(Request $request){
+        if(!$request->session()->exists('username')){
+            return redirect()->route('loginPage');
+        }else{
+          $username = $request->session()->get('username');
+          $name  = DB::table('tb_admin')
+                      ->where('username', $username)
+                      ->value('nama_admin');
+
+          $koordinator = Koordinator::all();
+          return view('admin.dataKoordinator', compact(
+              'name','koordinator'
+          ));
+        }
+    }
+
+    //TOKO
+    public function dataToko(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $toko = Toko::all();
+        $user = User::all();
+        return view('admin.dataToko', compact(
+            'name','toko','user'
+        ));
+      }
+    }
+
+    //JENIS BARANG
+    public function dataJenisBarang(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $jenisBarang = JenisBarang::all();
+        return view('admin.dataJenisBarang', compact(
+            'name','jenisBarang'
+        ));
+      }
+    }
+
 }

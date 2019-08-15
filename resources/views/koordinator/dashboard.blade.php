@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dashboard | Admin Migrant Shop</title>
+    <title>Dashboard | Koordinator Migrant Shop</title>
 
     <!-- <link rel="apple-touch-icon" href="/images/icon.png">
     <link rel="shortcut icon" href="/images/icon.png"> -->
@@ -73,23 +73,17 @@
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="{{ route('dashboardAdmin') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
+                        <a href="{{ route('dashboardKoordinator') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
                     </li>
                     <li class="menu-title">Data</li><!-- /.menu-title -->
-                    <li>
-                        <a href="{{ route('dataKoordinator') }}"><i class="menu-icon fa fa-user"></i>Data Koordinator </a>
-                    </li>
                     <li>
                         <a href="{{ route('dataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
                     </li>
                     <li>
-                        <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
+                        <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaski </a>
                     </li>
                     <li>
-                        <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
-                    </li>
-                    <li>
-                        <a href=""><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                        <a href="{{ route('dataToken') }}"><i class="menu-icon fa fa-database"></i>Data Token </a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -102,7 +96,7 @@
         <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{{ route('dashboardAdmin')}}">// LOGO SLURR</a>
+                    <a class="navbar-brand" href="{{ route('dashboardKoordinator')}}">// LOGO SLURR</a>
                     <!-- <a class="navbar-brand" href="{{ route('dashboardAdmin')}}"><img src="/images/Logo_MGOLEM_Web1.png" width="170" height="40" alt="Logo"></a>
                     <a class="navbar-brand hidden" href="{{ route('dashboardAdmin') }}"><img src="/images/logo2.png" alt="Logo"></a> -->
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
@@ -143,7 +137,7 @@
 
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="/images/admin/boy.png" alt="User Avatar">
+                            <img class="user-avatar rounded-circle" src="/images/koordinator/boy.png" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu">
@@ -167,23 +161,6 @@
             <div class="animated fadeIn">
                 <!-- Widgets  -->
                 <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-2">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">{{ $koordinator }}</span></div>
-                                            <div class="stat-heading">Koordinator</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
@@ -207,31 +184,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-4">
-                                        <i class="fa fa-tags"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">{{ $jenisBarang }}</span></div>
-                                            <div class="stat-heading">Jenis Barang</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-6">
+                                    <div class="stat-icon dib flat-color-2">
                                         <i class="fa fa-shopping-cart"></i>
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
                                             <div class="stat-text"><span class="count">0</span></div>
-                                            <div class="stat-heading">Konfirmasi Pembayaran</div>
+                                            <div class="stat-heading">Transaski</div>
                                         </div>
                                     </div>
                                 </div>
@@ -239,17 +198,17 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
                                 <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-5">
-                                        <i class="fa fa-database"></i>
+                                    <div class="stat-icon dib flat-color-3">
+                                        <i class="fa fa-qrcode"></i>
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">0</span></div>
-                                            <div class="stat-heading">Pembayaran</div>
+                                            <div class="stat-text"><span class="count">{{ $token }}</span></div>
+                                            <div class="stat-heading">Token</div>
                                         </div>
                                     </div>
                                 </div>
