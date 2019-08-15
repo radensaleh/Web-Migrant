@@ -29,4 +29,8 @@ class Koordinator extends Authenticatable
     {
       $this->attributes['password'] = bcrypt($value);
     }
+
+    public function token(){
+       return $this->hasMany('App\Token', 'kd_koordinator');
+    }
 }
