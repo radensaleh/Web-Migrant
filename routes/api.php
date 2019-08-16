@@ -24,8 +24,20 @@ Route::post("validasiToken", "API\TokenAPIController@checkToken");
 //Register
 Route::post("/Register", "API\UserController@register");
 
-//Update data User
+//Update data User -> Require kd_user and Data to be Change
 Route::put("/UserUpdate", "API\UserController@updateUser");
 
 //Register Toko
 Route::post("/RegisterToko", "API\TokoController@register");
+
+//Update Data Toko -> Require Kd_toko and Data to be Change
+Route::put("/Toko", "API\TokoController@update");
+
+//Get Data toko by id user
+Route::get("/Toko/{kd_user}", "API\TokoController@getToko");
+
+//Bank
+Route::get("/Bank", "API\BankController@index");
+
+//JenisBarang
+Route::get("/JenisBarang", "API\JenisBarangController@index");

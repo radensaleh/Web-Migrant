@@ -78,27 +78,18 @@ class UserController extends Controller
     }
 
 //Update User Identity
-    // public function updateUser(Request $request)
-    // {
-    //     $user = User::findOrFail($request->kd_user);
+    public function updateUser(Request $request)
+    {
+        $user = User::findOrFail($request->kd_user);
+        $user->update($request->all());
 
-    //     $user->kd_user = $request->input('kd_user');
-    //     $user->nama_lengkap = $request->input('nama_lengkap');
-    //     $user->jenis_kelamin = $request->input('jenis_kelamin');
-    //     $user->nomer_hp = $request->input('nomer_hp');
-    //     $user->email = $request->input('email');
-    //     $user->password = $request->input('password');
-    //     $user->provinsi = $request->input('provinsi');
-    //     $user->daerah = $request->input('daerah');
-    //     $user->nama_daerah = $request->input('nama_daerah');
-    //     $user->detail_alamat = $request->input('detail_alamat');
-    //     $user->status = $request->input('status');
-    //     $user->foto_user = $request->input('foto_user');
-
-    //     if($user->save()) {
-    //         return new UserResource($user);
-    //     }
-    // }
+        if($user) {
+            return response()->json([
+                'response' => true,
+                'message' => "Berhasil Update Data User"
+            ]);;
+        }
+    }
 
     /**
      * Display the specified resource.

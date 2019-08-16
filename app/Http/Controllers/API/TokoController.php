@@ -15,9 +15,21 @@ class TokoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getToko($kd_user)
     {
-        //
+        $toko = DB::table('tb_toko')->where('kd_user', $kd_user)->first();
+
+        if($toko==null) {
+            return response()->json([
+                'response' => false,
+                'message' => 'Toko is not available, probably wrong kd_user !'
+            ]);
+        } else 
+        {
+            return response()->json([
+                $toko
+            ]);
+        }
     }
 
     /**
@@ -118,9 +130,18 @@ class TokoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    //Update Toko
+    public function update(Request $request)
     {
-        //
+        $toko = Toko::findOrFail($request->kd_toko);
+        $toko->update($request->all());
+
+        if($toko) {
+            return response()->json([
+                'response' => true,
+                'mesaage' => 'Success Update Data Toko '
+            ], 200);
+        }
     }
 
     /**
