@@ -201,11 +201,10 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kode Koordinator</th>
+                                            <th>Kode</th>
                                             <th>KTP</th>
                                             <th>Nama Lengkap</th>
                                             <th>Jenis Kelamin</th>
-                                            <th>Nomor HP</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -217,9 +216,9 @@
                                           <td>{{ $data->KTP }}</td>
                                           <td>{{ $data->nama_lengkap }}</td>
                                           <td>{{ $data->jenis_kelamin }}</td>
-                                          <td>{{ $data->nomer_hp }}</td>
                                           <td>
-                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-nama="{{ $data->nama_lengkap }}"><i class="fa fa-edit"></i> Edit</button>
+                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-ktp="{{ $data->KTP }}" data-nama_lengkap="{{ $data->nama_lengkap }}" data-jenis_kelamin="{{ $data->jenis_kelamin }}" data-nomer_hp="{{ $data->nomer_hp }}" data-email="{{ $data->email }}"><i class="fa fa-edit"></i> Edit</button>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-nama="{{ $data->nama_lengkap }}"><i class="fa fa-info"></i> Detail</button>
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteData" data-kd_koordinator = "{{ $data->kd_koordinator }}"><i class="fa fa-trash"></i> Delete</button>
                                           </td>
                                         </tr>
@@ -265,12 +264,40 @@
                   </div>
                   <div class="form-group has-success">
                     <label for="nomer_hp" class="form-control-label">Nomor HP</label>
-                    <input type="number" id="nomer_hp" name="nomer_hp" class="form-control" required />
+                    <input placeholder="exp : 089247874182123" type="number" id="nomer_hp" name="nomer_hp" class="form-control" required />
                   </div>
                   <div class="form-group has-success">
                     <label for="email" class="form-control-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" required />
+                    <input placeholder="exp : koor@gmail.com" type="email" id="email" name="email" class="form-control" required />
                   </div>
+                  <div class="form-group has-success">
+                    <label for="provinsi" class="form-control-label">Provinsi</label>
+                    <select id="provinsi" name="provinsi" class="form-control">
+                        <option value="id">- Pilih Provisi -</option>
+                    </select>
+                  </div>
+                  <div class="form-group has-success">
+                    <label for="kabkota" class="form-control-label">Kabupaten/Kota</label>
+                    <select id="kabkota" name="kabkota" class="form-control">
+                        <option value="id">- Pilih Kota/Kabupaten -</option>
+                    </select>
+                  </div>
+                  <div class="form-group has-success">
+                    <label for="detail_alamat" class="form-control-label">Detail Alamat</label>
+                    <textarea placeholder="exp : Jl.Lohbener Raya No 08 Rt 04 Rw 01" id="detail_alamat" name="detail_alamat" class="form-control" required></textarea>
+                  </div>
+                  <!-- <div class="form-group has-success">
+                    <label for="daerah" class="form-control-label">Kabupaten/Kota</label>
+                    <select id="daerah" name="daerah" class="form-control">
+                        <option value="id">- Pilih Kota/Kabupaten -</option>
+                    </select>
+                  </div>
+                  <div class="form-group has-success">
+                    <label for="kecamatan" class="form-control-label">Kecamatan</label>
+                    <select id="kecamatan" name="provinsi" class="form-control">
+                        <option value="id">- Pilih Kecamatan -</option>
+                    </select>
+                  </div> -->
               </div>
               <div class="modal-footer">
                 <button type="submit" class=" btn btn-success"><span class="fa fa-plus-circle"></span> Submit</button>
@@ -403,9 +430,10 @@
         $(document).ready(function() {
           $('#bootstrap-data-table-export').DataTable();
 
-          $('#addData').on('show.bs.modal', function(event) {
-            event.preventDefault();
-          });
+          // $('#addData').on('show.bs.modal', function(event) {
+          //   event.preventDefault();
+          //
+          // });
 
           var formAdd    = $('#modal-form-add');
           formAdd.submit(function (e) {
@@ -450,7 +478,7 @@
 
               var button = $(event.relatedTarget) // Button that triggered the modal
               var kd_koordinator = button.data('kd_koordinator') // Extract info from data-* attributes
-              var ktp = button.data('KTP')
+              var ktp = button.data('ktp')
               var nama_lengkap = button.data('nama_lengkap')
               var jenis_kelamin = button.data('jenis_kelamin')
               var nomer_hp = button.data('nomer_hp')
@@ -550,6 +578,119 @@
                 			}
                   })
               });
+
+
+              //RAJA ONGKIR
+              var getProvince = "http://localhost:8000/koodinator/apiRajaOngkir/getProvince"
+              var getKabKota  = "http://localhost:8000/koodinator/apiRajaOngkir/getKabKota"
+
+              $.ajax({
+                  url: getProvince,
+                  type: "GET",
+                  dataType: "json",
+                  success: function( res ){
+                    $('#addData').on('show.bs.modal', function (event) {
+                        event.preventDefault();
+
+                        $.each(res.rajaongkir.results, function(id, obj){
+                          $("#provinsi").append($("<option></option>").attr("value", obj.province_id).text(obj.province));
+                        });
+
+                        $("#provinsi").change(function (){
+                            var id_provinsi = $(this).val()
+
+                            $.ajax({
+                                url: getKabKota,
+                                type: "POST",
+                                data: {"_token": "{{ csrf_token() }}", "id_provinsi" : id_provinsi},
+                                dataType: "json",
+                                success: function( res ){
+                                  $('#kabkota').empty();
+                                      $.each(res.rajaongkir.results, function(id, obj){
+                                         $("#kabkota").append($("<option></option>").attr("value", obj.city_id).text(obj.type + " " + obj.city_name));
+                                      });
+                                }
+                            })
+                        })
+                    })
+                  }
+
+              })
+
+              //RAJA API
+              // $.ajax({
+              //     url: "https://x.rajaapi.com/poe",
+              //     type: "GET",
+              //     dataType: "json",
+              //     success: function( res ){
+              //       var token = res.token;
+              //
+              //       //Provinsi
+              //       $.ajax({
+              //           url: "https://x.rajaapi.com/MeP7c5ne" + token + "/m/wilayah/provinsi",
+              //           type: "GET",
+              //           dataType: "json",
+              //           success: function( res ){
+              //
+              //             $('#addData').on('show.bs.modal', function (event) {
+              //               event.preventDefault();
+              //
+              //               $.each(res.data, function(id, obj){
+              //                    $("#provinsi").append($("<option></option>").attr("value", obj.id).text(obj.name));
+              //               });
+              //
+              //
+              //
+              //                $("#provinsi").change(function (){
+              //                     var id_provinsi = $(this).val()
+              //                     getKotaKab(id_provinsi)
+              //                })
+              //
+              //                $("#daerah").change(function (){
+              //                     var id_daerah = $(this).val()
+              //                     getKecamatan(id_daerah)
+              //                })
+              //
+              //                //DAERAH
+              //                function getKotaKab(id_provinsi){
+              //                  $.ajax({
+              //                      url: "https://x.rajaapi.com/MeP7c5ne" + token + "/m/wilayah/kabupaten?idpropinsi=" + id_provinsi,
+              //                      type: "GET",
+              //                      dataType: "json",
+              //                      success: function( res ){
+              //                        $('#daerah').empty();
+              //                        $('#kecamatan').empty().append('<option value="id">- Pilih Kecamatan -</option>');
+              //                        $.each(res.data, function(id, obj){
+              //                             $("#daerah").append($("<option></option>").attr("value", obj.id).text(obj.name));
+              //                        });
+              //                      }
+              //                   })
+              //                 }
+              //
+              //                 //KECAMATAN
+              //                 function getKecamatan(id_daerah){
+              //                   $.ajax({
+              //                       url: "https://x.rajaapi.com/MeP7c5ne" + token + "/m/wilayah/kecamatan?idkabupaten=" + id_daerah,
+              //                       type: "GET",
+              //                       dataType: "json",
+              //                       success: function( res ){
+              //                         $('#kecamatan').empty();
+              //                         $.each(res.data, function(id, obj){
+              //                              $("#kecamatan").append($("<option></option>").attr("value", obj.id).text(obj.name));
+              //                         });
+              //                       }
+              //                    })
+              //                  }
+              //
+              //             })
+              //
+              //
+              //           }
+              //       })
+              //
+              //
+              //     }
+              // })
 
         });
     </script>

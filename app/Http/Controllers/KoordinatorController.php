@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Toko;
 use App\Token;
+use Ixudra\Curl\Facades\Curl;
 
 class KoordinatorController extends Controller
 {
@@ -86,6 +87,22 @@ class KoordinatorController extends Controller
         return redirect()->route('loginPageKoor');
     }
 
+
+    public function getProvince(){
+      $response = Curl::to('https://api.rajaongkir.com/starter/province')
+                  ->withData( array( 'key' => 'e047008e889ac6329aa2dd447480dbf0' ) )
+                  ->get();
+
+      return $response;
+    }
+
+    public function getKabKota(Request $request){
+      $response = Curl::to('https://api.rajaongkir.com/starter/city')
+                  ->withData( array( 'key' => 'e047008e889ac6329aa2dd447480dbf0', 'province' => $request->id_provinsi ) )
+                  ->get();
+
+      return $response;
+    }
 
     //TOKEN
     public function dataToken(Request $request){

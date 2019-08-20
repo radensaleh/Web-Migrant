@@ -9,11 +9,13 @@ use Illuminate\Support\Str;
 class TokenController extends Controller
 {
     public function store(Request $request){
-        $randomToken = Str::random(10);
+        $randomToken = Str::random(4);
+        $endToken    = Str::random(4);
+
         $kd_koordinator = $request->kd_koordinator;
 
         $token = new Token();
-        $token->token = $randomToken;
+        $token->token = $randomToken.$endToken;
         $token->kd_koordinator = $kd_koordinator;
         $token->status = 0;
         $token->save();

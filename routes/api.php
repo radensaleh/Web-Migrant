@@ -19,15 +19,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Login
 Route::post("/Login", "API\UserController@login");
 
-<<<<<<< HEAD
 Route::post("/Login", "UserController@login");
 
 //api validasi tokens
 Route::post("validasiToken", "API\TokenAPIController@checkToken");
-=======
+
 //Register
 Route::post("/Register", "API\UserController@register");
 
 //Update data User
 Route::put("/UserUpdate", "API\UserController@updateUser");
->>>>>>> e2edeb2abf8b29736f4da2a14e566b749f7e5d83

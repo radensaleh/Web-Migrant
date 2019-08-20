@@ -35,3 +35,5 @@ Route::post('/koordinator/loginKoordinator', 'KoordinatorController@loginKoordin
 Route::get('/koordinator/logoutKoordinator', 'KoordinatorController@logoutKoordinator')->name('logoutKoordinator');
 Route::get('/koordinator/dashboard', 'KoordinatorController@dashboard')->name('dashboardKoordinator');
 Route::get('/koordinator/dataToken', 'KoordinatorController@dataToken')->name('dataToken');
+Route::get('/koodinator/apiRajaOngkir/getProvince', 'KoordinatorController@getProvince');
+Route::post('/koodinator/apiRajaOngkir/getKabKota', 'KoordinatorController@getKabKota');
