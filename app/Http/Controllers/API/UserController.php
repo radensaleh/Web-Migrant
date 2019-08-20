@@ -57,7 +57,12 @@ class UserController extends Controller
     {
         $user = new User;
 
-        $user->kd_user = $request->input('kd_user');
+        $getDate = Carbon::now();
+        $tgl = str_replace('-','', $getDate);
+        $jam = str_replace(':','', $tgl);
+        $kd_user = 'USR'.str_replace(' ','',$jam);
+
+        $user->kd_user = $kd_user;
         $user->nama_lengkap = $request->input('nama_lengkap');
         $user->jenis_kelamin = $request->input('jenis_kelamin');
         $user->nomer_hp = $request->input('nomer_hp');

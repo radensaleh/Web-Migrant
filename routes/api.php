@@ -41,3 +41,21 @@ Route::get("/Bank", "API\BankController@index");
 
 //JenisBarang
 Route::get("/JenisBarang", "API\JenisBarangController@index");
+
+//Create Barang / Menambah Barang
+Route::post("/Barang", "API\BarangController@createBarang");
+
+//Get All Barang
+Route::get("/Barang", "API\BarangController@index");
+
+//Menampilkan semua barang berdasarkan kd_toko
+Route::get("/Barang/{kd_toko}", "API\BarangController@show");
+
+//Update Barang
+Route::post("/BarangUpdate", "API\BarangController@update");
+
+//Delete Barang
+Route::get("/BarangDelete/{kd_barang}","API\BarangController@deleteBarang");
+
+//menampilkan semua barang berdasarkan kategori
+Route::get("/BarangKategori/{id_jenis}","API\BarangController@showByCategory");

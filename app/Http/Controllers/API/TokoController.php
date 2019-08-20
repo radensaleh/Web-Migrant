@@ -83,7 +83,13 @@ class TokoController extends Controller
 
         $bank = DB::table('tb_bank')->first();
 
-        $toko->kd_toko = $request->input('kd_toko');
+        $toko = new Toko;
+        $getDate = Carbon::now();
+        $tgl = str_replace('-','', $getDate);
+        $jam = str_replace(':','', $tgl);
+        $kd_toko = 'TK'.str_replace(' ','',$jam);
+        
+        $toko->kd_toko = $kd_toko;
         $toko->id_token = $token->id_token;
         $toko->KTP = $request->input('ktp');
         $toko->nama_toko = $request->input('nama_toko');
