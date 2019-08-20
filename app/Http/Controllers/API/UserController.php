@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User as UserResource;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 
 class UserController extends Controller
@@ -57,7 +58,7 @@ class UserController extends Controller
     {
         $user = new User;
 
-        $getDate = Carbon::now();
+        $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_user = 'USR'.str_replace(' ','',$jam);
@@ -80,6 +81,7 @@ class UserController extends Controller
                 'status' => 'Success'
             ];
         }
+
     }
 
 //Update User Identity

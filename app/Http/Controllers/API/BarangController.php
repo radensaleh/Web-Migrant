@@ -42,7 +42,7 @@ class BarangController extends Controller
     public function createBarang(Request $request )
     {
         $barang = new Barang;
-        $getDate = Carbon::now();
+        $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_barang = 'BRG'.str_replace(' ','',$jam);
@@ -140,7 +140,7 @@ class BarangController extends Controller
      */
     public function deleteBarang($kd_barang)
     {
-        $barang = Barang::destroy($kd_user);
+        $barang = Barang::destroy($kd_barang);
         if($barang) {
             return response()->json([
                 'response' => true,
