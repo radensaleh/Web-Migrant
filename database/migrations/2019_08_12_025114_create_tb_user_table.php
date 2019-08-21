@@ -20,9 +20,11 @@ class CreateTbUserTable extends Migration
             $table->string('nomer_hp');
             $table->string('email');
             $table->string('password');
-            $table->string('provinsi');
-            $table->string('daerah');
-            $table->string('nama_daerah');
+            // $table->string('provinsi');
+            // $table->string('daerah');
+            // $table->string('nama_daerah');
+            $table->integer('city_id')->unsigned();
+            $table->foreign('city_id')->references('city_id')->on('tb_kota');
             $table->string('detail_alamat');
             $table->string('foto_user');
             $table->string('status');

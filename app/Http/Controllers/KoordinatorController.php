@@ -7,10 +7,84 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Toko;
 use App\Token;
+use App\Koordinator;
 use Ixudra\Curl\Facades\Curl;
+use Carbon\Carbon;
 
 class KoordinatorController extends Controller
 {
+    //RESOURCE
+    public function store(Request $request){
+        $koor = new Koordinator;
+
+        $getDate = Carbon::now();
+        $tgl = str_replace('-','', $getDate);
+        $jam = str_replace(':','', $tgl);
+        $kd_koor = 'KOOR'.str_replace(' ','',$jam);
+
+        $koor->kd_koordinator = $kd_koor;
+        $koor->KTP = $request->KTP;
+        $koor->nama_lengkap = $request->nama_lengkap;
+        $koor->jenis_kelamin = $request->jenis_kelamin;
+        $koor->nomer_hp = $request->nomer_hp;
+        $koor->email = $request->email;
+        $koor->password = 'Koordinator123?';
+        $koor->provinsi = $request->provinsi;
+        $koor->daerah = $request->daerah;
+        $koor->nama_daerah = $request->kabkota;
+        $koor->detail_alamat = $request->detail_alamat;
+        $koor->poin = '0';
+
+        if($koor->save()){
+            return response()->json([
+              'error'   => 0,
+              'message' => 'Koordinator ' . $request->nama_lengkap . ' berhasil ditambahkan :)'
+            ], 200);
+        }else{
+            return response()->json([
+              'error'   => 1,
+              'message' => 'Gagal menambah data :('
+            ], 200);
+        }
+    }
+
+    public function update(Request $request){
+        $koor = Koordinator::findOrFail($request->kd_koordinator);
+        $koor->update($request->all());
+
+        if($koor){
+          return response()->json([
+            'error'   => 0,
+            'message' => 'Koordinator ' . $request->nama_lengkap . ' berhasil diubah :)'
+          ], 200);
+        }else{
+          return response()->json([
+            'error'   => 1,
+            'message' => 'Gagal mengubah data :)'
+          ], 200);
+        }
+    }
+
+    public function destroy(Request $request){
+       $data = Koordinator::findOrFail($request->kd_koordinator);
+
+       try {
+         $data->delete();
+
+         if( $data ){
+           return response()->json([
+             'error' => 0,
+             'message' => 'Success Delete Data'
+           ], 200);
+         }
+       } catch (\Exception $e) {
+           return response()->json([
+             'error' => 1,
+             'message' => 'Failed Delete Data'
+           ], 500);
+       }
+    }
+
     public function loginPage(Request $request){
       if($request->session()->exists('koordinator')){
         return redirect()->route('dashboardKoordinator');
@@ -99,6 +173,14 @@ class KoordinatorController extends Controller
     public function getKabKota(Request $request){
       $response = Curl::to('https://api.rajaongkir.com/starter/city')
                   ->withData( array( 'key' => 'e047008e889ac6329aa2dd447480dbf0', 'province' => $request->id_provinsi ) )
+                  ->get();
+
+      return $response;
+    }
+
+    public function getTypeDaerah(Request $request){
+      $response = Curl::to('https://api.rajaongkir.com/starter/city')
+                  ->withData( array( 'key' => 'e047008e889ac6329aa2dd447480dbf0', 'id' => $request->id ) )
                   ->get();
 
       return $response;

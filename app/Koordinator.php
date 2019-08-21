@@ -14,7 +14,7 @@ class Koordinator extends Authenticatable
 
     protected $fillable = [
       'kd_koordinator','KTP','nama_lengkap','jenis_kelamin','nomer_hp','email',
-      'password','provinsi','daerah','nama_daerah','detail_alamat','foto_koordinator','poin'
+      'password','city_id','detail_alamat','foto_koordinator','poin'
     ];
 
     protected $hidden = [
@@ -32,5 +32,9 @@ class Koordinator extends Authenticatable
 
     public function token(){
        return $this->hasMany('App\Token', 'kd_koordinator');
+    }
+
+    public function city(){
+       return $this->belongsTo('App\Kota', 'city_id');
     }
 }

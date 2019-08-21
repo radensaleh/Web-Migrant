@@ -23,11 +23,9 @@ class CreateTbBarangTable extends Migration
             $table->foreign('id_jenis')->references('id_jenis')->on('tb_jenis_barang');
             $table->integer('stok', false, true);
             $table->integer('harga_jual', false, true);
-            $table->integer('harga_modal', false, true);
             $table->string('deskripsi');
             $table->string('foto_barang');
             $table->double('berat_barang');
-            $table->string('status');
             $table->timestamps();
         });
     }

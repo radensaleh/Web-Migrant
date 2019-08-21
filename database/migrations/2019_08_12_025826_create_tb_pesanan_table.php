@@ -19,6 +19,12 @@ class CreateTbPesananTable extends Migration
             $table->foreign('kd_transaksi')->references('kd_transaksi')->on('tb_transaksi');
             $table->integer('total_harga', false, true);
             $table->integer('ongkir', false, true);
+            $table->string('no_resi')->nullable();
+            $table->integer('city_id')->unsigned();
+            $table->foreign('city_id')->references('city_id')->on('tb_kota');
+            $table->bigInteger('id_status')->unsigned();
+            $table->index('id_status');
+            $table->foreign('id_status')->references('id_status')->on('tb_status');
             $table->timestamps();
         });
     }

@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="/assets/css/lib/datatable/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/vendor/pnotify/pnotify.custom.css" />
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
     <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/jqvmap@1.5.1/dist/jqvmap.min.css" rel="stylesheet">
@@ -201,7 +202,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kode</th>
+                                            <!-- <th>Kode</th> -->
                                             <th>KTP</th>
                                             <th>Nama Lengkap</th>
                                             <th>Jenis Kelamin</th>
@@ -212,12 +213,12 @@
                                       @foreach($koordinator as $key => $data)
                                         <tr>
                                           <td>{{ ++$key }}</td>
-                                          <td>{{ $data->kd_koordinator }}</td>
+                                          <!-- <td>{{ $data->kd_koordinator }}</td> -->
                                           <td>{{ $data->KTP }}</td>
                                           <td>{{ $data->nama_lengkap }}</td>
-                                          <td>{{ $data->jenis_kelamin }}</td>
+                                          <td><?php if(  $data->jenis_kelamin == 1  ){ echo 'Laki-Laki'; }else{ echo 'Perempuan'; } ?></td>
                                           <td>
-                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-ktp="{{ $data->KTP }}" data-nama_lengkap="{{ $data->nama_lengkap }}" data-jenis_kelamin="{{ $data->jenis_kelamin }}" data-nomer_hp="{{ $data->nomer_hp }}" data-email="{{ $data->email }}"><i class="fa fa-edit"></i> Edit</button>
+                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-ktp="{{ $data->KTP }}" data-nama_lengkap="{{ $data->nama_lengkap }}" data-jenis_kelamin="{{ $data->jenis_kelamin }}" data-nomer_hp="{{ $data->nomer_hp }}" data-email="{{ $data->email }}" data-provinsi="{{ $data->provinsi }}" data-type="{{ $data->daerah }}" data-nama_daerah="{{ $data->nama_daerah }}" data-detail_alamat="{{ $data->detail_alamat }}"><i class="fa fa-edit"></i> Edit</button>
                                             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-nama="{{ $data->nama_lengkap }}"><i class="fa fa-info"></i> Detail</button>
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteData" data-kd_koordinator = "{{ $data->kd_koordinator }}"><i class="fa fa-trash"></i> Delete</button>
                                           </td>
@@ -244,11 +245,11 @@
                 <h4 class="modal-title"><span class="fa fa-plus-circle"></span> Add Koordinator</h4>
               </div>
               <div class="modal-body">
-                <form id="modal-form-add" action="#" method="post" role="form">
+                <form id="modal-form-add" action="{{ route('data-koordinator.store' )}}" method="post" role="form">
                   {{ csrf_field() }}
                   <div class="form-group has-success">
                     <label for="KTP" class="form-control-label">Nomor KTP</label>
-                    <input type="text" id="KTP" name="KTP" class="form-control" required/>
+                    <input type="number" id="KTP" name="KTP" class="form-control" required/>
                     <span class="text-warning" ></span>
                   </div>
                   <div class="form-group has-success">
@@ -276,6 +277,7 @@
                         <option value="id">- Pilih Provisi -</option>
                     </select>
                   </div>
+                  <input type="hidden" id="daerah" name="daerah" value="">
                   <div class="form-group has-success">
                     <label for="kabkota" class="form-control-label">Kabupaten/Kota</label>
                     <select id="kabkota" name="kabkota" class="form-control">
@@ -318,7 +320,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title"><span class="fa fa-edit"></span> Edit Data</h4>
               </div>
-                <form id="modal-form-edit" method="post" action="#">
+                <form id="modal-form-edit" method="post" action="{{ route('data-koordinator.update', 'update')}}">
                     {{ method_field('patch') }}
                     {{ csrf_field() }}
               <div class="modal-body">
@@ -351,6 +353,23 @@
                     <label for="email" class="form-control-label">Email</label>
                     <input type="email" id="email" name="email" class="form-control" required />
                   </div>
+                  <div class="form-group has-success">
+                    <label for="provinsi" class="form-control-label">Provinsi</label>
+                    <select id="editprovinsi" name="provinsi" class="form-control">
+                        <option value="id">- Pilih Provisi -</option>
+                    </select>
+                  </div>
+                  <input type="hidden" id="editdaerah" name="daerah" value="">
+                  <div class="form-group has-success">
+                    <label for="kabkota" class="form-control-label">Kabupaten/Kota</label>
+                    <select id="editkabkota" name="kabkota" class="form-control">
+                        <option value="id">- Pilih Kota/Kabupaten -</option>
+                    </select>
+                  </div>
+                  <div class="form-group has-success">
+                    <label for="detail_alamat" class="form-control-label">Detail Alamat</label>
+                    <textarea placeholder="exp : Jl.Lohbener Raya No 08 Rt 04 Rw 01" id="detail_alamat" name="detail_alamat" class="form-control" required></textarea>
+                  </div>
               </div>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-warning" id="btnEdit"><span class="fa fa-edit"></span> Edit</button>
@@ -371,7 +390,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title text-center"><span class="fa fa-check"></span> Delete Confirmation</h4>
               </div>
-                <form id="modal-form-delete" method="post" action="#">
+                <form id="modal-form-delete" method="post" action="{{ route('data-koordinator.destroy', 'destroy') }}">
                     {{ method_field('delete') }}
                     {{ csrf_field() }}
               <div class="modal-body">
@@ -425,6 +444,8 @@
     <script src="/assets/js/lib/data-table/buttons.colVis.min.js"></script>
     <script src="/assets/js/init/datatables-init.js"></script>
 
+    <script src="/vendor/pnotify/pnotify.custom.js"></script>
+
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -435,19 +456,127 @@
           //
           // });
 
+          // API RAJAONGKIR
+            var getProvince = "http://localhost:8000/koodinator/apiRajaOngkir/getProvince"
+            var getKabKota  = "http://localhost:8000/koodinator/apiRajaOngkir/getKabKota"
+            var getTypeDaerah= "http://localhost:8000/koodinator/apiRajaOngkir/getTypeDaerah"
+          //------
+
           var formAdd    = $('#modal-form-add');
           formAdd.submit(function (e) {
               e.preventDefault();
 
+              var a = $('#provinsi').val()
+              var b = $('#kabkota').val()
+
+              if( a && b === 'id' ){
+                  new PNotify({
+                      title: 'Alert!',
+                      text: 'Opsi Provinsi atau Nama Daerah tidak boleh kosong :)',
+                      type: 'warning',
+                      icon: "fa fa-warning",
+                      delay:1500
+                  })
+              }else{
+                  $.ajax({
+                      url: formAdd.attr('action'),
+                      type: "POST",
+                      data: formAdd.serialize(),
+                      dataType: "json",
+                      success: function( res ){
+                        console.log(res)
+                        if( res.error == 0 ){
+                          $('#addData').modal('hide');
+                          swal(
+                            'Success',
+                            res.message,
+                                'success'
+                            ).then(OK => {
+                              if(OK){
+                                window.location.href = "{{ route('dataKoordinator') }}";
+                              }
+                            });
+                        }else{
+                            $('#addData').modal('hide');
+                            swal(
+                              'Fail',
+                              res.message,
+                              'error'
+                            ).then(OK => {
+                              if(OK){
+                                window.location.href = "{{ route('dataKoordinator') }}";
+                              }
+                            });
+                          }
+                        }
+                    })
+              }
+
+
+            });
+
+            $('#editData').on('show.bs.modal', function (event) {
+              event.preventDefault();
+
               $.ajax({
-                  url: formAdd.attr('action'),
+                  url: getProvince,
+                  type: "GET",
+                  dataType: "json",
+                  success: function( res ){
+                      results_json(res, 1)
+                  }
+              })
+
+              var button = $(event.relatedTarget) // Button that triggered the modal
+              var kd_koordinator = button.data('kd_koordinator') // Extract info from data-* attributes
+              var ktp = button.data('ktp')
+              var nama_lengkap = button.data('nama_lengkap')
+              var jenis_kelamin = button.data('jenis_kelamin')
+              var nomer_hp = button.data('nomer_hp')
+              var email = button.data('email')
+              var password = button.data('password')
+              var detail_alamat = button.data('detail_alamat')
+
+
+              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+              var modal = $(this)
+              modal.find('.modal-body #kd_koordinator').val(kd_koordinator)
+              modal.find('.modal-body #KTP').val(ktp)
+              modal.find('.modal-body #nama_lengkap').val(nama_lengkap)
+              modal.find('.modal-body #jenis_kelamin').val(jenis_kelamin)
+              modal.find('.modal-body #nomer_hp').val(nomer_hp)
+              modal.find('.modal-body #email').val(email)
+              modal.find('.modal-body #detail_alamat').val(detail_alamat)
+              modal.find('.modal-body #cat_kd').val(kd_koordinator)
+              // $("#kd_koordinator").prop('disabled', true);
+            });
+
+            var formEdit   = $('#modal-form-edit');
+            formEdit.submit(function (e) {
+            e.preventDefault();
+
+            var a = $('#editprovinsi').val()
+            var b = $('#editkabkota').val()
+
+            if( a && b === 'id' ){
+                new PNotify({
+                    title: 'Alert!',
+                    text: 'Opsi Provinsi atau Nama Daerah tidak boleh kosong :)',
+                    type: 'warning',
+                    icon: "fa fa-warning",
+                    delay:1500
+                })
+            }else{
+              $.ajax({
+                  url: formEdit.attr('action'),
                   type: "POST",
-                  data: formAdd.serialize(),
+                  data: formEdit.serialize(),
                   dataType: "json",
                   success: function( res ){
                     console.log(res)
                     if( res.error == 0 ){
-                      $('#addData').modal('hide');
+                      $('#editData').modal('hide');
                       swal(
                         'Success',
                         res.message,
@@ -458,7 +587,7 @@
                           }
                         });
                     } else{
-                        $('#addData').modal('hide');
+                        $('#editData').modal('hide');
                         swal(
                           'Fail',
                           res.message,
@@ -470,70 +599,9 @@
                         });
                       }
                     }
-                })
-            });
+                  })
+            }
 
-            $('#editData').on('show.bs.modal', function (event) {
-              event.preventDefault();
-
-              var button = $(event.relatedTarget) // Button that triggered the modal
-              var kd_koordinator = button.data('kd_koordinator') // Extract info from data-* attributes
-              var ktp = button.data('ktp')
-              var nama_lengkap = button.data('nama_lengkap')
-              var jenis_kelamin = button.data('jenis_kelamin')
-              var nomer_hp = button.data('nomer_hp')
-              var email = button.data('email')
-              var password = button.data('password')
-
-              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-              var modal = $(this)
-              modal.find('.modal-body #kd_koordinator').val(kd_koordinator)
-              modal.find('.modal-body #KTP').val(ktp)
-              modal.find('.modal-body #nama_lengkap').val(nama_lengkap)
-              modal.find('.modal-body #jenis_kelamin').val(jenis_kelamin)
-              modal.find('.modal-body #nomer_hp').val(nomer_hp)
-              modal.find('.modal-body #email').val(email)
-              modal.find('.modal-body #cat_kd').val(kd_koordinator)
-              // $("#kd_koordinator").prop('disabled', true);
-            });
-
-            var formEdit   = $('#modal-form-edit');
-            formEdit.submit(function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: formEdit.attr('action'),
-                type: "POST",
-                data: formEdit.serialize(),
-                dataType: "json",
-                success: function( res ){
-                  console.log(res)
-                  if( res.error == 0 ){
-                    $('#editData').modal('hide');
-                    swal(
-                      'Success',
-                      res.message,
-                          'success'
-                      ).then(OK => {
-                        if(OK){
-                          window.location.href = "{{ route('dataKoordinator') }}";
-                        }
-                      });
-                  } else{
-                      $('#editData').modal('hide');
-                      swal(
-                        'Fail',
-                        res.message,
-                        'error'
-                      ).then(OK => {
-                        if(OK){
-                          window.location.href = "{{ route('dataKoordinator') }}";
-                        }
-                      });
-                    }
-                  }
-                })
             });
 
             $('#deleteData').on('show.bs.modal', function (event) {
@@ -581,8 +649,6 @@
 
 
               //RAJA ONGKIR
-              var getProvince = "http://localhost:8000/koodinator/apiRajaOngkir/getProvince"
-              var getKabKota  = "http://localhost:8000/koodinator/apiRajaOngkir/getKabKota"
 
               $.ajax({
                   url: getProvince,
@@ -591,31 +657,90 @@
                   success: function( res ){
                     $('#addData').on('show.bs.modal', function (event) {
                         event.preventDefault();
-
-                        $.each(res.rajaongkir.results, function(id, obj){
-                          $("#provinsi").append($("<option></option>").attr("value", obj.province_id).text(obj.province));
-                        });
-
-                        $("#provinsi").change(function (){
-                            var id_provinsi = $(this).val()
-
-                            $.ajax({
-                                url: getKabKota,
-                                type: "POST",
-                                data: {"_token": "{{ csrf_token() }}", "id_provinsi" : id_provinsi},
-                                dataType: "json",
-                                success: function( res ){
-                                  $('#kabkota').empty();
-                                      $.each(res.rajaongkir.results, function(id, obj){
-                                         $("#kabkota").append($("<option></option>").attr("value", obj.city_id).text(obj.type + " " + obj.city_name));
-                                      });
-                                }
-                            })
-                        })
+                        results_json(res, 0)
                     })
                   }
 
               })
+
+              function results_json(res, status){
+                if(status == 0){
+                  $.each(res.rajaongkir.results, function(id, obj){
+                    $("#provinsi").append($("<option></option>").attr("value", obj.province_id).text(obj.province));
+                  });
+
+                  $("#provinsi").change(function (){
+                      var id_provinsi = $(this).val()
+
+                      $.ajax({
+                          url: getKabKota,
+                          type: "POST",
+                          data: {"_token": "{{ csrf_token() }}", "id_provinsi" : id_provinsi},
+                          dataType: "json",
+                          success: function( res ){
+                            $('#kabkota').empty();
+                            $('#kabkota').empty().append('<option value="id">- Pilih Kota/Kabupaten -</option>');
+                                $.each(res.rajaongkir.results, function(id, obj){
+                                   $("#kabkota").append($("<option></option>").attr("value", obj.city_id).text(obj.type + " " + obj.city_name));
+                                });
+
+                                $('#kabkota').change(function (){
+                                    var id  = $(this).val()
+
+                                    $.ajax({
+                                        url: getTypeDaerah,
+                                        type: "POST",
+                                        data: {"_token": "{{ csrf_token() }}", "id" : id},
+                                        dataType: "json",
+                                        success: function( res ){
+                                           $('#daerah').val(res.rajaongkir.results.type)
+                                        }
+                                    })
+
+                                })
+                          }
+                      })
+                  })
+                }else{
+                  $.each(res.rajaongkir.results, function(id, obj){
+                    $("#editprovinsi").append($("<option></option>").attr("value", obj.province_id).text(obj.province));
+                  });
+
+                  $("#editprovinsi").change(function (){
+                      var id_provinsi = $(this).val()
+
+                      $.ajax({
+                          url: getKabKota,
+                          type: "POST",
+                          data: {"_token": "{{ csrf_token() }}", "id_provinsi" : id_provinsi},
+                          dataType: "json",
+                          success: function( res ){
+                            $('#editkabkota').empty();
+                            $('#editkabkota').empty().append('<option value="id">- Pilih Kota/Kabupaten -</option>');
+                                $.each(res.rajaongkir.results, function(id, obj){
+                                   $("#editkabkota").append($("<option></option>").attr("value", obj.city_id).text(obj.type + " " + obj.city_name));
+                                });
+
+                                $('#editkabkota').change(function (){
+                                    var id  = $(this).val()
+
+                                    $.ajax({
+                                        url: getTypeDaerah,
+                                        type: "POST",
+                                        data: {"_token": "{{ csrf_token() }}", "id" : id},
+                                        dataType: "json",
+                                        success: function( res ){
+                                           $('#editdaerah').val(res.rajaongkir.results.type)
+                                        }
+                                    })
+
+                                })
+                          }
+                      })
+                  })
+                }
+
+              }
 
               //RAJA API
               // $.ajax({

@@ -18,8 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-       'kd_user', 'nama_lengkap','jenis_kelamin','nomer_hp', 'email', 'password','provinsi',
-       'daerah','nama_daerah','detail_alamat', 'foto_user','status'
+       'kd_user', 'nama_lengkap','jenis_kelamin','nomer_hp', 'email', 'password','city_id','detail_alamat', 'foto_user','status'
     ];
 
     /**
@@ -43,4 +42,28 @@ class User extends Authenticatable
         'status' => 'boolean'
 
     ];
+
+    public function city(){
+       return $this->belongsTo('App\Kota', 'city_id');
+    }
+
+    public function toko(){
+       return $this->hasMany('App\Toko', 'kd_user');
+    }
+
+    public function chat(){
+       return $this->hasMany('App\Chat', 'kd_user');
+    }
+
+    public function diskusi(){
+       return $this->hasMany('App\Diskusi', 'kd_user');
+    }
+
+    public function keranjang(){
+       return $this->hasMany('App\Keranjang', 'kd_user');
+    }
+
+    public function transaksi(){
+       return $this->hasMany('App\Transaksi', 'kd_user');
+    }
 }

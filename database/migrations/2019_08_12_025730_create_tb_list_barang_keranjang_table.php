@@ -21,6 +21,7 @@ class CreateTbListBarangKeranjangTable extends Migration
             $table->string('kd_barang');
             $table->foreign('kd_barang')->references('kd_barang')->on('tb_barang');
             $table->integer('kuantitas', false, true);
+            $table->integer('harga', false, true);
             $table->timestamps();
         });
     }

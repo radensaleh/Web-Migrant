@@ -10,8 +10,16 @@ class ListBarang extends Model
 
     protected $fillable =
     [
-        'id_list_barang','kd_pesanan','kd_barang','kuantitas'
+        'id_list_barang','kd_pesanan','kd_barang','kuantitas','harga'
     ];
 
     protected $primaryKey = 'id_list_barang';
+
+    public function pesanan(){
+       return $this->belongsTo('App\Pesanan', 'kd_pesanan');
+    }
+
+    public function barang(){
+       return $this->belongsTo('App\Barang', 'kd_barang');
+    }
 }

@@ -55,7 +55,7 @@ class JenisBarangController extends Controller
            return response()->json([
              'error' => 1,
              'message' => 'Failed Delete Data'
-           ], 200);
+           ], 500);
        }
     }
 }

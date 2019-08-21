@@ -8,10 +8,18 @@ class Transaksi extends Model
 {
     protected $table = 'tb_transaksi';
 
-    protected $fillable = 
+    protected $fillable =
     [
-        'kd_transaksi','kd_user','foto_bukti','id_status','tgl_transaksi','total_harga','no_resi'
+        'kd_transaksi','kd_user','foto_bukti','tgl_transaksi','total_harga','nama_penerima'
     ];
 
     protected $primaryKey = 'kd_transaksi';
+
+    public function user(){
+       return $this->belongsTo('App\User', 'kd_user');
+    }
+
+    public function pesanan(){
+       return $this->hasMany('App\Pesanan', 'kd_transaksi');
+    }
 }

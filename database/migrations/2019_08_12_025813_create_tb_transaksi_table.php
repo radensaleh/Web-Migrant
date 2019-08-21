@@ -18,12 +18,9 @@ class CreateTbTransaksiTable extends Migration
             $table->string('kd_user')->index();
             $table->foreign('kd_user')->references('kd_user')->on('tb_user');
             $table->string('foto_bukti')->nullable();
-            $table->bigInteger('id_status')->unsigned();
-            $table->index('id_status');
-            $table->foreign('id_status')->references('id_status')->on('tb_status');
             $table->date('tgl_transaksi');
             $table->integer('total_harga');
-            $table->string('no_resi')->nullable();
+            $table->string('nama_penerima');
             $table->timestamps();
         });
     }

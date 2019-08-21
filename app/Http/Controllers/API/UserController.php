@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User as UserResource;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 
 class UserController extends Controller
@@ -92,7 +93,7 @@ class UserController extends Controller
             return response()->json([
                 'response' => true,
                 'message' => "Berhasil Update Data User"
-            ]);;
+            ], 200);
         }
     }
 

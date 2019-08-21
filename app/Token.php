@@ -18,4 +18,8 @@ class Token extends Model
     public function koordinator(){
        return $this->belongsTo('App\Koordinator','kd_koordinator');
     }
+
+    public function toko(){
+       return $this->hasMany('App\Toko', 'id_token');
+    }
 }

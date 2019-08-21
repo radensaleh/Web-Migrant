@@ -18,6 +18,7 @@ Route::get('/', function () {
 //RESOURCE
 Route::resource('data-jenis_barang', 'JenisBarangController');
 Route::resource('data-token', 'TokenController');
+Route::resource('data-koordinator', 'KoordinatorController');
 
 // ADMIN
 Route::get('/admin/login', 'AdminController@loginPage')->name('loginPage');
@@ -37,3 +38,7 @@ Route::get('/koordinator/dashboard', 'KoordinatorController@dashboard')->name('d
 Route::get('/koordinator/dataToken', 'KoordinatorController@dataToken')->name('dataToken');
 Route::get('/koodinator/apiRajaOngkir/getProvince', 'KoordinatorController@getProvince');
 Route::post('/koodinator/apiRajaOngkir/getKabKota', 'KoordinatorController@getKabKota');
+Route::post('/koodinator/apiRajaOngkir/getTypeDaerah', 'KoordinatorController@getTypeDaerah');
+
+//Raja Ongkir
+Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');

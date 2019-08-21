@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Toko;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Toko as TokoResource;
+use Carbon\Carbon;
 
 class TokoController extends Controller
 {
@@ -24,7 +25,7 @@ class TokoController extends Controller
                 'response' => false,
                 'message' => 'Toko is not available, probably wrong kd_user !'
             ]);
-        } else 
+        } else
         {
             return response()->json([
                 $toko
@@ -88,7 +89,7 @@ class TokoController extends Controller
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_toko = 'TK'.str_replace(' ','',$jam);
-        
+
         $toko->kd_toko = $kd_toko;
         $toko->id_token = $token->id_token;
         $toko->KTP = $request->input('ktp');
