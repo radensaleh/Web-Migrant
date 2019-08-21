@@ -55,7 +55,31 @@ Route::get("/Barang/{kd_toko}", "API\BarangController@show");
 Route::post("/BarangUpdate", "API\BarangController@update");
 
 //Delete Barang
-Route::get("/BarangDelete/{kd_barang}","API\BarangController@deleteBarang");
+Route::delete("/BarangDelete/{kd_barang}","API\BarangController@deleteBarang");
 
 //menampilkan semua barang berdasarkan kategori
 Route::get("/BarangKategori/{id_jenis}","API\BarangController@showByCategory");
+
+//Create Keranjang
+Route::post("/Keranjang","API\KeranjangController@createKeranjang");
+
+//Update Keranjang
+Route::put("/Keranjang", "API\KeranjangController@updateKeranjang");
+
+//Get Keranjang by kd_user
+Route::get("/Keranjang/{kd_user}", "API\KeranjangController@index");
+
+//Delete Keranjang
+Route::delete("/Keranjang/{id_keranjang}", "API\KeranjangController@destroy");
+
+//Create List Barang Keranjang
+Route::post("/ListKeranjang", "API\ListBarangKeranjang@createListKeranjang");
+
+//Get list Barang Keranjang by id_keranjang
+Route::get("/ListKeranjang/{id_keranjang}", "API\ListBarangKeranjang@index");
+
+//update List Barang Keranjang by id_list_keranjang
+Route::put("/ListKeranjang", "API\ListBarangKeranjang@update");
+
+//delete List Barang Keranjang by id_list_keranjang
+Route::delete("/ListKeranjang", "API\ListBarangKeranjang@destroy");

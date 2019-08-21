@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         $user = new User;
 
-        $getDate = Carbon::now();
+        $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_user = 'USR'.str_replace(' ','',$jam);
@@ -81,6 +81,7 @@ class UserController extends Controller
                 'status' => 'Success'
             ];
         }
+
     }
 
 //Update User Identity

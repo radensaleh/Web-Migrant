@@ -85,7 +85,7 @@ class TokoController extends Controller
         $bank = DB::table('tb_bank')->first();
 
         $toko = new Toko;
-        $getDate = Carbon::now();
+        $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_toko = 'TK'.str_replace(' ','',$jam);
