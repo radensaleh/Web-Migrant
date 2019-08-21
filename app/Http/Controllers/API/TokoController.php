@@ -69,7 +69,7 @@ class TokoController extends Controller
             ]);
         }
 
-        $user = DB::table('tb_user')->where('nama_lengkap', $request->nama_lengkap)->first();
+        $user = DB::table('tb_user')->where('kd_user', $request->kd_user)->first();
         if($user==null) {
             return response()->json([
                 'response' => false,
@@ -94,9 +94,9 @@ class TokoController extends Controller
         $toko->id_token = $token->id_token;
         $toko->KTP = $request->input('ktp');
         $toko->nama_toko = $request->input('nama_toko');
-        $toko->foto_toko = $request->input('foto_toko');
         $toko->kd_user = $user->kd_user;
         $toko->no_rekening = $bank->no_rekening;
+        $toko->city_id = $request->city_id;
 
         if($toko->save()) {
             DB::table('tb_user')->where('nama_lengkap', $request->nama_lengkap)->update(['status' => '1']);
