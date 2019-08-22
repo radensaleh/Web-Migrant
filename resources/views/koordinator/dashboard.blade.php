@@ -77,11 +77,11 @@
                     </li>
                     <li class="menu-title">Data</li><!-- /.menu-title -->
                     <li>
-                        <a href="{{ route('dataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
+                        <a href="{{ route('koorDataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaski </a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="{{ route('dataToken') }}"><i class="menu-icon fa fa-database"></i>Data Token </a>
                     </li>
@@ -147,7 +147,7 @@
 
                             <!-- <a class="nav-link" href="#"><i class="fa fa -cog"></i>Settings</a> -->
 
-                            <a class="nav-link" href="{{ route('logoutAdmin') }}"><i class="fa fa-power -off"></i>Logout</a>
+                            <a class="nav-link" href="{{ route('logoutKoordinator') }}"><i class="fa fa-power -off"></i>Logout</a>
                         </div>
                     </div>
 
@@ -190,7 +190,7 @@
                                     <div class="stat-content">
                                         <div class="text-left dib">
                                             <div class="stat-text"><span class="count">0</span></div>
-                                            <div class="stat-heading">Transaski</div>
+                                            <div class="stat-heading">Transaksi</div>
                                         </div>
                                     </div>
                                 </div>

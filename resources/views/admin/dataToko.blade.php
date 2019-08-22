@@ -169,7 +169,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Dashboard</h1>
+                                <h1>Data Toko</h1>
                             </div>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="{{ route('dashboardAdmin') }}">Dashboard</a></li>
-                                    <li class="active">Data Koordinator</li>
+                                    <li class="active">Data Toko</li>
                                 </ol>
                             </div>
                         </div>
@@ -194,7 +194,8 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Koordinator <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong>
+                                <strong class="card-title">Data Toko</strong>
+                                <!-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong> -->
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -202,8 +203,9 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Kode Toko</th>
-                                            <th>Nomor KTP Pemilik</th>
                                             <th>Nama Toko</th>
+                                            <th>Nama Pemilik</th>
+                                            <th>Koordinator</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -212,11 +214,12 @@
                                         <tr>
                                           <td>{{ ++$key }}</td>
                                           <td>{{ $data->kd_toko }}</td>
-                                          <td>{{ $data->KTP }}</td>
                                           <td>{{ $data->nama_toko }}</td>
+                                          <td>{{ $data->nama_lengkap }}</td>
+                                          <td>{{ $data->nama_koor }}</td>
                                           <td>
-                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_toko = "{{ $data->kd_toko }}" data-ktp="{{ $data->ktp }}" data-nama_toko="{{ $data->nama_toko }}" data-foto_toko="{{ $data->foto_toko }}" data-kd_user="{{ $data->kd_user }}" data-no_rekening="{{ $data->no_rekening }}"><i class="fa fa-edit"></i> Edit</button>
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteData" data-kd_toko = "{{ $data->kd_toko }}"><i class="fa fa-trash"></i> Delete</button>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_toko = "{{ $data->kd_toko }}" data-ktp="{{ $data->KTP }}" data-nama_toko="{{ $data->nama_toko }}" data-foto_toko="{{ $data->foto_toko }}" data-nama_user="{{ $data->nama_lengkap }}" data-nama_koor="{{ $data->nama_koor }}" data-no_rekening="{{ $data->no_rekening }}" data-provinsi="{{ $data->provinsi }}"
+                                              data-type="{{ $data->type }}" data-kota="{{ $data->kota }}"><i class="fa fa-info"></i> Detail</button>
                                           </td>
                                         </tr>
                                       @endforeach
@@ -230,134 +233,62 @@
         </div>
         <!-- .content -->
 
-        <!-- Modal Add Data-->
-        <div id="addData" class="modal fade" role="dialog">
+        <!-- Modal Detail Data-->
+        <div id="detailData" class="modal fade" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><span class="fa fa-plus-circle"></span> Add Toko</h4>
+                <h4 class="modal-title"> <span class="fa fa-info-circle">  </span> Detail Data</h4>
               </div>
               <div class="modal-body">
-                <form id="modal-form-add" action="#" method="post" role="form">
-                  {{ csrf_field() }}
-                  <div class="form-group has-success">
-                    <label for="id_token" class="form-control-label">Token</label>
-                    <input type="text" id="id_token" name="id_token" class="form-control" required/>
-                    <span class="text-warning" ></span>
-                  </div>
-                  <div class="form-group has-success">
-                    <label for="KTP" class="form-control-label">Nomor KTP Pemilik</label>
-                    <input type="text" id="KTP" name="KTP" class="form-control" required />
-                  </div>
-                  <div class="form-group has-success">
-                    <label for="nama_toko" class="form-control-label">Nama Toko</label>
-                    <input type="text" id="nama_toko" name="nama_toko" class="form-control" required />
-                  </div>
-                  <div class="form-group has-success">
-                    <label for="foto_toko" class="form-control-label">Foto Toko</label>
-                    <input type="file" id="foto_toko" name="foto_toko" class="form-control" required />
-                  </div>
-                  <div class="form-group has-success">
-                    <label for="kd_user" class="form-control-label">Nama Pemilik</label>
-                    <select id="kd_user" name="kd_user" class="form-control">
-                      @foreach($user as $data)
-                        <option value="{{ $data->kd_user }}">{{ $data->nama_lengkap }}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group has-success">
-                    <label for="no_rekening" class="form-control-label">Nomor Rekening</label>
-                    <input type="number" id="no_rekening" name="no_rekening" class="form-control" required />
-                  </div>
+                   <table class="table table-striped table-bordered table-hover no-footer">
+                       <tr>
+                           <th colspan="2"><img id="foto" src="" style="width: 100%; height: 100%" alt="Toko belum mengupload foto" onerror="this.onerror=null; this.src='/images/not_found.jpg'"></th>
+                       </tr>
+                       <tr>
+                           <th>Kode Toko</th>
+                           <td id="kd_toko"></td>
+                       </tr>
+                       <tr>
+                           <th>Nama Toko</th>
+                           <td id="nama_toko"></td>
+                       </tr>
+                       <tr>
+                           <th>Nama Pemilik</th>
+                           <td id="nama_pemilik"></td>
+                       </tr>
+                       <tr>
+                           <th>Nomor KTP Pemilik</th>
+                           <td id="no_ktp"></td>
+                       </tr>
+                       <tr>
+                           <th>Rekening Toko</th>
+                           <td id="no_rek"></td>
+                       </tr>
+                       <tr>
+                           <th>Nama Koordinator</th>
+                           <td id="nama_koor"></td>
+                       </tr>
+                       <!-- <tr>
+                           <th>Alamat</th>
+                           <td id="detail_alamat"></td>
+                       </tr> -->
+                       <tr>
+                           <th>Provinsi</th>
+                           <td id="provinsi"></td>
+                       </tr>
+                       <tr>
+                           <th>Daerah</th>
+                           <td id="daerah"></td>
+                       </tr>
+                   </table>
               </div>
               <div class="modal-footer">
-                <button type="submit" class=" btn btn-success"><span class="fa fa-plus-circle"></span> Submit</button>
                 <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
               </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal Edit Data-->
-        <div id="editData" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><span class="fa fa-edit"></span> Edit Data</h4>
-              </div>
-                <form id="modal-form-edit" method="post" action="#">
-                    {{ method_field('patch') }}
-                    {{ csrf_field() }}
-              <div class="modal-body">
-                    <input type="hidden" name="kd_toko" id="cat_kd" value="">
-                    <div class="form-group has-success">
-                      <label for="kd_toko" class="form-control-label">Kode Toko</label>
-                      <input type="text" id="kd_toko" name="kd_toko" class="form-control" required/>
-                      <span class="text-warning" ></span>
-                    </div>
-                    <div class="form-group has-success">
-                      <label for="KTP" class="form-control-label">Nomor KTP Pemilik</label>
-                      <input type="text" id="KTP" name="KTP" class="form-control" required />
-                    </div>
-                    <div class="form-group has-success">
-                      <label for="nama_toko" class="form-control-label">Nama Toko</label>
-                      <input type="text" id="nama_toko" name="nama_toko" class="form-control" required />
-                    </div>
-                    <div class="form-group has-success">
-                      <label for="foto_toko" class="form-control-label">Foto Toko</label>
-                      <input type="file" id="foto_toko" name="foto_toko" class="form-control" required />
-                    </div>
-                    <div class="form-group has-success">
-                      <label for="kd_user" class="form-control-label">Nama Pemilik</label>
-                      <select id="kd_user" name="kd_user" class="form-control">
-                        @foreach($user as $data)
-                          <option value="{{ $data->kd_user }}">{{ $data->nama_lengkap }}</option>
-                        @endforeach
-                      </select>
-                    </div>
-                    <div class="form-group has-success">
-                      <label for="no_rekening" class="form-control-label">Nomor Rekening</label>
-                      <input type="number" id="no_rekening" name="no_rekening" class="form-control" required />
-                    </div>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-warning" id="btnEdit"><span class="fa fa-edit"></span> Edit</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
-              </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal Delete Data-->
-        <div id="deleteData" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title text-center"><span class="fa fa-check"></span> Delete Confirmation</h4>
-              </div>
-                <form id="modal-form-delete" method="post" action="#">
-                    {{ method_field('delete') }}
-                    {{ csrf_field() }}
-              <div class="modal-body">
-                    <input type="hidden" name="kd_koordinator" id="cat_kd" value="">
-                    <p><center>Are you sure you want to delete this ?</center></p>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" id="btnDelete"><span class="fa fa-trash"></span> Yes, Delete</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> No, Cancel</button>
-              </div>
-              </form>
             </div>
           </div>
         </div>
@@ -405,152 +336,44 @@
         $(document).ready(function() {
           $('#bootstrap-data-table-export').DataTable();
 
-          $('#addData').on('show.bs.modal', function(event) {
+          $('#detailData').on('show.bs.modal', function (event) {
             event.preventDefault();
+            
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var kd_toko = button.data('kd_toko') // Extract info from data-* attributes
+            var ktp = button.data('ktp')
+            var nama_toko = button.data('nama_toko')
+            var nama_pemilik = button.data('nama_user')
+            var foto_toko = button.data('foto_toko')
+            var no_rek = button.data('no_rekening')
+            var nama_koor = button.data('nama_koor')
+            //var detail_alamat = button.data('detail_alamat');
+            var provinsi = button.data('provinsi')
+            var type = button.data('type')
+            var kota = button.data('kota')
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            var loadImg;
+
+            if(foto_toko != ""){
+              loadImg = "http://localhost:8000/images/toko/"+foto_toko
+            }else{
+              loadImg = "http://localhost:8000/images/not_found.jpg"
+            }
+
+            modal.find('.modal-body #foto').attr("src", loadImg)
+            modal.find('.modal-body #kd_toko').text(kd_toko)
+            modal.find('.modal-body #nama_toko').text(nama_toko)
+            modal.find('.modal-body #nama_pemilik').text(nama_pemilik)
+            modal.find('.modal-body #no_ktp').text(ktp)
+            modal.find('.modal-body #no_rek').text(no_rek)
+            modal.find('.modal-body #nama_koor').text(nama_koor)
+            //modal.find('.modal-body #detail_alamat').text(detail_alamat)
+            modal.find('.modal-body #provinsi').text(provinsi)
+            modal.find('.modal-body #daerah').text(type+' '+kota)
           });
-
-          var formAdd    = $('#modal-form-add');
-          formAdd.submit(function (e) {
-              e.preventDefault();
-
-              $.ajax({
-                  url: formAdd.attr('action'),
-                  type: "POST",
-                  data: formAdd.serialize(),
-                  dataType: "json",
-                  success: function( res ){
-                    console.log(res)
-                    if( res.error == 0 ){
-                      $('#addData').modal('hide');
-                      swal(
-                        'Success',
-                        res.message,
-                            'success'
-                        ).then(OK => {
-                          if(OK){
-                            window.location.href = "{{ route('dataToko') }}";
-                          }
-                        });
-                    } else{
-                        $('#addData').modal('hide');
-                        swal(
-                          'Fail',
-                          res.message,
-                          'error'
-                        ).then(OK => {
-                          if(OK){
-                            window.location.href = "{{ route('dataToko') }}";
-                          }
-                        });
-                      }
-                    }
-                })
-            });
-
-            $('#editData').on('show.bs.modal', function (event) {
-              event.preventDefault();
-
-              var button = $(event.relatedTarget) // Button that triggered the modal
-              var kd_toko = button.data('kd_toko') // Extract info from data-* attributes
-              var ktp = button.data('KTP')
-              var nama_toko = button.data('nama_toko')
-              var foto_toko = button.data('foto_toko')
-              var kd_user = button.data('kd_user')
-              var no_rek = button.data('no_rekening')
-
-              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-              var modal = $(this)
-              modal.find('.modal-body #kd_toko').val(kd_toko)
-              modal.find('.modal-body #KTP').val(ktp)
-              modal.find('.modal-body #nama_toko').val(nama_toko)
-              modal.find('.modal-body #foto_toko').val(foto_toko)
-              modal.find('.modal-body #kd_user').val(kd_user)
-              modal.find('.modal-body #no_rekening').val(no_rek)
-              modal.find('.modal-body #cat_kd').val(kd_toko)
-              // $("#kd_koordinator").prop('disabled', true);
-            });
-
-            var formEdit   = $('#modal-form-edit');
-            formEdit.submit(function (e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: formEdit.attr('action'),
-                type: "POST",
-                data: formEdit.serialize(),
-                dataType: "json",
-                success: function( res ){
-                  console.log(res)
-                  if( res.error == 0 ){
-                    $('#editData').modal('hide');
-                    swal(
-                      'Success',
-                      res.message,
-                          'success'
-                      ).then(OK => {
-                        if(OK){
-                          window.location.href = "{{ route('dataToko') }}";
-                        }
-                      });
-                  } else{
-                      $('#editData').modal('hide');
-                      swal(
-                        'Fail',
-                        res.message,
-                        'error'
-                      ).then(OK => {
-                        if(OK){
-                          window.location.href = "{{ route('dataToko') }}";
-                        }
-                      });
-                    }
-                  }
-                })
-            });
-
-            $('#deleteData').on('show.bs.modal', function (event) {
-              event.preventDefault();
-
-              var button     = $(event.relatedTarget)
-              var kd_toko    = button.data('kd_toko')
-              var modal      = $(this)
-              modal.find('.modal-body #cat_kd').val(kd_toko)
-            });
-
-            var formDelete = $('#modal-form-delete');
-            formDelete.submit(function (e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: formDelete.attr('action'),
-                    type: "POST",
-                    data: formDelete.serialize(),
-                    dataType: "json",
-                    success: function( res ){
-              				console.log(res)
-              				if( res.error == 0 ){
-                        $('#deleteData').modal('hide');
-              					swal(
-              					  'Success',
-              					  res.message,
-                  					  'success'
-                					).then(OK => {
-                            if(OK){
-                                window.location.href = "{{ route('dataToko') }}";
-                            }
-                          });
-                  		}else{
-                          $('#deleteData').modal('hide');
-                  				swal(
-                  				  'Fail',
-                					  res.message,
-                					  'error'
-                					)
-                				}
-                			}
-                  })
-              });
 
         });
     </script>

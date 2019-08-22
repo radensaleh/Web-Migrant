@@ -170,7 +170,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Dashboard</h1>
+                                <h1>Data Koordinator</h1>
                             </div>
                         </div>
                     </div>
@@ -218,8 +218,9 @@
                                           <td>{{ $data->nama_lengkap }}</td>
                                           <td><?php if(  $data->jenis_kelamin == 1  ){ echo 'Laki-Laki'; }else{ echo 'Perempuan'; } ?></td>
                                           <td>
-                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-ktp="{{ $data->KTP }}" data-nama_lengkap="{{ $data->nama_lengkap }}" data-jenis_kelamin="{{ $data->jenis_kelamin }}" data-nomer_hp="{{ $data->nomer_hp }}" data-email="{{ $data->email }}" data-provinsi="{{ $data->provinsi }}" data-type="{{ $data->daerah }}" data-nama_daerah="{{ $data->nama_daerah }}" data-detail_alamat="{{ $data->detail_alamat }}"><i class="fa fa-edit"></i> Edit</button>
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-nama="{{ $data->nama_lengkap }}"><i class="fa fa-info"></i> Detail</button>
+                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-ktp="{{ $data->KTP }}" data-nama_lengkap="{{ $data->nama_lengkap }}" data-jenis_kelamin="{{ $data->jenis_kelamin }}" data-nomer_hp="{{ $data->nomer_hp }}" data-email="{{ $data->email }}" data-detail_alamat="{{ $data->detail_alamat }}"><i class="fa fa-edit"></i> Edit</button>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_koordinator = "{{ $data->kd_koordinator }}" data-ktp="{{ $data->KTP }}" data-nama_lengkap="{{ $data->nama_lengkap }}" data-jenis_kelamin="<?php if(  $data->jenis_kelamin == 1  ){ echo 'Laki-Laki'; }else{ echo 'Perempuan'; } ?>" data-nomer_hp="{{ $data->nomer_hp }}"
+                                              data-email="{{ $data->email }}" data-detail_alamat="{{ $data->detail_alamat }}" data-provinsi="{{ $data->city->province->province }}" data-kota="{{ $data->city->city_name }}" data-type="{{ $data->city->type }}" data-foto="{{ $data->foto_koordinator }}"><i class="fa fa-info"></i> Detail</button>
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteData" data-kd_koordinator = "{{ $data->kd_koordinator }}"><i class="fa fa-trash"></i> Delete</button>
                                           </td>
                                         </tr>
@@ -249,12 +250,12 @@
                   {{ csrf_field() }}
                   <div class="form-group has-success">
                     <label for="KTP" class="form-control-label">Nomor KTP</label>
-                    <input type="number" id="KTP" name="KTP" class="form-control" required/>
+                    <input placeholder="998234782731" type="number" id="KTP" name="KTP" class="form-control" required/>
                     <span class="text-warning" ></span>
                   </div>
                   <div class="form-group has-success">
                     <label for="nama_lengkap" class="form-control-label">Nama Lengkap</label>
-                    <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-control" required />
+                    <input placeholder="Raden Saleh" type="text" id="nama_lengkap" name="nama_lengkap" class="form-control" required />
                   </div>
                   <div class="form-group has-success">
                     <label for="jenis_kelamin" class="form-control-label">Jenis Kelamin</label>
@@ -331,12 +332,12 @@
                   </div>
                   <div class="form-group has-success">
                     <label for="KTP" class="form-control-label">Nomor KTP</label>
-                    <input type="text" id="KTP" name="KTP" class="form-control" required/>
+                    <input placeholder="998234782731" type="text" id="KTP" name="KTP" class="form-control" required/>
                     <span class="text-warning" ></span>
                   </div>
                   <div class="form-group has-success">
                     <label for="nama_lengkap" class="form-control-label">Nama Lengkap</label>
-                    <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-control" required />
+                    <input placeholder="Raden Saleh" type="text" id="nama_lengkap" name="nama_lengkap" class="form-control" required />
                   </div>
                   <div class="form-group has-success">
                     <label for="jenis_kelamin" class="form-control-label">Jenis Kelamin</label>
@@ -362,7 +363,7 @@
                   <input type="hidden" id="editdaerah" name="daerah" value="">
                   <div class="form-group has-success">
                     <label for="kabkota" class="form-control-label">Kabupaten/Kota</label>
-                    <select id="editkabkota" name="kabkota" class="form-control">
+                    <select id="editkabkota" name="city_id" class="form-control">
                         <option value="id">- Pilih Kota/Kabupaten -</option>
                     </select>
                   </div>
@@ -376,6 +377,66 @@
                 <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
               </div>
               </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Detail Data-->
+        <div id="detailData" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> <span class="fa fa-info-circle"></span> Detail Data</h4>
+              </div>
+              <div class="modal-body">
+                   <table class="table table-striped table-bordered table-hover no-footer">
+                       <tr>
+                           <th colspan="2"><img id="foto" src="" style="width: 100%; height: 100%" alt="Koordinator belum mengupload foto" onerror="this.onerror=null; this.src='/images/not_found.jpg'"></th>
+                       </tr>
+                       <tr>
+                           <th>Kode Koordinator</th>
+                           <td id="kd_koordinator"></td>
+                       </tr>
+                       <tr>
+                           <th>Nomor KTP</th>
+                           <td id="ktp"></td>
+                       </tr>
+                       <tr>
+                           <th>Nama Lengkap</th>
+                           <td id="nama_lengkap"></td>
+                       </tr>
+                       <tr>
+                           <th>Jenis Kelamin</th>
+                           <td id="jenis_kelamin"></td>
+                       </tr>
+                       <tr>
+                           <th>Nomor HP</th>
+                           <td id="nomer_hp"></td>
+                       </tr>
+                       <tr>
+                           <th>Email</th>
+                           <td id="email"></td>
+                       </tr>
+                       <tr>
+                           <th>Alamat</th>
+                           <td id="detail_alamat"></td>
+                       </tr>
+                       <tr>
+                           <th>Provinsi</th>
+                           <td id="provinsi"></td>
+                       </tr>
+                       <tr>
+                           <th>Daerah</th>
+                           <td id="daerah"></td>
+                       </tr>
+                   </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
+              </div>
             </div>
           </div>
         </div>
@@ -534,9 +595,7 @@
               var jenis_kelamin = button.data('jenis_kelamin')
               var nomer_hp = button.data('nomer_hp')
               var email = button.data('email')
-              var password = button.data('password')
               var detail_alamat = button.data('detail_alamat')
-
 
               // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
               // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
@@ -550,6 +609,45 @@
               modal.find('.modal-body #detail_alamat').val(detail_alamat)
               modal.find('.modal-body #cat_kd').val(kd_koordinator)
               // $("#kd_koordinator").prop('disabled', true);
+            });
+
+            $('#detailData').on('show.bs.modal', function (event) {
+              event.preventDefault();
+
+              var button = $(event.relatedTarget) // Button that triggered the modal
+              var kd_koordinator = button.data('kd_koordinator') // Extract info from data-* attributes
+              var ktp = button.data('ktp')
+              var nama_lengkap = button.data('nama_lengkap')
+              var jenis_kelamin = button.data('jenis_kelamin')
+              var nomer_hp = button.data('nomer_hp')
+              var email = button.data('email')
+              var detail_alamat = button.data('detail_alamat')
+              var provinsi = button.data('provinsi')
+              var type = button.data('type')
+              var kota = button.data('kota')
+              var foto = button.data('foto')
+
+              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+              var modal = $(this)
+              var loadImg;
+
+              if(foto != ""){
+                loadImg = "http://localhost:8000/images/koordinator/"+foto
+              }else{
+                loadImg = "http://localhost:8000/images/not_found.jpg"
+              }
+
+              modal.find('.modal-body #foto').attr("src", loadImg)
+              modal.find('.modal-body #kd_koordinator').text(kd_koordinator)
+              modal.find('.modal-body #ktp').text(ktp)
+              modal.find('.modal-body #nama_lengkap').text(nama_lengkap)
+              modal.find('.modal-body #jenis_kelamin').text(jenis_kelamin)
+              modal.find('.modal-body #nomer_hp').text(nomer_hp)
+              modal.find('.modal-body #email').text(email)
+              modal.find('.modal-body #detail_alamat').text(detail_alamat)
+              modal.find('.modal-body #provinsi').text(provinsi)
+              modal.find('.modal-body #daerah').text(type+' '+kota)
             });
 
             var formEdit   = $('#modal-form-edit');

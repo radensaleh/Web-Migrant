@@ -29,9 +29,7 @@ class KoordinatorController extends Controller
         $koor->nomer_hp = $request->nomer_hp;
         $koor->email = $request->email;
         $koor->password = 'Koordinator123?';
-        $koor->provinsi = $request->provinsi;
-        $koor->daerah = $request->daerah;
-        $koor->nama_daerah = $request->kabkota;
+        $koor->city_id = $request->kabkota;
         $koor->detail_alamat = $request->detail_alamat;
         $koor->poin = '0';
 
@@ -130,7 +128,7 @@ class KoordinatorController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-          'email'       => 'required|email|max:255|unique:users',
+          'email'    => 'required|email|max:255',
           'password' => 'required|string|min:6|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
         ]);
 
@@ -209,6 +207,39 @@ class KoordinatorController extends Controller
 
           return view('koordinator.dataToken', compact(
               'name','token','kd_koordinator'
+          ));
+        }
+    }
+
+    //TOKO
+    public function dataToko(Request $request){
+        if(!$request->session()->exists('koordinator')){
+          return redirect()->route('loginPageKoor');
+        }else{
+          $koor = $request->session()->get('koordinator');
+          $name = DB::table('tb_koordinator')
+                  ->where('nomer_hp', $koor)
+                  ->orWhere('email', $koor)
+                  ->value('nama_lengkap');
+
+          $kd_koordinator = DB::table('tb_koordinator')
+                      ->where('nomer_hp', $koor)
+                      ->orWhere('email', $koor)
+                      ->value('kd_koordinator');
+
+
+          $toko = DB::table('tb_toko')
+                   ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko', 'tb_toko.no_rekening', 'user.nama_lengkap as nama_lengkap', 'provinsi.province as provinsi', 'kota.city_name as kota', 'kota.type as type', 'koordinator.nama_lengkap as nama_koor')
+                   ->join('tb_token as token', 'token.id_token', '=', 'tb_toko.id_token')
+                   ->join('tb_koordinator as koordinator', 'koordinator.kd_koordinator', '=', 'token.kd_koordinator')
+                   ->join('tb_user as user', 'user.kd_user', '=', 'tb_toko.kd_user')
+                   ->join('tb_kota as kota', 'kota.city_id', '=', 'tb_toko.city_id')
+                   ->join('tb_provinsi as provinsi', 'provinsi.province_id', '=', 'kota.province_id')
+                   ->where('token.kd_koordinator', $kd_koordinator)
+                   ->get();
+
+          return view('koordinator.dataToko', compact(
+              'name','toko','kd_koordinator'
           ));
         }
     }

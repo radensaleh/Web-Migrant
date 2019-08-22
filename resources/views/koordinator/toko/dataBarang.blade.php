@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Data Token | Koordinator Migrant Shop</title>
+    <title>Data Barang | Koordinator Migrant Shop</title>
 
     <!-- <link rel="apple-touch-icon" href="/images/icon.png">
     <link rel="shortcut icon" href="/images/icon.png"> -->
@@ -72,21 +72,21 @@
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
             <div id="main-menu" class="main-menu collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="{{ route('dashboardKoordinator') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
-                    </li>
-                    <li class="menu-title">Data</li><!-- /.menu-title -->
-                    <li>
-                        <a href="{{ route('koorDataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
-                    </li>
-                    <!-- <li>
-                        <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaski </a>
-                    </li> -->
-                    <li class="active">
-                        <a href="{{ route('dataToken') }}"><i class="menu-icon fa fa-database"></i>Data Token </a>
-                    </li>
-                </ul>
+              <ul class="nav navbar-nav">
+                  <li>
+                      <a href="{{ route('dashboardKoordinator') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
+                  </li>
+                  <li class="menu-title">Data</li><!-- /.menu-title -->
+                  <li class="active">
+                      <a href="{{ route('koorDataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
+                  </li>
+                  <!-- <li>
+                      <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaski </a>
+                  </li> -->
+                  <li>
+                      <a href="{{ route('dataToken') }}"><i class="menu-icon fa fa-database"></i>Data Token </a>
+                  </li>
+              </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
     </aside>
@@ -98,8 +98,8 @@
             <div class="top-left">
                 <div class="navbar-header">
                   <a class="navbar-brand" href="{{ route('dashboardKoordinator')}}">// LOGO SLURR</a>
-                  <!-- <a class="navbar-brand" href="{{ route('dashboardAdmin')}}"><img src="/images/Logo_MGOLEM_Web1.png" width="170" height="40" alt="Logo"></a>
-                  <a class="navbar-brand hidden" href="{{ route('dashboardAdmin') }}"><img src="/images/logo2.png" alt="Logo"></a> -->
+                  <!-- <a class="navbar-brand" href="{{ route('dashboardKoordinator')}}"><img src="/images/Logo_MGOLEM_Web1.png" width="170" height="40" alt="Logo"></a>
+                  <a class="navbar-brand hidden" href="{{ route('dashboardKoordinator') }}"><img src="/images/logo2.png" alt="Logo"></a> -->
                   <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
             </div>
@@ -163,7 +163,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Data Token</h1>
+                                <h1>Toko {{ $nama_toko }}</h1>
                             </div>
                         </div>
                     </div>
@@ -172,7 +172,8 @@
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="{{ route('dashboardKoordinator') }}">Dashboard</a></li>
-                                    <li class="active">Data Token</li>
+                                    <li><a href="{{ route('koorDataToko') }}">Data Toko</a></li>
+                                    <li class="active">Data Barang</li>
                                 </ol>
                             </div>
                         </div>
@@ -188,28 +189,29 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Token <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Generate</button></strong>
+                                <strong class="card-title">Data Barang</strong>
+                                <!-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong> -->
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Token</th>
-                                            <!-- <th>Koordinator</th> -->
-                                            <th>Status</th>
+                                            <th>Kode Barang</th>
+                                            <th>Nama Barang</th>
+                                            <th>Harga Jual</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      @foreach($token as $key => $data)
+                                      @foreach($barang as $key => $data)
                                         <tr>
                                           <td>{{ ++$key }}</td>
-                                          <td>{{ $data->token }}</td>
-                                          <!-- <td>{{ $data->nama_lengkap }}</td> -->
-                                          <td><?php if($data->status == 0) echo 'Belum dipakai'; else 'Sudah dipakai'; ?></td>
+                                          <td>{{ $data->kd_barang }}</td>
+                                          <td>{{ $data->nama_barang }}</td>
+                                          <td>{{ $data->harga_jual }}</td>
                                           <td>
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteData" data-id_token = "{{ $data->id_token }}"><i class="fa fa-trash"></i> Delete</button>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_barang="{{ $data->kd_barang }}" data-nama_barang="{{ $data->nama_barang }}" data-deskripsi="{{ $data->deskripsi }}" data-jenis_barang="{{ $data->jenis_barang }}" data-stok="{{ $data->stok }}" data-harga_jual="{{ $data->harga_jual }}" data-foto="{{ $data->foto_barang }}" data-berat="{{ $data->berat_barang }}"><i class="fa fa-info"></i> Detail</button>
                                           </td>
                                         </tr>
                                       @endforeach
@@ -223,52 +225,54 @@
         </div>
         <!-- .content -->
 
-        <!-- Modal Add Data-->
-        <div id="addData" class="modal fade" role="dialog">
+        <!-- Modal Detail Data-->
+        <div id="detailData" class="modal fade" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><span class="fa fa-plus-circle"></span> Generate Token</h4>
+                <h4 class="modal-title"> <span class="fa fa-info-circle">  </span> Detail Data</h4>
               </div>
               <div class="modal-body">
-                <form id="modal-form-add" action="{{ route('data-token.store') }}" method="post" role="form">
-                  {{ csrf_field() }}
-                  <input type="hidden" name="kd_koordinator" value="{{ $kd_koordinator }}">
+                   <table class="table table-striped table-bordered table-hover no-footer">
+                       <tr>
+                           <th colspan="2"><img src="" style="width: 100%; height: 100%" alt="Toko belum mengupload foto" onerror="this.onerror=null; this.src='/images/toko/not_found.jpg'"></th>
+                       </tr>
+                       <tr>
+                           <th>Kode Barang</th>
+                           <td id="kd_barang"></td>
+                       </tr>
+                       <tr>
+                           <th>Nama Barang</th>
+                           <td id="nama_barang"></td>
+                       </tr>
+                       <tr>
+                           <th>Deskripsi</th>
+                           <td id="deskripsi"></td>
+                       </tr>
+                       <tr>
+                           <th>Jenis Barang</th>
+                           <td id="jenis_barang"></td>
+                       </tr>
+                       <tr>
+                           <th>Harga Jual</th>
+                           <td id="harga_jual"></td>
+                       </tr>
+                       <tr>
+                           <th>Stok</th>
+                           <td id="stok"></td>
+                       </tr>
+                       <tr>
+                           <th>Berat Barang</th>
+                           <td id="berat_barang"></td>
+                       </tr>
+                   </table>
               </div>
               <div class="modal-footer">
-                <button type="submit" class=" btn btn-success"><span class="fa fa-plus-circle"></span> Generate</button>
                 <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
               </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal Delete Data-->
-        <div id="deleteData" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title text-center"><span class="fa fa-check"></span> Delete Confirmation</h4>
-              </div>
-                <form id="modal-form-delete" method="post" action="{{ route('data-token.destroy', 'destroy') }}">
-                    {{ method_field('delete') }}
-                    {{ csrf_field() }}
-              <div class="modal-body">
-                    <input type="hidden" name="id_token" id="cat_id" value="">
-                    <p><center>Are you sure you want to delete this ?</center></p>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" id="btnDelete"><span class="fa fa-trash"></span> Yes, Delete</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> No, Cancel</button>
-              </div>
-              </form>
             </div>
           </div>
         </div>
@@ -316,92 +320,30 @@
         $(document).ready(function() {
           $('#bootstrap-data-table-export').DataTable();
 
-          $('#addData').on('show.bs.modal', function(event) {
-            event.preventDefault();
+          $('#detailData').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var kd_barang = button.data('kd_barang') // Extract info from data-* attributes
+            var nama_barang = button.data('nama_barang')
+            var jenis = button.data('jenis_barang')
+            var stok = button.data('stok')
+            var harga = button.data('harga_jual')
+            var deskripsi = button.data('deskripsi')
+            var berat_barang = button.data('berat')
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-body #kd_barang').text(kd_barang)
+            modal.find('.modal-body #nama_barang').text(nama_barang)
+            modal.find('.modal-body #jenis_barang').text(jenis)
+            modal.find('.modal-body #deskripsi').text(deskripsi)
+            modal.find('.modal-body #harga_jual').text('Rp. ' + harga +',-')
+            modal.find('.modal-body #stok').text(stok)
+            modal.find('.modal-body #berat_barang').text(berat_barang + ' gram')
           });
 
-          var formAdd    = $('#modal-form-add');
-          formAdd.submit(function (e) {
-              e.preventDefault();
-
-              $.ajax({
-                  url: formAdd.attr('action'),
-                  type: "POST",
-                  data: formAdd.serialize(),
-                  dataType: "json",
-                  success: function( res ){
-                    console.log(res)
-                    if( res.error == 0 ){
-                      $('#addData').modal('hide');
-                      swal(
-                        'Success',
-                        res.message,
-                            'success'
-                        ).then(OK => {
-                          if(OK){
-                            window.location.href = "{{ route('dataToken') }}";
-                          }
-                        });
-                    } else{
-                        $('#addData').modal('hide');
-                        swal(
-                          'Fail',
-                          res.message,
-                          'error'
-                        ).then(OK => {
-                          if(OK){
-                            window.location.href = "{{ route('dataToken') }}";
-                          }
-                        });
-                      }
-                    }
-                })
-            });
-
-            $('#deleteData').on('show.bs.modal', function (event) {
-              event.preventDefault();
-
-              var button     = $(event.relatedTarget)
-              var id_token   = button.data('id_token')
-              var modal      = $(this)
-              modal.find('.modal-body #cat_id').val(id_token)
-            });
-
-            var formDelete = $('#modal-form-delete');
-            formDelete.submit(function (e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: formDelete.attr('action'),
-                    type: "POST",
-                    data: formDelete.serialize(),
-                    dataType: "json",
-                    success: function( res ){
-              				console.log(res)
-              				if( res.error == 0 ){
-                        $('#deleteData').modal('hide');
-              					swal(
-              					  'Success',
-              					  res.message,
-                  					  'success'
-                					).then(OK => {
-                            if(OK){
-                                window.location.href = "{{ route('dataToken') }}";
-                            }
-                          });
-                  		}else{
-                          $('#deleteData').modal('hide');
-                  				swal(
-                  				  'Fail',
-                					  res.message,
-                					  'error'
-                					)
-                				}
-                			}
-                  })
-              });
-
         });
+
     </script>
 
 </body>

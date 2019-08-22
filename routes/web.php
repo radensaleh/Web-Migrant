@@ -36,9 +36,12 @@ Route::post('/koordinator/loginKoordinator', 'KoordinatorController@loginKoordin
 Route::get('/koordinator/logoutKoordinator', 'KoordinatorController@logoutKoordinator')->name('logoutKoordinator');
 Route::get('/koordinator/dashboard', 'KoordinatorController@dashboard')->name('dashboardKoordinator');
 Route::get('/koordinator/dataToken', 'KoordinatorController@dataToken')->name('dataToken');
+Route::get('/koordinator/dataToko', 'KoordinatorController@dataToko')->name('koorDataToko');
 Route::get('/koodinator/apiRajaOngkir/getProvince', 'KoordinatorController@getProvince');
 Route::post('/koodinator/apiRajaOngkir/getKabKota', 'KoordinatorController@getKabKota');
 Route::post('/koodinator/apiRajaOngkir/getTypeDaerah', 'KoordinatorController@getTypeDaerah');
+// KOORDINATOR - DATA BARANG TOKO
+Route::get('/koordinator/toko/{kd_toko}/dataBarang', 'TokoController@dataBarang');
 
 //Raja Ongkir
-Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');
+//Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');
