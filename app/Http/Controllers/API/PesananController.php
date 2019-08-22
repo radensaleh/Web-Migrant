@@ -29,15 +29,85 @@ class PesananController extends Controller
 
     //CreatePesanan
     public function createPesanan(Request $request)
+    /*Parameter
+        ArrayListPesanan yang didalamnya terdapat 
+        atribut array
+        -kd_user
+        -nama_penerima
+        -ongkir
+        -no_resi
+        -city_id,
+        -kd_barang
+        -kuantitas
+        -harga
+
+    */
     {
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
-        $kd_pesanan = 'PSN'.str_replace(' ','',$jam);
-
         $kd_transaksi = 'TRX'.str_replace(' ','',$jam);
 
-        
+        $hargas = $request->harga;
+        $ongkirs = $request->ongkir;
+        $no_resis = $request->no_resi;
+        $citys_id = $request->city_id;
+        $nama_penerimas = $request->nama_penerima; //1
+        $kd_barangs = $request->kd_barang;
+        $kuantitass = $request->kuantitas;
+        $kd_user = $request->kd_user; //2
+
+        $total_harga_pesanan = 0;
+
+        for($j=0; $j<sizeof($listPesanan); $j++) {
+            $getDate = Carbon::now('Asia/Jakarta');
+            $tgl = str_replace('-','', $getDate);
+            $jam = str_replace(':','', $tgl);
+            $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$i;
+            //Input Ke listBarang
+            for($i=0; $i<sizeof($kd_barangs); $i++) {
+                $dataBarang = [
+                    'kd_pesanan' => $kd_pesanan,
+                    'kd_barang' => $kd_barangs[$i],
+                    'kuantitas' => $kuantitass[$i],
+                    'harga' => $hargas[$i]
+                ];
+                $total_harga_pesanan += $hargas[$i];
+                ListBarang::create($dataBarang);
+            } //End For
+            $dataPesanan = [
+                'kd_pesanan' => $kd_pesanan,
+                'kd_transaksi' => $kd_transaksi,
+                'total_harga' => $total_harga_pesanan,
+                'ongkir' => $ongkirs[$j],
+                'no_resi' => $no_resis[$j],
+                'city_id' => $citys_id[$j],
+                'id_status' => 1,
+            ];
+            $total_ongkir += $ongkir[$j];
+            Pesanan::create($dataPesanan);
+        } //End For
+        $transaksi = [
+            'kd_transaksi' => $kd_transaksi,
+            'kd_user' => $kd_user,
+            'tgl_transaksi' => Carbon::now()->format('d.m.Y'),
+            'total_harga' => $total_harga_pesanan + $total_ongkir,
+            'nama_penerima' => $nama_penerima
+        ];
+        $transaksi = Transaksi::create($transaksi);
+
+        if($transaksi) {
+            return response()->json([
+                'response' => true,
+                'message' => 'Transaction Successfull'
+            ]);
+        } else {
+            return response()->json([
+                'response' => false,
+                'message' => 'Transaction Failed !'
+            ]);
+        }
+
     }
 
     /**

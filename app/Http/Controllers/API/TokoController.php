@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Toko;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\Toko as TokoResource;
 use Carbon\Carbon;
@@ -17,6 +18,9 @@ class TokoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getToko($kd_user)
+    /*Paramter
+        -kd_user -> required !
+    */
     {
         $toko = DB::table('tb_toko')->where('kd_user', $kd_user)->first();
 
@@ -49,8 +53,18 @@ class TokoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    
     public function register(Request $request)
     {
+        /*
+    "kd_user" : "USR001",
+	"token" : "xyzxyz",
+	"ktp" : "1234567789",
+	"nama_toko" : "Eka Shop",
+    "city_id" : 1,
+    "no_rekening" : "example",
+    "nama_bank" : "BRI"
+        */
         $toko = new Toko;
 
         $kd_token = $request->input('token');
@@ -92,18 +106,24 @@ class TokoController extends Controller
 
         $toko->kd_toko = $kd_toko;
         $toko->id_token = $token->id_token;
-        $toko->KTP = $request->input('ktp');
-        $toko->nama_toko = $request->input('nama_toko');
+        $toko->KTP = $request->ktp;
+        $toko->nama_toko = $request->nama_toko;
         $toko->kd_user = $user->kd_user;
-        $toko->no_rekening = $bank->no_rekening;
+        $toko->no_rekening = $$request->no_rekening;
         $toko->city_id = $request->city_id;
+        $toko->nama_bank = $request->nama_bank;
 
         if($toko->save()) {
-            DB::table('tb_user')->where('nama_lengkap', $request->nama_lengkap)->update(['status' => '1']);
+            DB::table('tb_user')->where('kd_user', $request->kd_user)->update(['status' => '1']);
             DB::table('tb_token')->where('token', $kd_token)->update(['status' => '1']);
             return response()->json([
                 'response' => true,
                 'message' => 'Success'
+            ]);
+        } else {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed !'
             ]);
         }
     }
@@ -139,6 +159,16 @@ class TokoController extends Controller
      */
     //Update Toko
     public function update(Request $request)
+    /* Parameter
+        -kd_toko -> Required
+        ktp; -> optional
+        nama_toko; -> optional
+        kd_user; -> optional
+        no_rekening; -> optional
+        city_id; -> optional
+        nama_bank; -> optional
+        
+    */
     {
         $toko = Toko::findOrFail($request->kd_toko);
         $toko->update($request->all());

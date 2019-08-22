@@ -20,6 +20,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function login(Request $request)
+    /* Parameter :
+        -email
+        -password
+    */
     {
         $email = $request->input('email');
         $password = $request->input('password');
@@ -27,15 +31,17 @@ class UserController extends Controller
         where('password', '=', $password)->first();
 
         if($user==null) {
-            return [
-                'status' => '404'
-            ];
+            return response()->json(
+            [
+                'status' => false,
+                'message' => 'Login Failed !'
+            ]);
         }
         else {
             return response()->json([
                 $user
             ]);
-        }
+        }        
     }
 
     /**
@@ -45,7 +51,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $tanggal = Carbon::now()->format('d.m.Y');
+
+        return $tanggal;
     }
 
     /**
@@ -55,6 +63,16 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function register(Request $request)
+    /*Parameter
+        -nama_lengkap
+        -jenis_kelamin (1/0)
+        -nomor HP (0-9)
+        -email
+        -password
+        -city_id
+        -detail_alamat
+
+    */
     {
         $user = new User;
 
@@ -69,23 +87,40 @@ class UserController extends Controller
         $user->nomer_hp = $request->input('nomer_hp');
         $user->email = $request->input('email');
         $user->password = $request->input('password');
-        $user->provinsi = $request->input('provinsi');
-        $user->daerah = $request->input('daerah');
-        $user->nama_daerah = $request->input('nama_daerah');
+        $user->city_id = $request->input('city_id');
         $user->detail_alamat = $request->input('detail_alamat');
-        $user->status = $request->input('status');
-        $user->foto_user = $request->input('foto_user');
+        // $user->foto_user = $request->input('foto_user');
+        $user->status = 0;
 
         if($user->save()) {
-            return [
-                'status' => 'Success'
-            ];
+            return response()->json([
+                'response' => true,
+                'message' => 'Success'
+            ]);
+        } else 
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Registration Failed !'
+            ]);
         }
 
     }
 
 //Update User Identity
     public function updateUser(Request $request)
+    /*Parameter
+        -kd_user -> Required !
+        -nama_lengkap -> Optional
+        -jenis_kelamin (1/0) ->optional
+        -nomor HP (0-9) ->optional
+        -email ->optional
+        -password ->optional
+        -city_id ->optional
+        -detail_alamat ->optional
+        -foto user ->optional
+
+    */
     {
         $user = User::findOrFail($request->kd_user);
         $user->update($request->all());

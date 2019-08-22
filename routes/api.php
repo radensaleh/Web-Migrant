@@ -83,3 +83,6 @@ Route::put("/ListKeranjang", "API\ListBarangKeranjang@update");
 
 //delete List Barang Keranjang by id_list_keranjang
 Route::delete("/ListKeranjang", "API\ListBarangKeranjang@destroy");
+
+//Create Pesanan
+Route::post("/Pesanan", "API\PesananController@createPesanan");

@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class TokenAPIController extends Controller
+/*Parameter
+  -kd_token
+*/
 {
   public function checkToken(){
     $kd_token = request()->token;

@@ -10,7 +10,7 @@ class Toko extends Model
 
     protected $fillable = [
         'kd_toko','id_token','KTP','nama_toko','foto_toko',
-        'kd_user','no_rekening','city_id'
+        'kd_user','no_rekening','city_id', 'nama_bank'
     ];
 
     protected $primaryKey = 'kd_toko';
