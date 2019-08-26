@@ -15,6 +15,8 @@ class Toko extends Model
 
     protected $primaryKey = 'kd_toko';
 
+    public $incrementing = false;
+
     public function user(){
        return $this->belongsTo('App\User', 'kd_user');
     }

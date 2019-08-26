@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Pesanan;
 use App\ListBarang;
 use App\Transaksi;
+use App\Keranjang;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -30,23 +31,17 @@ class PesananController extends Controller
     //CreatePesanan
     public function createPesanan(Request $request)
     /*Parameter
-        ArrayListPesanan yang didalamnya terdapat 
-        atribut array
-        -kd_user
-        -nama_penerima
-        -ongkir
-        -no_resi
-        -city_id,
-        -kd_barang
-        -kuantitas
-        -harga
+        $kd_user = $request->kd_user;
+        $nama_penerima = $request->nama_penerima;
+        $city_id = $request->city_id;
+        $ongkirs = $request->ongkir;
 
     */
     {
         $kd_user = $request->kd_user;
         $nama_penerima = $request->nama_penerima;
         $city_id = $request->city_id;
-        $ongkir = 
+        $ongkirs = $request->ongkir;
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
@@ -57,40 +52,46 @@ class PesananController extends Controller
         // $kuantitass = $request->kuantitas;
         // $hargas = $request->harga;
 
+        //Data dari Keranjang untuk dimasukkan ke pesanan dan listBarang
+        $keranjang = Keranjang::where('kd_user', $kd_user)->get();
         $total_harga_pesanan = 0;
 
-        for($j=0; $j<sizeof($listPesanan); $j++) {
+        for($j=0; $j<sizeof($keranjang); $j++) {
             $getDate = Carbon::now('Asia/Jakarta');
             $tgl = str_replace('-','', $getDate);
             $jam = str_replace(':','', $tgl);
             $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$i;
+
+            //GetListBarangKeranjang
+            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang->id_keranjang)->get();
             //Input Ke listBarang
-            for($i=0; $i<sizeof($kd_barangs); $i++) {
+            for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
                 $dataBarang = [
                     'kd_pesanan' => $kd_pesanan,
-                    'kd_barang' => $kd_barangs[$i],
-                    'kuantitas' => $kuantitass[$i],
-                    'harga' => $hargas[$i]
+                    'kd_barang' => $listBarangKeranjang[$i]->kd_barang,
+                    'kuantitas' => $listBarangKeranjang[$i]->kuantitas,
+                    'harga' => $listBarangKeranjang[$i]->harga
                 ];
-                $total_harga_pesanan += $hargas[$i];
+                $total_harga_pesanan += $listBarangKeranjang[$i]->harga;
                 ListBarang::create($dataBarang);
             } //End For
             $dataPesanan = [
                 'kd_pesanan' => $kd_pesanan,
                 'kd_transaksi' => $kd_transaksi,
+                //Total Harga Pesanan
                 'total_harga' => $total_harga_pesanan,
                 'ongkir' => $ongkirs[$j],
-                'no_resi' => $no_resis[$j],
-                'city_id' => $citys_id[$j],
+                'city_id' => $city_id,
                 'id_status' => 1,
             ];
-            $total_ongkir += $ongkir[$j];
+            $total_ongkir += $ongkirs[$j];
             Pesanan::create($dataPesanan);
         } //End For
         $transaksi = [
             'kd_transaksi' => $kd_transaksi,
             'kd_user' => $kd_user,
             'tgl_transaksi' => Carbon::now()->format('d.m.Y'),
+            //Total Harga Transaksi, ini belum ditambah dengan keuntungan untuk migrantshop
             'total_harga' => $total_harga_pesanan + $total_ongkir,
             'nama_penerima' => $nama_penerima
         ];
