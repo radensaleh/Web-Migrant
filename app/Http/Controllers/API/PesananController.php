@@ -43,19 +43,19 @@ class PesananController extends Controller
 
     */
     {
+        $kd_user = $request->kd_user;
+        $nama_penerima = $request->nama_penerima;
+        $city_id = $request->city_id;
+        $ongkir = 
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_transaksi = 'TRX'.str_replace(' ','',$jam);
 
-        $hargas = $request->harga;
-        $ongkirs = $request->ongkir;
-        $no_resis = $request->no_resi;
-        $citys_id = $request->city_id;
-        $nama_penerimas = $request->nama_penerima; //1
-        $kd_barangs = $request->kd_barang;
-        $kuantitass = $request->kuantitas;
-        $kd_user = $request->kd_user; //2
+        //Dari tb keranjang
+        // $kd_barangs = $request->kd_barang;
+        // $kuantitass = $request->kuantitas;
+        // $hargas = $request->harga;
 
         $total_harga_pesanan = 0;
 

@@ -61,7 +61,7 @@ Route::delete("/BarangDelete/{kd_barang}","API\BarangController@deleteBarang");
 Route::get("/BarangKategori/{id_jenis}","API\BarangController@showByCategory");
 
 //Create Keranjang
-Route::post("/Keranjang","API\KeranjangController@createKeranjang");
+Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 
 //Update Keranjang
 Route::put("/Keranjang", "API\KeranjangController@updateKeranjang");
