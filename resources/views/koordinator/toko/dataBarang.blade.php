@@ -238,7 +238,7 @@
               <div class="modal-body">
                    <table class="table table-striped table-bordered table-hover no-footer">
                        <tr>
-                           <th colspan="2"><img src="" style="width: 100%; height: 100%" alt="Toko belum mengupload foto" onerror="this.onerror=null; this.src='/images/toko/not_found.jpg'"></th>
+                           <th colspan="2"><img id="foto" src="" style="width: 100%; height: 100%" alt="Toko belum mengupload foto" onerror="this.onerror=null; this.src='/images/not_found.jpg'"></th>
                        </tr>
                        <tr>
                            <th>Kode Barang</th>
@@ -321,6 +321,7 @@
           $('#bootstrap-data-table-export').DataTable();
 
           $('#detailData').on('show.bs.modal', function (event) {
+            event.preventDefault();
             var button = $(event.relatedTarget) // Button that triggered the modal
             var kd_barang = button.data('kd_barang') // Extract info from data-* attributes
             var nama_barang = button.data('nama_barang')
@@ -329,10 +330,20 @@
             var harga = button.data('harga_jual')
             var deskripsi = button.data('deskripsi')
             var berat_barang = button.data('berat')
+            var foto = button.data('foto')
 
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
+            var loadImg;
+
+            if(foto != ""){
+              loadImg = "http://localhost:8000/images/barang/"+foto
+            }else{
+              loadImg = "http://localhost:8000/images/not_found.jpg"
+            }
+
+            modal.find('.modal-body #foto').attr("src", loadImg)
             modal.find('.modal-body #kd_barang').text(kd_barang)
             modal.find('.modal-body #nama_barang').text(nama_barang)
             modal.find('.modal-body #jenis_barang').text(jenis)
