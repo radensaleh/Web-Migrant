@@ -15,11 +15,21 @@ class Pesanan extends Model
 
     protected $primaryKey = 'kd_pesanan';
 
+    public $incrementing = false;
+
     public function city(){
        return $this->belongsTo('App\Kota', 'city_id');
     }
 
     public function transaksi(){
        return $this->belongsTo('App\Transaksi', 'kd_transaksi');
+    }
+
+    public function list_barang(){
+       return $this->hasMany('App\ListBarang', 'kd_pesanan');
+    }
+
+    public function status(){
+      return $this->belongsTo('App\Status', 'id_status');
     }
 }

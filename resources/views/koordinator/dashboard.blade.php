@@ -189,8 +189,8 @@
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">0</span></div>
-                                            <div class="stat-heading">Transaksi</div>
+                                            <div class="stat-text"><span class="count">{{ $pesanan }}</span></div>
+                                            <div class="stat-heading">Pesanan</div>
                                         </div>
                                     </div>
                                 </div>

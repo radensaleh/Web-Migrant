@@ -209,7 +209,7 @@
                                           <td>{{ ++$key }}</td>
                                           <td>{{ $data->kd_barang }}</td>
                                           <td>{{ $data->nama_barang }}</td>
-                                          <td>{{ $data->harga_jual }}</td>
+                                          <td>Rp. {{ $data->harga_jual }},-</td>
                                           <td>
                                             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_barang="{{ $data->kd_barang }}" data-nama_barang="{{ $data->nama_barang }}" data-deskripsi="{{ $data->deskripsi }}" data-jenis_barang="{{ $data->jenis_barang }}" data-stok="{{ $data->stok }}" data-harga_jual="{{ $data->harga_jual }}" data-foto="{{ $data->foto_barang }}" data-berat="{{ $data->berat_barang }}"><i class="fa fa-info"></i> Detail</button>
                                           </td>
