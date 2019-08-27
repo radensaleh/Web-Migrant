@@ -18,4 +18,8 @@ class Keranjang extends Model
     public function user(){
        return $this->belongsTo('App\User', 'kd_user');
     }
+
+    public function keranjang() {
+        return $this->hasMany('App\ListBarangKeranjang','id_keranjang');
+    }
 }
