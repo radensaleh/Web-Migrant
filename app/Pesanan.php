@@ -15,6 +15,8 @@ class Pesanan extends Model
 
     protected $primaryKey = 'kd_pesanan';
 
+    public $incrementing = false;
+
     public function city(){
        return $this->belongsTo('App\Kota', 'city_id');
     }

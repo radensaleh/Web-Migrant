@@ -86,3 +86,12 @@ Route::delete("/ListKeranjang", "API\ListBarangKeranjang@destroy");
 
 //Create Pesanan
 Route::post("/Transaksi", "API\PesananController@createPesanan");
+
+//Get Pesanan By kd_user
+Route::post("/Pesanan", "API\PesananController@show");
+
+//Upload bukti pembayaran transaksi
+Route::post("/Transaksiupload", "APi\TransaksiController@upload");
+
+//Upload no resi
+Route::post("/Resi", "API\PesananController@upload");

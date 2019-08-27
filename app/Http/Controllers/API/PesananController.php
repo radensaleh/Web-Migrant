@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Pesanan;
 use App\ListBarang;
+use App\ListBarangKeranjang;
 use App\Transaksi;
 use App\Keranjang;
+use App\Barang;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -55,27 +58,54 @@ class PesananController extends Controller
         //Data dari Keranjang untuk dimasukkan ke pesanan dan listBarang
         $keranjang = Keranjang::where('kd_user', $kd_user)->get();
         $total_harga_pesanan = 0;
+        $total_ongkir = 0;
+        $total_harga_all_pesanan = 0;
+
+        //Create Transaksi
+        $dataTransaksi = array(
+            'kd_transaksi' => $kd_transaksi,
+            'kd_user' => $kd_user,
+            'nama_penerima' => $nama_penerima
+        );
+        Transaksi::create($dataTransaksi);
 
         for($j=0; $j<sizeof($keranjang); $j++) {
             $getDate = Carbon::now('Asia/Jakarta');
             $tgl = str_replace('-','', $getDate);
             $jam = str_replace(':','', $tgl);
-            $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$i;
+            $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$j;
 
             //GetListBarangKeranjang
-            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang->id_keranjang)->get();
+            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang[$j]->id_keranjang)->get();
+            //CreatePesanan
+            $dataPesanan = array (
+                'kd_pesanan' => $kd_pesanan,
+                'kd_transaksi' => $kd_transaksi,
+                'city_id' => $city_id,
+                'id_status' => 1,
+            );
+            Pesanan::create($dataPesanan);
             //Input Ke listBarang
             for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
-                $dataBarang = [
+                $dataBarang = array(
                     'kd_pesanan' => $kd_pesanan,
                     'kd_barang' => $listBarangKeranjang[$i]->kd_barang,
                     'kuantitas' => $listBarangKeranjang[$i]->kuantitas,
                     'harga' => $listBarangKeranjang[$i]->harga
-                ];
-                $total_harga_pesanan += $listBarangKeranjang[$i]->harga;
+                ); 
+                $total_harga_pesanan += $listBarangKeranjang[$i]->harga*$listBarangKeranjang[$i]->kuantitas;
                 ListBarang::create($dataBarang);
-            } //End For
-            $dataPesanan = [
+                //Update Stok Barang
+                $barang = Barang::where('kd_barang',$listBarangKeranjang[$i]->kd_barang)->first();
+                $stokBarang = $barang->stok;
+                $updateStok = array (
+                    'stok' => $stokBarang-$listBarangKeranjang[$i]->kuantitas);
+
+                $updateBarang = Barang::findOrFail($listBarangKeranjang[$i]->kd_barang);
+                $updateBarang->update($updateStok);
+            } //End For 2
+            $total_harga_all_pesanan += $total_harga_pesanan;
+            $pesanan = [
                 'kd_pesanan' => $kd_pesanan,
                 'kd_transaksi' => $kd_transaksi,
                 //Total Harga Pesanan
@@ -85,19 +115,26 @@ class PesananController extends Controller
                 'id_status' => 1,
             ];
             $total_ongkir += $ongkirs[$j];
-            Pesanan::create($dataPesanan);
-        } //End For
+            $updatePesanan = Pesanan::findOrFail($kd_pesanan);
+            $updatePesanan->update($pesanan);
+            $total_harga_pesanan = 0;
+        } //End For 1
         $transaksi = [
             'kd_transaksi' => $kd_transaksi,
             'kd_user' => $kd_user,
-            'tgl_transaksi' => Carbon::now()->format('d.m.Y'),
+            'tgl_transaksi' => Carbon::now('Asia/Jakarta'),
             //Total Harga Transaksi, ini belum ditambah dengan keuntungan untuk migrantshop
-            'total_harga' => $total_harga_pesanan + $total_ongkir,
+            'total_harga' => $total_harga_all_pesanan + $total_ongkir,
             'nama_penerima' => $nama_penerima
         ];
-        $transaksi = Transaksi::create($transaksi);
+        $updateTransaksi = Transaksi::findOrFail($kd_transaksi);
 
-        if($transaksi) {
+        $data = [];
+        if($updateTransaksi->update($transaksi)) {
+            for($i=0; $i<sizeof($keranjang); $i++) {
+                DB::table('tb_list_barang_keranjang')->where('id_keranjang', $keranjang[$i]->id_keranjang)->delete();
+            }
+            DB::table('tb_keranjang')->where('kd_user', $kd_user)->delete();
             return response()->json([
                 'response' => true,
                 'message' => 'Transaction Successfull'
@@ -117,9 +154,28 @@ class PesananController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    //Upload Resi per pesanan
+    /* Parameter
+        -kd_pesanan,
+        -no_resi
+    */
+    public function upload(Request $request)
     {
-        //
+        $pesanan = Pesanan::findOrFail($request->kd_pesanan);
+        
+        if($pesanan->update($request->all())) {
+            return response()->json([
+                'response' => true,
+                'message' => 'upload nomor resi success'
+            ]);
+        } 
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'upload Failed !'
+            ]);
+        }
     }
 
     /**
@@ -128,9 +184,22 @@ class PesananController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    //Get Pesanan By kd_user
+    /* Parameter 
+        -kd_user
+    */
+    public function show(Request $request)
     {
-        //
+        $kd_user = $request->kd_user;
+        $pesanan = Pesanan::where('id_status',1)
+        ->whereHas('transaksi', function($query) {
+            $query->where('kd_user', request('kd_user'));
+        })->get();
+
+        return response()->json(
+            $pesanan
+        );
+
     }
 
     /**
