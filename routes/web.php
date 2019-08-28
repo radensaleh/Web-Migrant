@@ -27,11 +27,6 @@ Route::get('/admin/logoutAdmin', 'AdminController@logoutAdmin')->name('logoutAdm
 Route::get('/admin/dashboard', 'AdminController@dashboard')->name('dashboardAdmin');
 Route::get('/admin/dataKoordinator', 'AdminController@dataKoordinator')->name('dataKoordinator');
 Route::get('/admin/dataToko', 'AdminController@dataToko')->name('dataToko');
-Route::get('/admin/dataKonfirmasiPembayaran', 'AdminController@dataKonfirmasi')->name('dataKonfirmasi');
-Route::get('/admin/konfirmasi_pembayaran/toko/{kd_transaksi}/dataPesanan', 'AdminController@dataPesanan');
-Route::get('/admin/dataPembayaran', 'AdminController@dataPembayaran')->name('dataPembayaran');
-Route::get('/admin/dataPembayaran/toko/{kd_transaksi}/dataPesanan', 'AdminController@dataPesanan2');
-Route::post('/admin/transaksi/konfirmasiPembayaran', 'AdminController@konfirmPembayaran')->name('konfirmPembayaran');
 // Jenis Barang
 Route::get('/admin/dataJenisBarang', 'AdminController@dataJenisBarang')->name('dataJenisBarang');
 
@@ -47,9 +42,6 @@ Route::post('/koodinator/apiRajaOngkir/getKabKota', 'KoordinatorController@getKa
 Route::post('/koodinator/apiRajaOngkir/getTypeDaerah', 'KoordinatorController@getTypeDaerah');
 // KOORDINATOR - DATA BARANG TOKO
 Route::get('/koordinator/toko/{kd_toko}/dataBarang', 'TokoController@dataBarang');
-Route::get('/koordinator/toko/{kd_toko}/dataPesanan', 'TokoController@dataPesanan')->name('koorDataPesanan');
-// Route::get('/koordinator/toko/{kd_toko}/dataTransaksi', 'TokoController@dataTransaksi')->name('koorDataTransaksi');
-// Route::get('/koordinator/toko/{kd_toko}/{kd_transaksi}/dataPesanan', 'TokoController@dataPesanan');
 
 //Raja Ongkir
 //Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');

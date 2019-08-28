@@ -28,9 +28,9 @@ class BarangController extends Controller
             ]);
         }
         else {
-            return response()->json([
+            return response()->json(
                 $barangs
-            ]);
+            );
         }
     }
 
@@ -83,7 +83,23 @@ class BarangController extends Controller
                 'message' => 'Barang created successfull'
             ]);
         }
-        
+
+    }
+
+    public function showById(){
+      $kd_barang=request()->kd_barang;
+      $barang = Barang::where('kd_barang',$kd_barang)->first();
+      if($barang==null) {
+          return response()->json([
+              'response' => true,
+              'message' => 'Barang tidak ada !'
+          ]);
+      }
+      else {
+          return response()->json(
+              $barang
+          );
+      }
     }
 
     /**
@@ -92,8 +108,9 @@ class BarangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function showByCategory($id_jenis)
+    public function showByCategory()
     {
+        $id_jenis=request()->id_jenis;
         $barang = Barang::where('id_jenis',$id_jenis)->get();
         if($barang==null) {
             return response()->json([
@@ -102,9 +119,9 @@ class BarangController extends Controller
             ]);
         }
         else {
-            return response()->json([
+            return response()->json(
                 $barang
-            ]);
+            );
         }
     }
 
@@ -118,7 +135,7 @@ class BarangController extends Controller
     public function show($kd_toko)
     {
         $barang = Barang::where('kd_toko', $kd_toko)->get();
-        
+
         if($barang==null) {
             return response()->json([
                 'response' => false,
