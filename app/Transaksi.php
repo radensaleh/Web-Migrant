@@ -24,4 +24,8 @@ class Transaksi extends Model
     public function pesanan(){
        return $this->hasMany('App\Pesanan', 'kd_transaksi');
     }
+
+    public function keuntungan(){
+       return $this->hasMany('App\Keuntungan', 'kd_transaksi');
+    }
 }

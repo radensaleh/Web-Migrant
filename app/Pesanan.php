@@ -32,4 +32,8 @@ class Pesanan extends Model
     public function status(){
       return $this->belongsTo('App\Status', 'id_status');
     }
+
+    public function historis(){
+      return $this->hasMany('App\Historis', 'kd_pesanan');
+    }
 }

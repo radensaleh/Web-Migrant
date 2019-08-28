@@ -34,4 +34,8 @@ class Barang extends Model
        return $this->hasMany('App\ListBarang', 'kd_barang');
     }
 
+    public function suspend(){
+      return $this->hasMany('App\Suspend', 'kd_barang');
+    }
+
 }
