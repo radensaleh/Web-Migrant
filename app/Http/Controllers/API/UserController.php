@@ -31,17 +31,15 @@ class UserController extends Controller
         where('password', '=', $password)->first();
 
         if($user==null) {
-            return response()->json(
-            [
-                'status' => false,
-                'message' => 'Login Failed !'
+            return response()->json([
+                'status' => '404',
             ]);
         }
         else {
-            return response()->json([
+            return response()->json(
                 $user
-            ]);
-        }        
+            );
+        }
     }
 
     /**
@@ -94,15 +92,17 @@ class UserController extends Controller
 
         if($user->save()) {
             return response()->json([
-                'response' => true,
-                'message' => 'Success'
-            ]);
-        } else 
+                'kd_user' => $kd_user,
+                'status' => 'sukses'
+              ]
+            );
+        } else
         {
-            return response()->json([
+            return response()->json(
+              [
                 'response' => false,
-                'message' => 'Registration Failed !'
-            ]);
+                'message' => 'Registration Failed !']
+            );
         }
 
     }

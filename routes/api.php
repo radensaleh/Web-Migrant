@@ -58,7 +58,10 @@ Route::post("/BarangUpdate", "API\BarangController@update");
 Route::delete("/BarangDelete/{kd_barang}","API\BarangController@deleteBarang");
 
 //menampilkan semua barang berdasarkan kategori
-Route::get("/BarangKategori/{id_jenis}","API\BarangController@showByCategory");
+Route::get("/BarangKategori","API\BarangController@showByCategory");
+
+//menampilkan barang berdasarkan kd_barang
+Route::get("/BarangID","API\BarangController@showById");
 
 //Create Keranjang
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
@@ -86,3 +89,6 @@ Route::delete("/ListKeranjang", "API\ListBarangKeranjang@destroy");
 
 //Create Pesanan
 Route::post("/Pesanan", "API\PesananController@createPesanan");
+
+//
+Route::get("/Provinsi", "API\ProvinsiAPIController@show");

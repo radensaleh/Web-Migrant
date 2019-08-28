@@ -16,6 +16,8 @@ class Barang extends Model
 
     protected $primaryKey = 'kd_barang';
 
+    public $incrementing = false;
+
     public function toko(){
        return $this->belongsTo('App\Toko', 'kd_toko');
     }
