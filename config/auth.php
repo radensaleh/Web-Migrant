@@ -94,10 +94,10 @@ return [
             'model' => App\Koordinator::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'users' => [
+            'driver' => 'database',
+            'table' => 'users',
+        ],
     ],
 
     /*

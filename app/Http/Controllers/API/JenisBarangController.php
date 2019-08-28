@@ -23,10 +23,9 @@ class JenisBarangController extends Controller
                 'message' => 'Jenis Barang is not available'
             ]);
         } else {
-            return response()->json([
-                'response' =>true,
+            return response()->json(
                 $jenisBarang
-            ]);
+            );
         }
     }
 

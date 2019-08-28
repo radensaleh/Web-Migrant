@@ -11,7 +11,7 @@ class Barang extends Model
     protected $fillable =
     [
         'kd_barang','kd_toko','nama_barang','id_jenis','stok','harga_jual',
-        'deskripsi','foto_barang','berat_barang'
+        'harga_modal','deskripsi','foto_barang','berat_barang'
     ];
 
     protected $primaryKey = 'kd_barang';

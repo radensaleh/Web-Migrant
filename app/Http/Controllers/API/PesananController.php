@@ -196,9 +196,18 @@ class PesananController extends Controller
             $query->where('kd_user', request('kd_user'));
         })->get();
 
-        return response()->json(
-            $pesanan
-        );
+        if($pesanan) {
+            return response()->json(
+                $pesanan
+            );
+        }
+        else 
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Tidak ada pesanan !'
+            ]);
+        }
 
     }
 
@@ -208,9 +217,24 @@ class PesananController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    //Get Pesanan By Toko
+    /*Parameter
+        -kd_toko
+    */
+    public function getPesananByToko(Request $request)
     {
-        //
+        $kd_toko = $request->kd_toko;
+        $pesanan = Pesanan::where('id_status', 2)
+        ->whereHas('list_barang', function($query) {
+            $query->whereHas('barang', function($query) {
+                $query->where('kd_toko', request('kd_toko'));
+            });
+        })->first();
+
+        return response()->json(
+            $pesanan
+        );
+
     }
 
     /**
@@ -220,9 +244,27 @@ class PesananController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    //Api untuk konfirmasi barang diterima
+    /*Parameter
+        -kd_pesanan
+    */
+    public function finish(Request $request)
     {
-        //
+       $finish = DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 5]);
+       
+       if($finish) {
+           return response()->json([
+               'response' => true,
+               'message' => 'Transaksi selesai'
+           ]);
+       }
+       else 
+       {
+           return response()->json([
+               'response' => false,
+               'message' => 'Failed !'
+           ]);
+       }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Transaksi;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -43,6 +44,7 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::findOrFail($request->kd_transaksi);
         
         if($transaksi->update($request->all())) {
+            DB::table('tb_pesanan')->where('kd_transaksi', $request->kd_transaksi)->update(['id_status' => 2]);
             return response()->json([
                 'response' => true,
                 'message' => 'upload bukti pembayaran success'
