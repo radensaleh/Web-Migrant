@@ -88,10 +88,10 @@
                         <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
                     </li>
                     <li>
-                        <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
+                        <a href="{{ route('dataKonfirmasi') }}"><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
                     </li>
                     <li>
-                        <a href=""><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                        <a href="{{ route('dataPembayaran') }}"><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

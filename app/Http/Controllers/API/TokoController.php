@@ -95,9 +95,7 @@ class TokoController extends Controller
                 'message' => 'User already have a store'
             ]);
         }
-
-        $bank = DB::table('tb_bank')->first();
-
+        
         $toko = new Toko;
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);

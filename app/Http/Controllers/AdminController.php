@@ -9,6 +9,8 @@ use App\Koordinator;
 use App\Toko;
 use App\JenisBarang;
 use App\User;
+use App\Transaksi;
+use App\Pesanan;
 
 class AdminController extends Controller
 {
@@ -32,9 +34,16 @@ class AdminController extends Controller
           $koordinator = Koordinator::count();
           $toko = Toko::count();
           $jenisBarang = JenisBarang::count();
+          $konfirm = Transaksi::whereHas('pesanan', function($query){
+              $query->where('id_status', 1);
+          })->count();
+
+          $sudahTerkonfirm = Transaksi::whereHas('pesanan', function($query){
+              $query->where('id_status', '>', 1);
+          })->count();
 
           return view('admin.dashboard', compact(
-              'name','koordinator','toko','jenisBarang'
+              'name','koordinator','toko','jenisBarang','konfirm', 'sudahTerkonfirm'
           ));
       }
     }
@@ -137,6 +146,114 @@ class AdminController extends Controller
         return view('admin.dataJenisBarang', compact(
             'name','jenisBarang'
         ));
+      }
+    }
+
+    //KONFIRMASI PEMBAYARAN
+    public function dataKonfirmasi(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $transaksi = Transaksi::
+                     whereHas('pesanan', function($query){
+                       $query->where('id_status', 1);
+                      })->get();
+
+        return view('admin.dataKonfirmasiPembayaran', compact(
+            'name','transaksi'
+        ));
+      }
+    }
+
+    //DATA PESANAN di Konfirmasi Pembayaran
+    public function dataPesanan(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $kd_transaksi = $request->kd_transaksi;
+
+        $pesanan = Pesanan::
+                     whereHas('transaksi', function($query){
+                       $query->where('kd_transaksi', request('kd_transaksi'));
+                      })->get();
+
+        return view('admin.dataPesanan', compact(
+            'name','pesanan','kd_transaksi'
+        ));
+      }
+    }
+
+    //DATA PESANAN di Data Pembayaran
+    public function dataPesanan2(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $kd_transaksi = $request->kd_transaksi;
+
+        $pesanan = Pesanan::
+                     whereHas('transaksi', function($query){
+                       $query->where('kd_transaksi', request('kd_transaksi'));
+                      })->get();
+
+        return view('admin.dataPesananKonfirmasi', compact(
+            'name','pesanan','kd_transaksi'
+        ));
+      }
+    }
+
+    //DATA PEMBAYARAN
+    public function dataPembayaran(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $transaksi = Transaksi::
+                     whereHas('pesanan', function($query){
+                       $query->where('id_status', '>', 1);
+                      })->get();
+
+        return view('admin.dataPembayaran', compact(
+            'name','transaksi'
+        ));
+      }
+    }
+
+    //KONFIRMASI TRANSAKSI
+    public function konfirmPembayaran(Request $request){
+      $kd_transaksi = $request->kd_transaksi;
+
+      $konfirm = Pesanan::where('kd_transaksi', $kd_transaksi)
+                 ->update(['id_status' => 2]);
+
+      if( $konfirm ){
+        return response()->json([
+          'error'   => 0,
+          'message' => 'Konfirmasi Transaksi ' . $kd_transaksi . ' Berhasil',
+        ], 200);
+      }else{
+        return response()->json([
+          'error'   => 1,
+          'message' => 'Konfirmasi Transaksi Gagal',
+        ], 200);
       }
     }
 

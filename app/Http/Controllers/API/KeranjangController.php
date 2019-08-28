@@ -55,19 +55,18 @@ class KeranjangController extends Controller
     /* ==Parameter
         -kd_barang, ->required
         -kuantitas, ->required
-        -harga, -> required
-        kd_user -> required
+        -kd_user -> required
     */
     {
         $kd_barang = $request->kd_barang;
         $kuantitas = $request->kuantitas;
-        $harga = $request->harga;
         $kd_user = $request->kd_user;
 
         $barang = Barang::where('kd_barang', $kd_barang)->first();
         $keranjang = Keranjang::where('kd_user', $kd_user)->get();
 
-        if($keranjang==null) {
+
+        if(count($keranjang)==0) {
             //CreateKeranjang
             $data = array(
                 'kd_user' => $kd_user
@@ -78,7 +77,7 @@ class KeranjangController extends Controller
             $listBarangKeranjang->id_keranjang = $createKeranjang->id_keranjang;
             $listBarangKeranjang->kd_barang= $kd_barang;
             $listBarangKeranjang->kuantitas = $kuantitas;
-            $listBarangKeranjang->harga = $harga;
+            $listBarangKeranjang->harga = $barang->harga_jual;
 
             if($listBarangKeranjang->save()) {
                 return response()->json([
@@ -106,7 +105,7 @@ class KeranjangController extends Controller
                             'id_keranjang' => $id_keranjang,
                             'kd_barang' => $kd_barang,
                             'kuantitas' => $kuantitas,
-                            'harga' => $harga
+                            'harga' => $barang->harga_jual
                         );
 
                         if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
@@ -124,7 +123,7 @@ class KeranjangController extends Controller
                 $id_keranjang = $keranjang[$i]->id_keranjang;
                 $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
 
-                if($barang->Toko->kd_toko != $listBarangKeranjang->Barang->Toko->kd_toko && $kd_user == $listBarangKeranjang->Keranjang->kd_user)
+                if($barang->toko->kd_toko != $listBarangKeranjang->barang->toko->kd_toko && $kd_user == $listBarangKeranjang->keranjang->kd_user)
                     {
                         $dataKeranjang = array(
                             'kd_user' => $kd_user
@@ -132,10 +131,10 @@ class KeranjangController extends Controller
 
                         $keranjang = Keranjang::create($dataKeranjang);
                         $data = array(
-                            'id_keranjang' => $$keranjang->id_keranjang,
+                            'id_keranjang' => $keranjang->id_keranjang,
                             'kd_barang' => $kd_barang,
                             'kuantitas' => $kuantitas,
-                            'harga' => $harga
+                            'harga' => $barang->harga_jual
                         );
 
                         if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {

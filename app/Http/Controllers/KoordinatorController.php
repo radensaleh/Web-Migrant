@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Toko;
 use App\Token;
 use App\Koordinator;
+use App\Pesanan;
 use Ixudra\Curl\Facades\Curl;
 use Carbon\Carbon;
 
@@ -101,20 +102,33 @@ class KoordinatorController extends Controller
                 ->orWhere('email', $koor)
                 ->value('nama_lengkap');
 
-        $toko = Toko::count();
-
         $kd_koordinator = DB::table('tb_koordinator')
                     ->where('nomer_hp', $koor)
                     ->orWhere('email', $koor)
                     ->value('kd_koordinator');
+
+        $toko = DB::table('tb_toko')
+                ->join('tb_token as token', 'token.id_token', '=', 'tb_toko.id_token')
+                ->where('token.kd_koordinator', $kd_koordinator)
+                ->count();
 
         $token = DB::table('tb_token')
                  ->join('tb_koordinator', 'tb_koordinator.kd_koordinator', '=', 'tb_token.kd_koordinator')
                  ->where('tb_token.kd_koordinator', $kd_koordinator)
                  ->count();
 
+        $pesanan = Pesanan::whereHas('list_barang', function($q) use($kd_koordinator){
+            $q->whereHas('barang', function($q) use($kd_koordinator){
+                $q->whereHas('toko', function($q) use($kd_koordinator){
+                    $q->whereHas('token', function($q) use($kd_koordinator){
+                        $q->where('kd_koordinator', $kd_koordinator);
+                    });
+                });
+            });
+        })->count();
+
         return view('koordinator.dashboard', compact(
-            'name','toko','token'
+            'name','toko','token','pesanan'
         ));
       }
     }

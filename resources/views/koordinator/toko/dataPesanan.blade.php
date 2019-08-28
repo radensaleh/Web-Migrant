@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Data Toko | Koordinator Migrant Shop</title>
+    <title>Data Pesanan | Koordinator Migrant Shop</title>
 
     <!-- <link rel="apple-touch-icon" href="/images/icon.png">
     <link rel="shortcut icon" href="/images/icon.png"> -->
@@ -81,7 +81,7 @@
                       <a href="{{ route('koorDataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
                   </li>
                   <!-- <li>
-                      <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaksi </a>
+                      <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaski </a>
                   </li> -->
                   <li>
                       <a href="{{ route('dataToken') }}"><i class="menu-icon fa fa-database"></i>Data Token </a>
@@ -163,7 +163,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Data Toko</h1>
+                                <h1>Toko {{ $nama_toko }}</h1>
                             </div>
                         </div>
                     </div>
@@ -172,7 +172,8 @@
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="{{ route('dashboardKoordinator') }}">Dashboard</a></li>
-                                    <li class="active">Data Toko</li>
+                                    <li><a href="{{ route('koorDataToko') }}">Data Toko</a></li>
+                                    <li class="active">Data Pesanan</li>
                                 </ol>
                             </div>
                         </div>
@@ -188,7 +189,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Toko</strong>
+                                <strong class="card-title">Data Pesanan</strong>
                                 <!-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong> -->
                             </div>
                             <div class="card-body">
@@ -196,24 +197,47 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kode Toko</th>
+                                            <th>Kd Pesanan</th>
+                                            <th>Kd Transaksi</th>
+                                            <!-- <th>Total Harga</th> -->
                                             <th>Nama Toko</th>
-                                            <th>Nomor KTP Pemilik</th>
+                                            <th>Status Pengiriman</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      @foreach($toko as $key => $data)
+                                      @foreach($pesanan as $key => $data)
                                         <tr>
                                           <td>{{ ++$key }}</td>
-                                          <td>{{ $data->kd_toko }}</td>
-                                          <td>{{ $data->nama_toko }}</td>
-                                          <td>{{ $data->KTP }}</td>
+                                          <td>{{ $data->kd_pesanan }}</td>
+                                          <td>{{ $data->kd_transaksi }}</td>
+                                          <!-- <td>Rp. {{ $data->total_harga }},-</td> -->
+                                          @foreach($data->list_barang as $key => $list)
+                                            @if($key == 0)
+                                              <td>{{ $list->barang->toko->nama_toko }}</td>
+                                            @endif
+                                          @endforeach
                                           <td>
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_toko = "{{ $data->kd_toko }}" data-ktp="{{ $data->KTP }}" data-nama_toko="{{ $data->nama_toko }}" data-foto_toko="{{ $data->foto_toko }}" data-nama_user="{{ $data->nama_lengkap }}"  data-nama_koor="{{ $data->nama_koor }}" data-no_rekening="{{ $data->no_rekening }}" data-provinsi="{{ $data->provinsi }}"
-                                              data-type="{{ $data->type }}" data-kota="{{ $data->kota }}"><i class="fa fa-info"></i> Detail</button>
-                                            <button type="button" class="btn btn-success btn-sm" onclick="dataPesanan('{{$data->kd_toko}}')" data-toggle="modal"><i class="fa fa-shopping-cart"></i> Pesanan</button>
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="dataBarang('{{$data->kd_toko}}')" data-toggle="modal" data-target="#dataBarang"><i class="fa fa-database"></i> Barang</button>
+                                            @if( $data->status->id_status == 1 )
+                                              <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-clock-o"></i> {{ $data->status->status }}</button>
+                                            @elseif( $data->status->id_status == 2 )
+                                              <button type="button" class="btn btn-success btn-sm"><i class="fa fa-check-square-o"></i> {{ $data->status->status }}</button>
+                                            @elseif( $data->status->id_status == 3 )
+                                              <button type="button" class="btn btn-warning btn-sm"><i class="fa fa-spinner"></i> {{ $data->status->status }}</button>
+                                            @elseif( $data->status->id_status == 4 )
+                                              <button type="button" class="btn btn-info btn-sm"><i class="fa fa-truck"></i> {{ $data->status->status }}</button>
+                                            @else
+                                              <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i> {{ $data->status->status }}</button>
+                                            @endif
+                                          </td>
+                                          <td>
+                                            @foreach($data->list_barang as $key => $list)
+                                              @if($key == 0)
+                                              <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_pesanan="{{ $data->kd_pesanan }}" data-kd_transaksi="{{ $data->kd_transaksi }}" data-nama_toko="{{ $list->barang->toko->nama_toko }}" data-total_harga="{{ $data->total_harga }}" data-ongkir="{{ $data->ongkir }}" data-noresi="{{ $data->no_resi }}" data-ongkir="{{ $data->ongkir }}"
+                                              data-kota="{{ $data->city->city_name }}" data-type="{{ $data->city->type }}" data-provinsi="{{ $data->city->province->province }}" data-status="{{ $data->status->status }}"><i class="fa fa-info"></i> Detail</button>
+                                              @endif
+                                            @endforeach
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="dataListBarang('{{$data->kd_pesanan}}', '{{$data->kd_transaksi}}', '{{$kd_toko}}')" data-toggle="modal" data-target="#detailListBarang"><i class="fa fa-shopping-cart"></i> List Barang</button>
                                           </td>
                                         </tr>
                                       @endforeach
@@ -240,43 +264,40 @@
               <div class="modal-body">
                    <table class="table table-striped table-bordered table-hover no-footer">
                        <tr>
-                           <th colspan="2"><img id="foto" src="" style="width: 100%; height: 100%" alt="Toko belum mengupload foto" onerror="this.onerror=null; this.src='/images/not_found.jpg'"></th>
+                           <th>Kode Pesanan</th>
+                           <td id="kd_pesanan"></td>
                        </tr>
                        <tr>
-                           <th>Kode Toko</th>
-                           <td id="kd_toko"></td>
+                           <th>Kode Transaksi</th>
+                           <td id="kd_transaksi"></td>
                        </tr>
                        <tr>
                            <th>Nama Toko</th>
                            <td id="nama_toko"></td>
                        </tr>
                        <tr>
-                           <th>Nama Pemilik</th>
-                           <td id="nama_pemilik"></td>
+                           <th>Ongkir</th>
+                           <td id="ongkir"></td>
                        </tr>
                        <tr>
-                           <th>Nomor KTP Pemilik</th>
-                           <td id="no_ktp"></td>
+                           <th>Total Harga</th>
+                           <td id="total_harga"></td>
                        </tr>
                        <tr>
-                           <th>Rekening Toko</th>
-                           <td id="no_rek"></td>
+                           <th>Nomor Resi</th>
+                           <td id="no_resi"></td>
                        </tr>
-                       <tr>
-                           <th>Nama Koordinator</th>
-                           <td id="nama_koor"></td>
-                       </tr>
-                       <!-- <tr>
-                           <th>Alamat</th>
-                           <td id="detail_alamat"></td>
-                       </tr> -->
                        <tr>
                            <th>Provinsi</th>
                            <td id="provinsi"></td>
                        </tr>
                        <tr>
-                           <th>Daerah</th>
+                           <th>Kota/Kab</th>
                            <td id="daerah"></td>
+                       </tr>
+                       <tr>
+                           <th>Status Pengiriman</th>
+                           <td id="status"></td>
                        </tr>
                    </table>
               </div>
@@ -332,51 +353,45 @@
 
           $('#detailData').on('show.bs.modal', function (event) {
             event.preventDefault();
-
             var button = $(event.relatedTarget) // Button that triggered the modal
-            var kd_toko = button.data('kd_toko') // Extract info from data-* attributes
-            var ktp = button.data('ktp')
+            var kd_pesanan = button.data('kd_pesanan') // Extract info from data-* attributes
+            var kd_transaksi = button.data('kd_transaksi')
             var nama_toko = button.data('nama_toko')
-            var nama_pemilik = button.data('nama_user')
-            var foto_toko = button.data('foto_toko')
-            var no_rek = button.data('no_rekening')
-            var nama_koor = button.data('nama_koor')
-            //var detail_alamat = button.data('detail_alamat');
-            var provinsi = button.data('provinsi')
-            var type = button.data('type')
+            var total_harga = button.data('total_harga')
+            var ongkir = button.data('ongkir')
+            var no_resi = button.data('noresi')
             var kota = button.data('kota')
+            var type = button.data('type')
+            var provinsi = button.data('provinsi')
+            var status = button.data('status')
+
 
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            var loadImg;
+            var resi;
 
-            if(foto_toko != ""){
-              loadImg = "http://localhost:8000/images/toko/"+foto_toko
+            if(no_resi != ""){
+              resi = no_resi;
             }else{
-              loadImg = "http://localhost:8000/images/not_found.jpg"
+              resi = '-';
             }
 
-            modal.find('.modal-body #foto').attr("src", loadImg)
-            modal.find('.modal-body #kd_toko').text(kd_toko)
+            modal.find('.modal-body #kd_pesanan').text(kd_pesanan)
+            modal.find('.modal-body #kd_transaksi').text(kd_transaksi)
             modal.find('.modal-body #nama_toko').text(nama_toko)
-            modal.find('.modal-body #nama_pemilik').text(nama_pemilik)
-            modal.find('.modal-body #no_ktp').text(ktp)
-            modal.find('.modal-body #no_rek').text(no_rek)
-            modal.find('.modal-body #nama_koor').text(nama_koor)
-            //modal.find('.modal-body #detail_alamat').text(detail_alamat)
+            modal.find('.modal-body #ongkir').text('Rp. ' + ongkir +',-')
+            modal.find('.modal-body #total_harga').text('Rp. ' + total_harga +',-')
+            modal.find('.modal-body #no_resi').text(resi)
             modal.find('.modal-body #provinsi').text(provinsi)
-            modal.find('.modal-body #daerah').text(type+' '+kota)
+            modal.find('.modal-body #daerah').text(type + ' ' + kota)
+            modal.find('.modal-body #status').text(status)
           });
 
         });
 
-        function dataBarang(kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/dataBarang";
-        }
-
-        function dataPesanan(kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/dataPesanan";
+        function dataListBarang(kd_pesanan, kd_transaksi, kd_toko){
+            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/" + kd_transaksi + "/" + kd_pesanan + "/dataBarang";
         }
 
     </script>
