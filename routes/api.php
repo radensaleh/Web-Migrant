@@ -95,3 +95,9 @@ Route::post("/Transaksiupload", "APi\TransaksiController@upload");
 
 //Upload no resi
 Route::post("/Resi", "API\PesananController@upload");
+
+//Konfirmasi Barang diterima
+Route::post("/Selesai", "API\PesananController@finish");
+
+//Get Pesanan by kd_toko
+Route::post("/getPesananToko", "API\PesananController@getPesananByToko");

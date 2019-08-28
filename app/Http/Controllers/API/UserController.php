@@ -51,9 +51,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $tanggal = Carbon::now()->format('d.m.Y');
-
-        return $tanggal;
+     //
     }
 
     /**
