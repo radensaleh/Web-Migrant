@@ -10,7 +10,7 @@ class Toko extends Model
 
     protected $fillable = [
         'kd_toko','id_token','KTP','nama_toko','foto_toko',
-        'kd_user','no_rekening','city_id', 'nama_bank'
+        'kd_user','no_rekening','nama_nasabah', 'nama_bank','city_id'
     ];
 
     protected $primaryKey = 'kd_toko';
@@ -32,5 +32,5 @@ class Toko extends Model
     public function toko(){
        return $this->hasMany('App\Toko', 'kd_toko');
     }
-    
+
 }

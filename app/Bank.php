@@ -8,9 +8,9 @@ class Bank extends Model
 {
     protected $table = 'tb_bank';
 
-    protected $fillable = 
+    protected $fillable =
     [
-        'no_rekening','jenis_bank'
+        'no_rekening','nama_nasabah', 'nama_bank'
     ];
 
     protected $primaryKey = 'no_rekening';

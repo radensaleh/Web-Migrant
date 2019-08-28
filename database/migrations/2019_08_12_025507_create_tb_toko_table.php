@@ -24,6 +24,7 @@ class CreateTbTokoTable extends Migration
             $table->string('kd_user')->index();
             $table->foreign('kd_user')->references('kd_user')->on('tb_user');
             $table->string('no_rekening');
+            $table->string('nama_nasabah');
             $table->string('nama_bank');
             $table->integer('city_id')->unsigned();
             $table->foreign('city_id')->references('city_id')->on('tb_kota');

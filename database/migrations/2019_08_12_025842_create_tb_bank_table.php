@@ -15,7 +15,8 @@ class CreateTbBankTable extends Migration
     {
         Schema::create('tb_bank', function (Blueprint $table) {
             $table->string('no_rekening')->primary();
-            $table->string('jenis_bank');
+            $table->string('nama_nasabah');
+            $table->string('nama_bank');
             $table->timestamps();
         });
     }
