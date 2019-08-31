@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Data Pesanan | Admin Migrant Shop</title>
+    <title>Transaksi Diterima | Admin Migrant Shop</title>
 
     <!-- <link rel="apple-touch-icon" href="/images/icon.png">
     <link rel="shortcut icon" href="/images/icon.png"> -->
@@ -86,11 +86,18 @@
                   <li>
                       <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
                   </li>
-                  <li class="active">
-                      <a href="{{ route('dataKonfirmasi') }}"><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
+                  <li class="menu-title">Transaksi</li><!-- /.menu-title -->
+                  <li>
+                      <a href="{{ route('dataKonfirmasiPembayaran') }}"><i class="menu-icon fa fa-check-circle"></i>Konfirmasi Pembayaran </a>
                   </li>
                   <li>
-                      <a href="{{ route('dataPembayaran') }}"><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                      <a href="{{ route('dataProsesTransaksi') }}"><i class="menu-icon fa fa-truck"></i>Proses Transaksi </a>
+                  </li>
+                  <li class="active">
+                      <a href="{{ route('dataTransaksiDiterima') }}"><i class="menu-icon fa fa-handshake-o"></i>Transaksi Diterima</a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataRiwayatTransfer') }}"><i class="menu-icon fa fa-credit-card-alt"></i>Riwayat Transfer </a>
                   </li>
               </ul>
             </div><!-- /.navbar-collapse -->
@@ -169,7 +176,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Data Pesanan</h1>
+                                <h1>Transaksi Diterima</h1>
                             </div>
                         </div>
                     </div>
@@ -178,8 +185,7 @@
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="{{ route('dashboardAdmin') }}">Dashboard</a></li>
-                                    <li><a href="{{ route('dataKonfirmasi') }}">Konfirmasi Pembayaran</a></li>
-                                    <li class="active">Data Pesanan</li>
+                                    <li class="active">Transaksi Diterima</li>
                                 </ol>
                             </div>
                         </div>
@@ -195,7 +201,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Pesanan</strong>
+                                <strong class="card-title">Transaksi Diterima</strong>
                                 <!-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong> -->
                             </div>
                             <div class="card-body">
@@ -203,46 +209,22 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kd Pesanan</th>
-                                            <th>Kd Transaksi</th>
-                                            <!-- <th>Total Harga</th> -->
-                                            <th>Kd Toko</th>
-                                            <th>Status Pengiriman</th>
+                                            <th>Kode Transaksi</th>
+                                            <th>Tanggal Transaksi</th>
+                                            <th>Status Transaksi</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      @foreach($pesanan as $key => $data)
+                                      @foreach($transaksi as $key => $data)
                                         <tr>
                                           <td>{{ ++$key }}</td>
-                                          <td>{{ $data->kd_pesanan }}</td>
                                           <td>{{ $data->kd_transaksi }}</td>
-                                          <!-- <td>Rp. {{ $data->total_harga }},-</td> -->
-                                          @foreach($data->list_barang as $key => $list)
-                                            @if($key == 0)
-                                              <td>{{ $list->barang->kd_toko }}</td>
-                                            @endif
-                                          @endforeach
+                                          <td>{{ $data->tgl_transaksi }}</td>
+                                          <td><span class="btn btn-warning btn-sm"><i class="fa fa-clock-o"></i> Menunggu Dibayar</span></td>
                                           <td>
-                                            @if( $data->status->id_status == 1 )
-                                              <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-clock-o"></i> {{ $data->status->status }}</button>
-                                            @elseif( $data->status->id_status == 2 )
-                                              <button type="button" class="btn btn-success btn-sm"><i class="fa fa-check-square-o"></i> {{ $data->status->status }}</button>
-                                            @elseif( $data->status->id_status == 3 )
-                                              <button type="button" class="btn btn-warning btn-sm"><i class="fa fa-spinner"></i> {{ $data->status->status }}</button>
-                                            @elseif( $data->status->id_status == 4 )
-                                              <button type="button" class="btn btn-info btn-sm"><i class="fa fa-truck"></i> {{ $data->status->status }}</button>
-                                            @else
-                                              <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i> {{ $data->status->status }}</button>
-                                            @endif
-                                          </td>
-                                          <td>
-                                            @foreach($data->list_barang as $key => $list)
-                                              @if($key == 0)
-                                              <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_pesanan="{{ $data->kd_pesanan }}" data-kd_transaksi="{{ $data->kd_transaksi }}" data-kd_toko="{{ $list->barang->kd_toko }}" data-nama_toko="{{ $list->barang->toko->nama_toko }}" data-total_harga="{{ $data->total_harga }}" data-ongkir="{{ $data->ongkir }}" data-noresi="{{ $data->no_resi }}" data-ongkir="{{ $data->ongkir }}"
-                                                data-kota="{{ $data->city->city_name }}" data-type="{{ $data->city->type }}" data-provinsi="{{ $data->city->province->province }}" data-status="{{ $data->status->status }}"><i class="fa fa-info"></i> Detail</button>
-                                              @endif
-                                            @endforeach
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_transaksi="{{ $data->kd_transaksi }}" data-nama_pemesan="{{ $data->user->nama_lengkap }}" data-foto_bukti="{{ $data->foto_bukti }}" data-tgl_transaksi="{{ $data->tgl_transaksi }}" data-total_harga="{{ $data->total_harga }}" data-nama_penerima="{{ $data->nama_penerima }}"><i class="fa fa-info"></i> Detail Transaksi</button>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="dataPesanan('{{$data->kd_transaksi}}')" data-toggle="modal" data-target="#detailPesanan"><i class="fa fa-shopping-cart"></i> Detail Pesanan</button>
                                           </td>
                                         </tr>
                                       @endforeach
@@ -269,44 +251,28 @@
               <div class="modal-body">
                    <table class="table table-striped table-bordered table-hover no-footer">
                        <tr>
-                           <th>Kode Pesanan</th>
-                           <td id="kd_pesanan"></td>
+                           <th style="padding-top: 80px;">Foto Bukti Transaksi</th>
+                           <th><img id="foto" src="" style="width: 100%; height: 100%" alt="Pemesan belum mengupload foto" onerror="this.onerror=null; this.src='/images/not_found.jpg'"></th>
                        </tr>
                        <tr>
                            <th>Kode Transaksi</th>
                            <td id="kd_transaksi"></td>
                        </tr>
                        <tr>
-                           <th>Kode Toko</th>
-                           <td id="kd_toko"></td>
+                           <th>Nama Pemesan</th>
+                           <td id="nama_pemesan"></td>
                        </tr>
                        <tr>
-                           <th>Nama Toko</th>
-                           <td id="nama_toko"></td>
-                       </tr>
-                       <tr>
-                           <th>Ongkir</th>
-                           <td id="ongkir"></td>
+                           <th>Tanggal Transaksi</th>
+                           <td id="tgl_transaksi"></td>
                        </tr>
                        <tr>
                            <th>Total Harga</th>
                            <td id="total_harga"></td>
                        </tr>
                        <tr>
-                           <th>Nomor Resi</th>
-                           <td id="no_resi"></td>
-                       </tr>
-                       <tr>
-                           <th>Provinsi</th>
-                           <td id="provinsi"></td>
-                       </tr>
-                       <tr>
-                           <th>Kota/Kab</th>
-                           <td id="daerah"></td>
-                       </tr>
-                       <tr>
-                           <th>Status Pengiriman</th>
-                           <td id="status"></td>
+                           <th>Nama Penerima</th>
+                           <td id="nama_penerima"></td>
                        </tr>
                    </table>
               </div>
@@ -363,41 +329,37 @@
           $('#detailData').on('show.bs.modal', function (event) {
             event.preventDefault();
             var button = $(event.relatedTarget) // Button that triggered the modal
-            var kd_pesanan = button.data('kd_pesanan') // Extract info from data-* attributes
-            var kd_transaksi = button.data('kd_transaksi')
-            var kd_toko = button.data('kd_toko')
-            var nama_toko = button.data('nama_toko')
+            var kd_transaksi = button.data('kd_transaksi') // Extract info from data-* attributes
+            var nama_pemesan = button.data('nama_pemesan')
+            var foto_bukti = button.data('foto_bukti')
+            var tgl_transaksi = button.data('tgl_transaksi')
             var total_harga = button.data('total_harga')
-            var ongkir = button.data('ongkir')
-            var no_resi = button.data('noresi')
-            var kota = button.data('kota')
-            var type = button.data('type')
-            var provinsi = button.data('provinsi')
-            var status = button.data('status')
+            var nama_penerima = button.data('nama_penerima')
 
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            var resi;
+            var loadImg;
 
-            if(no_resi != ""){
-              resi = no_resi;
+            if(foto_bukti != ""){
+              loadImg = "http://localhost:8000/images/bukti_tf/"+foto_bukti
             }else{
-              resi = '-';
+              loadImg = "http://localhost:8000/images/not_found.jpg"
             }
-            modal.find('.modal-body #kd_pesanan').text(kd_pesanan)
+
+            modal.find('.modal-body #foto').attr("src", loadImg)
             modal.find('.modal-body #kd_transaksi').text(kd_transaksi)
-            modal.find('.modal-body #kd_toko').text(kd_toko)
-            modal.find('.modal-body #nama_toko').text(nama_toko)
-            modal.find('.modal-body #ongkir').text('Rp. ' + ongkir +',-')
+            modal.find('.modal-body #nama_pemesan').text(nama_pemesan)
+            modal.find('.modal-body #tgl_transaksi').text(tgl_transaksi)
             modal.find('.modal-body #total_harga').text('Rp. ' + total_harga +',-')
-            modal.find('.modal-body #no_resi').text(resi)
-            modal.find('.modal-body #provinsi').text(provinsi)
-            modal.find('.modal-body #daerah').text(type + ' ' + kota)
-            modal.find('.modal-body #status').text(status)
+            modal.find('.modal-body #nama_penerima').text(nama_penerima)
           });
 
         });
+
+        function dataPesanan(kd_transaksi){
+            window.location.href = "http://localhost:8000/admin/dataTransaksiDiterima/toko/" + kd_transaksi + "/dataPesanan";
+        }
 
     </script>
 

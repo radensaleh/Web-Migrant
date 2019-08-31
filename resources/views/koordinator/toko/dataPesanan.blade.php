@@ -237,7 +237,7 @@
                                               data-kota="{{ $data->city->city_name }}" data-type="{{ $data->city->type }}" data-provinsi="{{ $data->city->province->province }}" data-status="{{ $data->status->status }}"><i class="fa fa-info"></i> Detail</button>
                                               @endif
                                             @endforeach
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="dataListBarang('{{$data->kd_pesanan}}', '{{$data->kd_transaksi}}', '{{$kd_toko}}')" data-toggle="modal" data-target="#detailListBarang"><i class="fa fa-shopping-cart"></i> List Barang</button>
+                                            <!-- <button type="button" class="btn btn-danger btn-sm" onclick="dataListBarang('{{$data->kd_pesanan}}', '{{$data->kd_transaksi}}', '{{$kd_toko}}')" data-toggle="modal" data-target="#detailListBarang"><i class="fa fa-shopping-cart"></i> List Barang</button> -->
                                           </td>
                                         </tr>
                                       @endforeach
@@ -272,6 +272,9 @@
                            <td id="kd_transaksi"></td>
                        </tr>
                        <tr>
+                         <th colspan="2"></th>
+                       </tr>
+                       <tr>
                            <th>Nama Toko</th>
                            <td id="nama_toko"></td>
                        </tr>
@@ -286,6 +289,9 @@
                        <tr>
                            <th>Nomor Resi</th>
                            <td id="no_resi"></td>
+                       </tr>
+                       <tr>
+                         <th colspan="2"></th>
                        </tr>
                        <tr>
                            <th>Provinsi</th>

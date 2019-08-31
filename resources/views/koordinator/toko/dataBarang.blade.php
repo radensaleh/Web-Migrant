@@ -200,6 +200,7 @@
                                             <th>Kode Barang</th>
                                             <th>Nama Barang</th>
                                             <th>Harga Jual</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -210,6 +211,13 @@
                                           <td>{{ $data->kd_barang }}</td>
                                           <td>{{ $data->nama_barang }}</td>
                                           <td>Rp. {{ $data->harga_jual }},-</td>
+                                          <td>
+                                            @if($data->status_barang == 1)
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#verif" data-kd_barang="{{ $data->kd_barang }}" data-kd_toko="{{ $data->kd_toko }}"><i class="fa fa-ban"></i> Suspend</button>
+                                            @else
+                                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#suspend" data-kd_barang="{{ $data->kd_barang }}" data-kd_toko="{{ $data->kd_toko }}"><i class="fa fa-check-circle"></i> Verifikasi</button>
+                                            @endif
+                                          </td>
                                           <td>
                                             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_barang="{{ $data->kd_barang }}" data-nama_barang="{{ $data->nama_barang }}" data-deskripsi="{{ $data->deskripsi }}" data-jenis_barang="{{ $data->jenis_barang }}" data-stok="{{ $data->stok }}" data-harga_jual="{{ $data->harga_jual }}" data-foto="{{ $data->foto_barang }}" data-berat="{{ $data->berat_barang }}"><i class="fa fa-info"></i> Detail</button>
                                           </td>
@@ -273,6 +281,59 @@
               <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Suspend Data-->
+        <div id="suspend" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center"><span class="fa fa-ban"></span> Suspend Confirmation</h4>
+              </div>
+                <form id="modal-form-suspend" method="post" action="{{ route('suspend') }}">
+                    {{ csrf_field() }}
+              <div class="modal-body">
+                    <input type="hidden" name="kd_barang" id="cat_kd" value="">
+                    <input type="hidden" name="kd_toko" id="cat_toko" value="">
+                    <!-- <p><center>Are you sure you want to suspend this ?</center></p> -->
+                    <textarea name="pesan" rows="7" cols="48.5"  placeholder="Berikan Alasan Mem-suspend Barang Untuk Penjual/Toko"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" id="btnSuspend"><span class="fa fa-ban"></span> Yes, Suspend</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> No, Cancel</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Verifikasi Data-->
+        <div id="verif" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center"><span class="fa fa-check"></span> Verification Confirmation</h4>
+              </div>
+                <form id="modal-form-verif" method="post" action="{{ route('verif') }}">
+                    {{ csrf_field() }}
+              <div class="modal-body">
+                    <input type="hidden" name="kd_barang" id="cat_kd" value="">
+                    <input type="hidden" name="kd_toko" id="cat_toko" value="">
+                    <p><center>Are you sure you want to verification this ?</center></p>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="btnVerif"><span class="fa fa-check-circle"></span> Yes, Verification</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> No, Cancel</button>
+              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -351,6 +412,94 @@
             modal.find('.modal-body #harga_jual').text('Rp. ' + harga +',-')
             modal.find('.modal-body #stok').text(stok)
             modal.find('.modal-body #berat_barang').text(berat_barang + ' gram')
+          });
+
+          $('#suspend').on('show.bs.modal', function (event) {
+            event.preventDefault();
+
+            var button     = $(event.relatedTarget)
+            var kd_barang   = button.data('kd_barang')
+            var kd_toko   = button.data('kd_toko')
+            var modal      = $(this)
+            modal.find('.modal-body #cat_kd').val(kd_barang)
+            modal.find('.modal-body #cat_toko').val(kd_toko)
+          });
+
+          $('#verif').on('show.bs.modal', function (event) {
+            event.preventDefault();
+
+            var button     = $(event.relatedTarget)
+            var kd_barang   = button.data('kd_barang')
+            var kd_toko   = button.data('kd_toko')
+            var modal      = $(this)
+            modal.find('.modal-body #cat_kd').val(kd_barang)
+            modal.find('.modal-body #cat_toko').val(kd_toko)
+          });
+
+          var formSuspend = $('#modal-form-suspend');
+          formSuspend.submit(function (e){
+              e.preventDefault();
+
+              $.ajax({
+                  url: formSuspend.attr('action'),
+                  type: "POST",
+                  data: formSuspend.serialize(),
+                  dataType: "json",
+                  success: function( res ){
+                    if( res.error == 0 ){
+                      $('#suspend').modal('hide');
+                      swal(
+                        'Success',
+                        res.message,
+                            'success'
+                        ).then(OK => {
+                          if(OK){
+                              window.location.href = "http://localhost:8000/koordinator/toko/" + res.kd_toko + "/dataBarang";
+                          }
+                        });
+                    }else{
+                        $('#suspend').modal('hide');
+                        swal(
+                          'Fail',
+                          res.message,
+                          'error'
+                        )
+                    }
+                  }
+              });
+          });
+
+          var formVerif = $('#modal-form-verif');
+          formVerif.submit(function (e){
+              e.preventDefault();
+
+              $.ajax({
+                  url: formVerif.attr('action'),
+                  type: "POST",
+                  data: formVerif.serialize(),
+                  dataType: "json",
+                  success: function( res ){
+                    if( res.error == 0 ){
+                      $('#suspend').modal('hide');
+                      swal(
+                        'Success',
+                        res.message,
+                            'success'
+                        ).then(OK => {
+                          if(OK){
+                              window.location.href = "http://localhost:8000/koordinator/toko/" + res.kd_toko + "/dataBarang";
+                          }
+                        });
+                    }else{
+                        $('#suspend').modal('hide');
+                        swal(
+                          'Fail',
+                          res.message,
+                          'error'
+                        )
+                    }
+                  }
+              });
           });
 
         });
