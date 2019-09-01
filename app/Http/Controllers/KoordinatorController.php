@@ -243,7 +243,7 @@ class KoordinatorController extends Controller
 
 
           $toko = DB::table('tb_toko')
-                   ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko', 'tb_toko.no_rekening', 'user.nama_lengkap as nama_lengkap', 'provinsi.province as provinsi', 'kota.city_name as kota', 'kota.type as type', 'koordinator.nama_lengkap as nama_koor')
+                   ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko', 'tb_toko.no_rekening', 'tb_toko.nama_bank', 'tb_toko.nama_nasabah', 'user.nama_lengkap as nama_lengkap', 'provinsi.province as provinsi', 'kota.city_name as kota', 'kota.type as type', 'koordinator.nama_lengkap as nama_koor')
                    ->join('tb_token as token', 'token.id_token', '=', 'tb_toko.id_token')
                    ->join('tb_koordinator as koordinator', 'koordinator.kd_koordinator', '=', 'token.kd_koordinator')
                    ->join('tb_user as user', 'user.kd_user', '=', 'tb_toko.kd_user')

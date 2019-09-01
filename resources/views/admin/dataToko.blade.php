@@ -86,11 +86,18 @@
                     <li>
                         <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
                     </li>
+                    <li class="menu-title">Transaksi</li><!-- /.menu-title -->
                     <li>
-                        <a href="{{ route('dataKonfirmasi') }}"><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
+                        <a href="{{ route('dataKonfirmasiPembayaran') }}"><i class="menu-icon fa fa-check-circle"></i>Konfirmasi Pembayaran </a>
                     </li>
                     <li>
-                        <a href="{{ route('dataPembayaran') }}"><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                        <a href="{{ route('dataProsesTransaksi') }}"><i class="menu-icon fa fa-truck"></i>Proses Transaksi </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dataTransaksiDiterima') }}"><i class="menu-icon fa fa-handshake-o"></i>Transaksi Diterima</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dataRiwayatTransfer') }}"><i class="menu-icon fa fa-credit-card-alt"></i>Riwayat Transfer </a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

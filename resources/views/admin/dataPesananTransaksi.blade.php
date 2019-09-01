@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Data Toko | Koordinator Migrant Shop</title>
+    <title>Data Pesanan | Admin Migrant Shop</title>
 
     <!-- <link rel="apple-touch-icon" href="/images/icon.png">
     <link rel="shortcut icon" href="/images/icon.png"> -->
@@ -74,17 +74,30 @@
             <div id="main-menu" class="main-menu collapse navbar-collapse">
               <ul class="nav navbar-nav">
                   <li>
-                      <a href="{{ route('dashboardKoordinator') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
+                      <a href="{{ route('dashboardAdmin') }}"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
                   </li>
                   <li class="menu-title">Data</li><!-- /.menu-title -->
-                  <li class="active">
-                      <a href="{{ route('koorDataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
-                  </li>
-                  <!-- <li>
-                      <a href=""><i class="menu-icon fa fa-shopping-cart"></i>Data Transaksi </a>
-                  </li> -->
                   <li>
-                      <a href="{{ route('dataToken') }}"><i class="menu-icon fa fa-database"></i>Data Token </a>
+                      <a href="{{ route('dataKoordinator') }}"><i class="menu-icon fa fa-user"></i>Data Koordinator </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataToko') }}"><i class="menu-icon fa fa-rocket"></i>Data Toko </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
+                  </li>
+                  <li class="menu-title">Transaksi</li><!-- /.menu-title -->
+                  <li>
+                      <a href="{{ route('dataKonfirmasiPembayaran') }}"><i class="menu-icon fa fa-check-circle"></i>Konfirmasi Pembayaran </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataProsesTransaksi') }}"><i class="menu-icon fa fa-truck"></i>Proses Transaksi </a>
+                  </li>
+                  <li class="active">
+                      <a href="{{ route('dataTransaksiDiterima') }}"><i class="menu-icon fa fa-handshake-o"></i>Transaksi Diterima</a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataRiwayatTransfer') }}"><i class="menu-icon fa fa-credit-card-alt"></i>Riwayat Transfer </a>
                   </li>
               </ul>
             </div><!-- /.navbar-collapse -->
@@ -97,7 +110,7 @@
         <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                  <a class="navbar-brand" href="{{ route('dashboardKoordinator')}}">// LOGO SLURR</a>
+                  <a class="navbar-brand" href="{{ route('dashboardAdmin')}}">// LOGO SLURR</a>
                   <!-- <a class="navbar-brand" href="{{ route('dashboardKoordinator')}}"><img src="/images/Logo_MGOLEM_Web1.png" width="170" height="40" alt="Logo"></a>
                   <a class="navbar-brand hidden" href="{{ route('dashboardKoordinator') }}"><img src="/images/logo2.png" alt="Logo"></a> -->
                   <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
@@ -138,7 +151,7 @@
 
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="/images/koordinator/boy.png" alt="User Avatar">
+                            <img class="user-avatar rounded-circle" src="/images/admin/boy.png" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu">
@@ -148,7 +161,7 @@
 
                             <!-- <a class="nav-link" href="#"><i class="fa fa -cog"></i>Settings</a> -->
 
-                            <a class="nav-link" href="{{ route('logoutKoordinator') }}"><i class="fa fa-power -off"></i>Logout</a>
+                            <a class="nav-link" href="{{ route('logoutAdmin') }}"><i class="fa fa-power -off"></i>Logout</a>
                         </div>
                     </div>
 
@@ -163,7 +176,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Data Toko</h1>
+                                <h1>Data Pesanan</h1>
                             </div>
                         </div>
                     </div>
@@ -171,8 +184,9 @@
                         <div class="page-header float-right">
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
-                                    <li><a href="{{ route('dashboardKoordinator') }}">Dashboard</a></li>
-                                    <li class="active">Data Toko</li>
+                                    <li><a href="{{ route('dashboardAdmin') }}">Dashboard</a></li>
+                                    <li><a href="{{ route('dataTransaksiDiterima') }}">Data Transaksi</a></li>
+                                    <li class="active">Data Pesanan</li>
                                 </ol>
                             </div>
                         </div>
@@ -188,7 +202,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Toko</strong>
+                                <strong class="card-title">Data Pesanan</strong>
                                 <!-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong> -->
                             </div>
                             <div class="card-body">
@@ -196,24 +210,53 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Kd Pesanan</th>
+                                            <th>Kd Transaksi</th>
+                                            <!-- <th>Total Harga</th> -->
                                             <th>Kode Toko</th>
-                                            <th>Nama Toko</th>
-                                            <th>Nomor KTP Pemilik</th>
+                                            <th>Status Pengiriman</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      @foreach($toko as $key => $data)
+                                      @foreach($pesanan as $key => $data)
                                         <tr>
                                           <td>{{ ++$key }}</td>
-                                          <td>{{ $data->kd_toko }}</td>
-                                          <td>{{ $data->nama_toko }}</td>
-                                          <td>{{ $data->KTP }}</td>
+                                          <td>{{ $data->kd_pesanan }}</td>
+                                          <td>{{ $data->kd_transaksi }}</td>
+                                          <!-- @foreach($data->historis as $key => $historis)
+                                            @if($key == 0)
+                                              <td>{{ $historis->foto_bukti}}</td>
+                                            @endif
+                                          @endforeach -->
+
+                                          <!-- <td>Rp. {{ $data->total_harga }},-</td> -->
+                                          @foreach($data->list_barang as $key => $list)
+                                            @if($key == 0)
+                                              <td>{{ $list->barang->kd_toko }}</td>
+                                            @endif
+                                          @endforeach
                                           <td>
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_toko = "{{ $data->kd_toko }}" data-ktp="{{ $data->KTP }}" data-nama_toko="{{ $data->nama_toko }}" data-foto_toko="{{ $data->foto_toko }}" data-nama_user="{{ $data->nama_lengkap }}"  data-nama_koor="{{ $data->nama_koor }}" data-no_rekening="{{ $data->no_rekening }}" data-nama_bank="{{ $data->nama_bank }}" data-nama_nasabah="{{ $data->nama_nasabah }}" data-provinsi="{{ $data->provinsi }}"
-                                              data-type="{{ $data->type }}" data-kota="{{ $data->kota }}"><i class="fa fa-info"></i> Detail</button>
-                                            <button type="button" class="btn btn-success btn-sm" onclick="dataPesanan('{{$data->kd_toko}}')" data-toggle="modal"><i class="fa fa-shopping-cart"></i> Pesanan</button>
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="dataBarang('{{$data->kd_toko}}')" data-toggle="modal" data-target="#dataBarang"><i class="fa fa-database"></i> Barang</button>
+                                            @if( $data->status->id_status == 1 )
+                                              <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-clock-o"></i> {{ $data->status->status }}</button>
+                                            @elseif( $data->status->id_status == 2 )
+                                              <button type="button" class="btn btn-success btn-sm"><i class="fa fa-check-square-o"></i> {{ $data->status->status }}</button>
+                                            @elseif( $data->status->id_status == 3 )
+                                              <button type="button" class="btn btn-warning btn-sm"><i class="fa fa-spinner"></i> {{ $data->status->status }}</button>
+                                            @elseif( $data->status->id_status == 4 )
+                                              <button type="button" class="btn btn-info btn-sm"><i class="fa fa-truck"></i> {{ $data->status->status }}</button>
+                                            @else
+                                              <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i> {{ $data->status->status }}</button>
+                                            @endif
+                                          </td>
+                                          <td>
+                                            @foreach($data->list_barang as $key => $list)
+                                              @if($key == 0)
+                                              <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailData" data-kd_pesanan="{{ $data->kd_pesanan }}" data-kd_transaksi="{{ $data->kd_transaksi }}" data-kd_toko="{{ $list->barang->kd_toko }}" data-nama_toko="{{ $list->barang->toko->nama_toko }}" data-total_harga="{{ $data->total_harga }}" data-ongkir="{{ $data->ongkir }}" data-noresi="{{ $data->no_resi }}" data-ongkir="{{ $data->ongkir }}"
+                                                data-kota="{{ $data->city->city_name }}" data-type="{{ $data->city->type }}" data-provinsi="{{ $data->city->province->province }}" data-status="{{ $data->status->status }}" data-no_rek="{{ $list->barang->toko->no_rekening }}" data-nama_nasabah="{{ $list->barang->toko->nama_nasabah }}" data-nama_bank="{{ $list->barang->toko->nama_bank }}"><i class="fa fa-info"></i> Detail</button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#uploadbukti" data-kd_pesanan="{{ $data->kd_pesanan }}" data-kd_transaksi="{{ $data->kd_transaksi }}"><i class="fa fa-camera"></i> Upload Bukti</button>
+                                              @endif
+                                            @endforeach
                                           </td>
                                         </tr>
                                       @endforeach
@@ -240,7 +283,15 @@
               <div class="modal-body">
                    <table class="table table-striped table-bordered table-hover no-footer">
                        <tr>
-                           <th colspan="2"><img id="foto" src="" style="width: 100%; height: 100%" alt="Toko belum mengupload foto" onerror="this.onerror=null; this.src='/images/not_found.jpg'"></th>
+                           <th>Kode Pesanan</th>
+                           <td id="kd_pesanan"></td>
+                       </tr>
+                       <tr>
+                           <th>Kode Transaksi</th>
+                           <td id="kd_transaksi"></td>
+                       </tr>
+                       <tr>
+                         <th colspan="2"></th>
                        </tr>
                        <tr>
                            <th>Kode Toko</th>
@@ -251,17 +302,6 @@
                            <td id="nama_toko"></td>
                        </tr>
                        <tr>
-                           <th>Nama Pemilik</th>
-                           <td id="nama_pemilik"></td>
-                       </tr>
-                       <tr>
-                           <th>Nomor KTP Pemilik</th>
-                           <td id="no_ktp"></td>
-                       </tr>
-                       <tr>
-                         <th colspan="2"></th>
-                       </tr>
-                       <tr>
                            <th>Nomor Rekening</th>
                            <td id="no_rek" class="btn btn-danger btn-sm"></td>
                        </tr>
@@ -269,30 +309,69 @@
                            <th>Nama Nasabah</th>
                            <td id="nama_nasabah"></td>
                        </tr>
-                       <!-- <tr>
-                           <th>Nama Koordinator</th>
-                           <td id="nama_koor"></td>
-                       </tr> -->
-                       <!-- <tr>
-                           <th>Alamat</th>
-                           <td id="detail_alamat"></td>
-                       </tr> -->
                        <tr>
                          <th colspan="2"></th>
+                       </tr>
+                       <tr>
+                           <th>Ongkir</th>
+                           <td id="ongkir"></td>
+                       </tr>
+                       <tr>
+                           <th>Total Harga</th>
+                           <td id="total_harga"></td>
+                       </tr>
+                       <tr>
+                           <th>Nomor Resi</th>
+                           <td id="no_resi"></td>
                        </tr>
                        <tr>
                            <th>Provinsi</th>
                            <td id="provinsi"></td>
                        </tr>
                        <tr>
-                           <th>Daerah</th>
+                           <th>Kota/Kab</th>
                            <td id="daerah"></td>
+                       </tr>
+                       <tr>
+                           <th>Status Pengiriman</th>
+                           <td id="status"></td>
                        </tr>
                    </table>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Upload Bukti Data-->
+        <div id="uploadbukti" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="fa fa-camera"></span> Upload Bukti Transfer</h4>
+              </div>
+              <div class="modal-body">
+                <form id="modal-form-uploadbukti" action="{{ route('uploadBuktiTF') }}" method="post" role="form" enctype="multipart/form-data">
+                  {{ csrf_field() }}
+                  <div class="form-group has-success">
+                    <img src="" id="image-preview" width="100%" />
+                    <br>
+                    <input type="file" id="image-source" name="foto_bukti" onchange="previewImage();">
+                    <input type="hidden" id="kd_pesanan" name="kd_pesanan" value="">
+                    <input type="hidden" id="kd_transaksi" name="kd_transaksi" value="">
+                    <!-- <span class="text-warning" ></span> -->
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class=" btn btn-success"><span class="fa fa-plus-circle"></span> Submit</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
+              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -342,55 +421,133 @@
 
           $('#detailData').on('show.bs.modal', function (event) {
             event.preventDefault();
-
             var button = $(event.relatedTarget) // Button that triggered the modal
-            var kd_toko = button.data('kd_toko') // Extract info from data-* attributes
-            var ktp = button.data('ktp')
+            var kd_pesanan = button.data('kd_pesanan') // Extract info from data-* attributes
+            var kd_transaksi = button.data('kd_transaksi')
+            var kd_toko = button.data('kd_toko')
             var nama_toko = button.data('nama_toko')
-            var nama_pemilik = button.data('nama_user')
-            var foto_toko = button.data('foto_toko')
-            var no_rek = button.data('no_rekening')
-            var nama_bank = button.data('nama_bank')
-            var nama_nasabah = button.data('nama_nasabah')
-            var nama_koor = button.data('nama_koor')
-            //var detail_alamat = button.data('detail_alamat');
-            var provinsi = button.data('provinsi')
-            var type = button.data('type')
+            var total_harga = button.data('total_harga')
+            var ongkir = button.data('ongkir')
+            var no_resi = button.data('noresi')
             var kota = button.data('kota')
+            var type = button.data('type')
+            var provinsi = button.data('provinsi')
+            var status = button.data('status')
+            var no_rek = button.data('no_rek')
+            var nama_nasabah = button.data('nama_nasabah')
+            var nama_bank = button.data('nama_bank')
 
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            var loadImg;
+            var resi;
 
-            if(foto_toko != ""){
-              loadImg = "http://localhost:8000/images/toko/"+foto_toko
+            if(no_resi != ""){
+              resi = no_resi;
             }else{
-              loadImg = "http://localhost:8000/images/not_found.jpg"
+              resi = '-';
             }
-
-            modal.find('.modal-body #foto').attr("src", loadImg)
+            modal.find('.modal-body #kd_pesanan').text(kd_pesanan)
+            modal.find('.modal-body #kd_transaksi').text(kd_transaksi)
             modal.find('.modal-body #kd_toko').text(kd_toko)
             modal.find('.modal-body #nama_toko').text(nama_toko)
-            modal.find('.modal-body #nama_pemilik').text(nama_pemilik)
-            modal.find('.modal-body #no_ktp').text(ktp)
             modal.find('.modal-body #no_rek').text(no_rek + ' (' + nama_bank + ')')
             modal.find('.modal-body #nama_nasabah').text(nama_nasabah)
-            modal.find('.modal-body #nama_koor').text(nama_koor)
-            //modal.find('.modal-body #detail_alamat').text(detail_alamat)
+            modal.find('.modal-body #ongkir').text('Rp. ' + ongkir +',-')
+            modal.find('.modal-body #total_harga').text('Rp. ' + total_harga +',-')
+            modal.find('.modal-body #no_resi').text(resi)
             modal.find('.modal-body #provinsi').text(provinsi)
-            modal.find('.modal-body #daerah').text(type+' '+kota)
+            modal.find('.modal-body #daerah').text(type + ' ' + kota)
+            modal.find('.modal-body #status').text(status)
+          });
+
+          $('#uploadbukti').on('show.bs.modal', function (event){
+              event.preventDefault();
+
+              var button = $(event.relatedTarget)
+              var kd_pesanan = button.data('kd_pesanan')
+              var kd_transaksi = button.data('kd_transaksi')
+
+              var modal = $(this)
+              modal.find('.modal-body #kd_pesanan').val(kd_pesanan)
+              modal.find('.modal-body #kd_transaksi').val(kd_transaksi)
+          });
+
+          var formUploadBukti = $('#modal-form-uploadbukti');
+          formUploadBukti.submit(function (e){
+              e.preventDefault();
+
+              var formData = new FormData(this);
+
+              $.ajax({
+                  url: formUploadBukti.attr('action'),
+                  type: "POST",
+                  data: formData,
+                  dataType: "json",
+                  cache: false,
+                  contentType: false,
+                  processData: false,
+                  success: function( res ){
+                    if( res.error == 0 ){
+                      $('#uploadbukti').modal('hide');
+                      swal(
+                        'Success',
+                        res.message,
+                            'success'
+                        ).then(OK => {
+                          if(OK){
+                              window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                          }
+                        });
+                    }else if( res.error == 1){
+                        $('#uploadbukti').modal('hide');
+                        swal(
+                          'Fail',
+                          res.message,
+                          'error'
+                        ).then(OK => {
+                          if(OK){
+                              window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                          }
+                        });
+                    }else if( res.error == 2){
+                        $('#uploadbukti').modal('hide');
+                        swal(
+                          'Fail',
+                          res.message,
+                          'error'
+                        ).then(OK => {
+                          if(OK){
+                              window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                          }
+                        });
+                    }else{
+                      $('#uploadbukti').modal('hide');
+                      swal(
+                        'Fail',
+                        res.message,
+                        'error'
+                      ).then(OK => {
+                        if(OK){
+                            window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                        }
+                      });
+                    }
+                  }
+              });
           });
 
         });
 
-        function dataBarang(kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/dataBarang";
-        }
+        function previewImage() {
+  				document.getElementById("image-preview").style.display = "block";
+  				var oFReader = new FileReader();
+  				 oFReader.readAsDataURL(document.getElementById("image-source").files[0]);
 
-        function dataPesanan(kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/dataPesanan";
-        }
+  				oFReader.onload = function(oFREvent) {
+  				  document.getElementById("image-preview").src = oFREvent.target.result;
+  				};
+			  };
 
     </script>
 
