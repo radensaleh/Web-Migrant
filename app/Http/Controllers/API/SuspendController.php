@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use App\JenisBarang;
+use App\Suspend;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
-class JenisBarangController extends Controller
+class SuspendController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,18 +15,7 @@ class JenisBarangController extends Controller
      */
     public function index()
     {
-        $jenisBarang = DB::table('tb_jenis_barang')->get();
-
-        if($jenisBarang==null) {
-            return response()->json([
-                'response' => false,
-                'message' => 'Jenis Barang is not available'
-            ]);
-        } else {
-            return response()->json(
-                $jenisBarang
-            );
-        }
+        //
     }
 
     /**
@@ -35,29 +23,9 @@ class JenisBarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    //Create Category
-    /*Parameter
-        -jenis_barang
-    */
-    public function createCategory(Request $request)
+    public function create()
     {
-        $jenis_barang = $request->jenis_barang;
-        $jenisBarang = new JenisBarang;
-        $jenisBarang->jenis_barang = $jenis_barang;
-
-        if($jenisBarang->save()) {
-            return response()->json([
-                'response' => true,
-                'message' => 'Success create category'
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                'response' => false,
-                'message' => 'Failed !'
-            ]);
-        }
+        //
     }
 
     /**
@@ -66,9 +34,29 @@ class JenisBarangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    //Get SuspendByToko
+    /* Parameter
+        -kd_toko
+    */
+    public function getSuspendByToko(Request $request)
     {
-        //
+        $kd_toko = $request->kd_toko;
+        $suspend = Suspend::whereHas('barang', function($query) {
+            $query->whereHas('toko', function($query) {
+                $query->where('kd_toko', request('kd_toko'));
+            });
+        })->get();
+
+        if($suspend) {
+           return response()->json(
+                $suspend);
+        }
+        else {
+            return response()->json([
+                'response' => false,
+                'message' => 'Tidak ada suspend !'
+            ]);
+        }
     }
 
     /**

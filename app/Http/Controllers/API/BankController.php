@@ -24,10 +24,9 @@ class BankController extends Controller
             ]);
         } else 
         {
-            return response()->json([
-                'response' => true,
+            return response()->json(
                 $bank
-            ]);
+            );
         }
     }
 

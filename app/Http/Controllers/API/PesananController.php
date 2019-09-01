@@ -6,6 +6,7 @@ use App\Pesanan;
 use App\ListBarang;
 use App\ListBarangKeranjang;
 use App\Transaksi;
+use App\Bank;
 use App\Keranjang;
 use App\Barang;
 use Carbon\Carbon;
@@ -20,9 +21,28 @@ class PesananController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function konfirmasiPesanan(Request $request)
     {
-        //
+        $kd_pesanan = $request->kd_pesanan;
+
+        $pesanan = Pesanan::findOrFail($kd_pesanan);
+        
+        if($pesanan) {
+            $pesanan->id_status = 3;
+            $pesanan->save();
+
+            return response()->json([
+                'response' => true,
+                'message' => 'Berhasil Konfirmasi Pesanan'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed konfirmasi pesanan !'
+            ]);
+        }
     }
 
     /**
@@ -50,16 +70,13 @@ class PesananController extends Controller
         $jam = str_replace(':','', $tgl);
         $kd_transaksi = 'TRX'.str_replace(' ','',$jam);
 
-        //Dari tb keranjang
-        // $kd_barangs = $request->kd_barang;
-        // $kuantitass = $request->kuantitas;
-        // $hargas = $request->harga;
 
         //Data dari Keranjang untuk dimasukkan ke pesanan dan listBarang
         $keranjang = Keranjang::where('kd_user', $kd_user)->get();
         $total_harga_pesanan = 0;
         $total_ongkir = 0;
         $total_harga_all_pesanan = 0;
+        $comission_fee = 0;
 
         //Create Transaksi
         $dataTransaksi = array(
@@ -119,17 +136,18 @@ class PesananController extends Controller
             $updatePesanan->update($pesanan);
             $total_harga_pesanan = 0;
         } //End For 1
+        $comission_fee = ($total_harga_all_pesanan + $total_ongkir) * 5 / 100;
         $transaksi = [
             'kd_transaksi' => $kd_transaksi,
             'kd_user' => $kd_user,
             'tgl_transaksi' => Carbon::now('Asia/Jakarta'),
-            //Total Harga Transaksi, ini belum ditambah dengan keuntungan untuk migrantshop
-            'total_harga' => $total_harga_all_pesanan + $total_ongkir,
+            //Total Harga Transaksi, sudah plus keuntungan migrant
+            'total_harga' => $total_harga_all_pesanan + $total_ongkir + $comission_fee,
             'nama_penerima' => $nama_penerima
         ];
         $updateTransaksi = Transaksi::findOrFail($kd_transaksi);
+        $bank = Bank::first();
 
-        $data = [];
         if($updateTransaksi->update($transaksi)) {
             for($i=0; $i<sizeof($keranjang); $i++) {
                 DB::table('tb_list_barang_keranjang')->where('id_keranjang', $keranjang[$i]->id_keranjang)->delete();
@@ -137,14 +155,16 @@ class PesananController extends Controller
             DB::table('tb_keranjang')->where('kd_user', $kd_user)->delete();
             return response()->json([
                 'response' => true,
-                'message' => 'Transaction Successfull'
+                'message' => 'Transaction Successfull',
+                'transaksi' => $updateTransaksi,
+                'bank' => $bank
             ]);
         } else {
             return response()->json([
                 'response' => false,
                 'message' => 'Transaction Failed !'
             ]);
-        }
+        } //end else
 
     }
 
@@ -164,6 +184,7 @@ class PesananController extends Controller
         $pesanan = Pesanan::findOrFail($request->kd_pesanan);
         
         if($pesanan->update($request->all())) {
+            DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 4]);
             return response()->json([
                 'response' => true,
                 'message' => 'upload nomor resi success'
@@ -255,7 +276,7 @@ class PesananController extends Controller
        if($finish) {
            return response()->json([
                'response' => true,
-               'message' => 'Transaksi selesai'
+               'message' => 'Barang sudah diterima '
            ]);
        }
        else 

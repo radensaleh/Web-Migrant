@@ -9,7 +9,7 @@ class Toko extends Model
     protected $table = 'tb_toko';
 
     protected $fillable = [
-        'kd_toko','id_token','KTP','nama_toko','foto_toko',
+        'kd_toko','id_token','ktp','nama_toko','foto_toko',
         'kd_user','no_rekening','nama_nasabah', 'nama_bank','city_id'
     ];
 

@@ -39,6 +39,17 @@ class BarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //Create Barang
+    /*Parameter
+        -kd_toko
+        -nama_barang
+        -id_jenis
+        -stok
+        -harga_jual
+        -deskripsi
+        -foto_barang
+        -berat_barang
+    */
     public function createBarang(Request $request )
     {
         $barang = new Barang;
@@ -57,7 +68,7 @@ class BarangController extends Controller
             ]);
         }
 
-        $barang->kd_toko = $kd_toko;
+        $barang->kd_toko = $request->kd_toko;
         $barang->nama_barang = $request->input('nama_barang');
 
         //Find ID Jenis
@@ -68,14 +79,13 @@ class BarangController extends Controller
                 'message' => 'Cant find ID Jenis !'
             ];
         }
-        $barang->id_jenis = $id_jenis;
+        $barang->id_jenis = $request->id_jenis;
         $barang->stok = $request->input('stok');
         $barang->harga_jual = $request->input('harga_jual');
-        $barang->harga_modal = $request->input('harga_modal');
         $barang->deskripsi = $request->input('deskripsi');
         $barang->foto_barang = $request->input('foto_barang');
         $barang->berat_barang = $request->input('berat_barang');
-        $barang->status = $request->input('status');
+        $barang->status_barang = 0;
 
         if($barang->save()) {
             return response()->json([
@@ -83,9 +93,19 @@ class BarangController extends Controller
                 'message' => 'Barang created successfull'
             ]);
         }
+        else 
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed !'
+            ]);
+        }
 
     }
-
+//Show By ID
+/*Parameter
+    -kd_barang
+*/
     public function showById(){
       $kd_barang=request()->kd_barang;
       $barang = Barang::where('kd_barang',$kd_barang)->first();
@@ -108,6 +128,9 @@ class BarangController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    /*Parameter
+        -id_jenis
+    */
     public function showByCategory()
     {
         $id_jenis=request()->id_jenis;
@@ -131,10 +154,13 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    //Menampilkan semua barang berdasarkan id_toko
-    public function show($kd_toko)
+    //Menampilkan semua barang berdasarkan kd_toko
+    /*Parameter
+        -kd_toko
+    */
+    public function show(Request $request)
     {
-        $barang = Barang::where('kd_toko', $kd_toko)->get();
+        $barang = Barang::where('kd_toko', $request->kd_toko)->get();
 
         if($barang==null) {
             return response()->json([
@@ -155,13 +181,20 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteBarang($kd_barang)
+    public function deleteBarang(Request $request)
     {
-        $barang = Barang::destroy($kd_barang);
+        $barang = Barang::destroy($request->kd_barang);
         if($barang) {
             return response()->json([
                 'response' => true,
                 'message' => 'Barang deleted !'
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed !'
             ]);
         }
     }
@@ -173,6 +206,18 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //Kode Barang
+    /*Parameter
+            -kd_barang ->required
+            "nama_barang": "Kue", ->optional
+            "id_jenis": 1, -> optional
+            "stok": 30, -> optional
+            "harga_jual": 10000, -> optional
+            "deskripsi": "Kue ini enaaaaaak banget", -> optional
+            "foto_barang": "http://foto.com", -> optional
+            "berat_barang": 2, -> optional
+            "status_barang": "0", -> optional
+    */
     public function update(Request $request)
     {
         $barang = Barang::findOrFail($request->kd_barang);

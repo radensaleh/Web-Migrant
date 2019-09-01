@@ -99,21 +99,37 @@ class KeranjangController extends Controller
                 $id_keranjang = $keranjang[$i]->id_keranjang;
                 $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
 
-                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko && $kd_user == $listBarangKeranjang->keranjang->kd_user)
+                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko 
+                && $kd_user == $listBarangKeranjang->keranjang->kd_user)
                     {
-                        $data = array(
-                            'id_keranjang' => $id_keranjang,
-                            'kd_barang' => $kd_barang,
-                            'kuantitas' => $kuantitas,
-                            'harga' => $barang->harga_jual
-                        );
+                        if($kd_barang == $listBarangKeranjang->kd_barang) {
+                            //Handle
+                            $kuantitas = $listBarangKeranjang->kuantitas+1;
+                            $listBarangKeranjang->kuantitas = $kuantitas;
+                            $listBarangKeranjang->save();
 
-                        if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
                             return response()->json([
                                 'response' => true,
-                                'message' => 'Data Berhasil Ditambah ke Keranjang'
+                                'message' => 'Berhasil ditambahkan !'
                             ]);
-                        } //end If
+
+                        }
+                        else 
+                        {
+                            $data = array(
+                                'id_keranjang' => $id_keranjang,
+                                'kd_barang' => $kd_barang,
+                                'kuantitas' => $kuantitas,
+                                'harga' => $barang->harga_jual
+                            );
+    
+                            if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
+                                return response()->json([
+                                    'response' => true,
+                                    'message' => 'Data Berhasil Ditambah ke Keranjang'
+                                ]);
+                            } //end If
+                        } //end else
 
                     } //End If
             }// End For ke 1
@@ -166,7 +182,7 @@ class KeranjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function deleteBarangKeranjang(Request $request)
     {
         //
     }

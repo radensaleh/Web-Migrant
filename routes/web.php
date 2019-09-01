@@ -44,4 +44,4 @@ Route::post('/koodinator/apiRajaOngkir/getTypeDaerah', 'KoordinatorController@ge
 Route::get('/koordinator/toko/{kd_toko}/dataBarang', 'TokoController@dataBarang');
 
 //Raja Ongkir
-//Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');
+// Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');

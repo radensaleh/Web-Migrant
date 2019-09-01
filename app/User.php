@@ -32,6 +32,12 @@ class User extends Authenticatable
 
     protected $primaryKey = 'kd_user';
 
+    public $incrementing = false;
+
+    public function setPasswordAttribute($value) {
+       $this->attributes['password'] = bcrypt($value);
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

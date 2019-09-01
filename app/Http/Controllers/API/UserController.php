@@ -27,15 +27,21 @@ class UserController extends Controller
     {
         $email = $request->input('email');
         $password = $request->input('password');
-        $user = DB::table('tb_user')->where('email', '=', $email)->
-        where('password', '=', $password)->first();
+        
 
-        if($user==null) {
+       $auth = auth()->guard('users');
+       $credentials = [
+            'email' => $email,
+            'password' => $password        
+       ];
+        
+        if(!$auth->attempt($credentials)) {
             return response()->json([
                 'status' => '404',
             ]);
         }
         else {
+            $user = DB::table('tb_user')->where('email', '=', $email)->first();
             return response()->json(
                 $user
             );
@@ -62,7 +68,7 @@ class UserController extends Controller
     /*Parameter
         -nama_lengkap
         -jenis_kelamin (1/0)
-        -nomor HP (0-9)
+        -nomer_hp (0-9)
         -email
         -password
         -city_id
@@ -128,6 +134,13 @@ class UserController extends Controller
                 'response' => true,
                 'message' => "Berhasil Update Data User"
             ], 200);
+        }
+        else 
+        {
+            return response()->json([
+                'response' => false,
+                'message' => "Failed !"
+            ]);
         }
     }
 
