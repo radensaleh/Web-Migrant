@@ -20,14 +20,13 @@ class BankController extends Controller
         if($bank==null) {
             return response()->json([
                'response' => false,
-               'message' => 'Bank is not available' 
+               'message' => 'Bank is not available'
             ]);
-        } else 
+        } else
         {
-            return response()->json([
-                'response' => true,
+            return response()->json(
                 $bank
-            ]);
+            );
         }
     }
 

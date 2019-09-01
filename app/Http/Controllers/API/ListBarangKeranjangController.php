@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\ListBarangKeranjang;
+use Illuminate\Support\Facades\DB;
 
 class ListBarangKeranjangController extends Controller
 {
@@ -56,7 +57,7 @@ class ListBarangKeranjangController extends Controller
                 'message' => 'id_keranjang tidak ditemukan'
             ]);
         }
-        
+
         if($listKeranjang = ListBarangKeranjang::save($request->all())) {
             return response()->json([
                 'response' => true,

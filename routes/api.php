@@ -34,7 +34,7 @@ Route::post("/RegisterToko", "API\TokoController@register");
 Route::put("/Toko", "API\TokoController@update");
 
 //Get Data toko by id user
-Route::get("/Toko/{kd_user}", "API\TokoController@getToko");
+Route::get("/Toko", "API\TokoController@getToko");
 
 //Bank
 Route::get("/Bank", "API\BankController@index");
@@ -70,10 +70,10 @@ Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 Route::put("/Keranjang", "API\KeranjangController@updateKeranjang");
 
 //Get Keranjang by kd_user
-Route::get("/Keranjang/{kd_user}", "API\KeranjangController@index");
+Route::get("/Keranjang", "API\KeranjangController@index");
 
 //Delete Keranjang
-Route::delete("/Keranjang/{id_keranjang}", "API\KeranjangController@destroy");
+Route::delete("/Keranjang", "API\KeranjangController@destroy");
 
 //Create List Barang Keranjang
 Route::post("/ListKeranjang", "API\ListBarangKeranjang@createListKeranjang");
