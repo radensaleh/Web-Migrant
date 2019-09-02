@@ -10,7 +10,8 @@ class Pesanan extends Model
 
     protected $fillable =
     [
-        'kd_pesanan','kd_transaksi','total_harga','ongkir','no_resi','city_id','id_status'
+        'kd_pesanan','kd_transaksi','total_harga','ongkir','no_resi','city_id','id_status',
+        'estimasi_pengiriman','kurir', 'nama_service'
     ];
 
     protected $primaryKey = 'kd_pesanan';
