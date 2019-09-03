@@ -85,11 +85,18 @@
                     <li>
                         <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
                     </li>
+                    <li class="menu-title">Transaksi</li><!-- /.menu-title -->
                     <li>
-                        <a href="{{ route('dataKonfirmasi') }}"><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
+                        <a href="{{ route('dataKonfirmasiPembayaran') }}"><i class="menu-icon fa fa-check-circle"></i>Konfirmasi Pembayaran </a>
                     </li>
                     <li>
-                        <a href="{{ route('dataPembayaran') }}"><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                        <a href="{{ route('dataProsesTransaksi') }}"><i class="menu-icon fa fa-truck"></i>Proses Transaksi </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dataTransaksiDiterima') }}"><i class="menu-icon fa fa-handshake-o"></i>Transaksi Diterima</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dataRiwayatTransfer') }}"><i class="menu-icon fa fa-credit-card-alt"></i>Riwayat Transfer </a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -226,7 +233,7 @@
                             <div class="card-body">
                                 <div class="stat-widget-five">
                                     <div class="stat-icon dib flat-color-6">
-                                        <i class="fa fa-shopping-cart"></i>
+                                        <i class="fa fa-check-circle"></i>
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
@@ -244,12 +251,48 @@
                             <div class="card-body">
                                 <div class="stat-widget-five">
                                     <div class="stat-icon dib flat-color-5">
-                                        <i class="fa fa-database"></i>
+                                        <i class="fa fa-truck"></i>
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">{{ $sudahTerkonfirm }}</span></div>
-                                            <div class="stat-heading">Pembayaran</div>
+                                            <div class="stat-text"><span class="count">{{ $prosesTransaksi }}</span></div>
+                                            <div class="stat-heading">Proses Transaksi</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-widget-five">
+                                    <div class="stat-icon dib flat-color-3">
+                                        <i class="fa fa-handshake-o"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="text-left dib">
+                                            <div class="stat-text"><span class="count">{{ $dataTransaksi }}</span></div>
+                                            <div class="stat-heading">Transaksi Diterima</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-widget-five">
+                                    <div class="stat-icon dib flat-color-4">
+                                        <i class="fa fa-credit-card-alt"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="text-left dib">
+                                            <div class="stat-text"><span class="count">{{ $riwayat }}</span></div>
+                                            <div class="stat-heading">Riwayat Transfer</div>
                                         </div>
                                     </div>
                                 </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use DB;
 use App\Transaksi;
 use App\Pesanan;
+use App\Suspend;
+use App\Barang;
 use Illuminate\Http\Request;
 
 class TokoController extends Controller
@@ -27,7 +29,7 @@ class TokoController extends Controller
         $kd_toko = $request->kd_toko;
 
         $barang = DB::table('tb_barang')
-                    ->select('kd_barang', 'nama_barang', 'jenis.jenis_barang as jenis_barang', 'stok', 'harga_jual', 'deskripsi', 'foto_barang', 'berat_barang')
+                    ->select('kd_barang', 'kd_toko', 'nama_barang', 'jenis.jenis_barang as jenis_barang', 'stok', 'harga_jual', 'deskripsi', 'foto_barang', 'berat_barang', 'status_barang')
                     ->join('tb_jenis_barang as jenis', 'jenis.id_jenis', '=', 'tb_barang.id_jenis')
                     ->where('kd_toko', $kd_toko)
                     ->get();
@@ -75,6 +77,61 @@ class TokoController extends Controller
         ));
 
       }
+    }
+
+    public function suspendBarang(Request $request){
+       $suspend = Suspend::create($request->all());
+       if( $suspend ){
+         $barang = Barang::findOrFail($request->kd_barang);
+         $barang->status_barang = 1;
+         $barang->update();
+
+         if( $barang ){
+           return response()->json([
+             'error' => 0,
+             'message' => 'Success Suspend Data',
+             'kd_toko' => $request->kd_toko
+           ], 200);
+         }
+
+       }else{
+         return response()->json([
+           'error' => 1,
+           'message' => 'Failed Suspend Data',
+           'kd_toko' => $request->kd_toko
+         ], 200);
+       }
+    }
+
+    public function verifBarang(Request $request){
+       $kd_barang = $request->kd_barang;
+       $verif = Suspend::where('kd_barang', '=', $kd_barang)->first();
+
+       try {
+         $verif->delete();
+
+         if( $verif ){
+           $barang = Barang::findOrFail($kd_barang);
+           $barang->status_barang = 0;
+           $barang->update();
+
+           if( $barang ){
+             return response()->json([
+               'error' => 0,
+               'message' => 'Success Verification Data',
+               'kd_toko' => $request->kd_toko
+             ], 200);
+           }
+
+         }
+
+       } catch (\Exception $e) {
+           return response()->json([
+             'error' => 1,
+             'message' => 'Failed Verification Data',
+             'kd_toko' => $request->kd_toko
+           ], 500);
+       }
     }
 
     // public function dataTransaksi(Request $request){

@@ -26,6 +26,7 @@ class CreateTbBarangTable extends Migration
             $table->string('deskripsi');
             $table->string('foto_barang');
             $table->double('berat_barang');
+            $table->string('status_barang');
             $table->timestamps();
         });
     }

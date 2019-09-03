@@ -17,23 +17,25 @@ class TokoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getToko($kd_user)
+    public function getToko(Request $request)
     /*Paramter
         -kd_user -> required !
     */
     {
+        $kd_user = $request->kd_user;
         $toko = DB::table('tb_toko')->where('kd_user', $kd_user)->first();
 
         if($toko==null) {
             return response()->json([
                 'response' => false,
-                'message' => 'Toko is not available, probably wrong kd_user !'
+                'message' => 'Toko is not available, probably wrong kd_user !',
+                $kd_user
             ]);
         } else
         {
-            return response()->json([
+            return response()->json(
                 $toko
-            ]);
+            );
         }
     }
 
@@ -63,7 +65,8 @@ class TokoController extends Controller
 	"nama_toko" : "Eka Shop",
     "city_id" : 1,
     "no_rekening" : "example",
-    "nama_bank" : "BRI"
+    "nama_bank" : "BRI",
+    "nama_nasabah :"Eka Rahadi"
         */
         $toko = new Toko;
 
@@ -107,9 +110,10 @@ class TokoController extends Controller
         $toko->KTP = $request->ktp;
         $toko->nama_toko = $request->nama_toko;
         $toko->kd_user = $user->kd_user;
-        $toko->no_rekening = $$request->no_rekening;
+        $toko->no_rekening = $request->no_rekening;
         $toko->city_id = $request->city_id;
         $toko->nama_bank = $request->nama_bank;
+        $toko->nama_nasabah = $request->nama_nasabah;
 
         if($toko->save()) {
             DB::table('tb_user')->where('kd_user', $request->kd_user)->update(['status' => '1']);
@@ -165,6 +169,7 @@ class TokoController extends Controller
         no_rekening; -> optional
         city_id; -> optional
         nama_bank; -> optional
+        nama_nasabah -> optional
         
     */
     {

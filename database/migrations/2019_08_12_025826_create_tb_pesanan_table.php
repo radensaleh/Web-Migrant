@@ -18,6 +18,9 @@ class CreateTbPesananTable extends Migration
             $table->string('kd_transaksi')->index();
             $table->foreign('kd_transaksi')->references('kd_transaksi')->on('tb_transaksi');
             $table->integer('total_harga', false, true);
+            $table->string('kurir');
+            $table->string('nama_service');
+            $table->string('estimasi_pengiriman');
             $table->integer('ongkir', false, true);
             $table->string('no_resi')->nullable();
             $table->integer('city_id')->unsigned();

@@ -86,11 +86,18 @@
                   <li>
                       <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
                   </li>
+                  <li class="menu-title">Transaksi</li><!-- /.menu-title -->
                   <li class="active">
-                      <a href="{{ route('dataKonfirmasi') }}"><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
+                      <a href="{{ route('dataKonfirmasiPembayaran') }}"><i class="menu-icon fa fa-check-circle"></i>Konfirmasi Pembayaran </a>
                   </li>
                   <li>
-                      <a href="{{ route('dataPembayaran') }}"><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                      <a href="{{ route('dataProsesTransaksi') }}"><i class="menu-icon fa fa-truck"></i>Proses Transaksi </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataTransaksiDiterima') }}"><i class="menu-icon fa fa-handshake-o"></i>Transaksi Diterima</a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataRiwayatTransfer') }}"><i class="menu-icon fa fa-credit-card-alt"></i>Riwayat Transfer </a>
                   </li>
               </ul>
             </div><!-- /.navbar-collapse -->
@@ -272,6 +279,7 @@
               <form id="modal-form-confirm" method="post" action="{{ route('konfirmPembayaran') }}">
                   {{ csrf_field() }}
                   <input type="hidden" name="kd_transaksi" id="cat_kd" value="">
+                  <input type="hidden" name="total_harga" id="cat_total_harga" value="">
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-success"><span class="fa fa-check-circle"></span> Konfirmasi Pembayaran</button>
                     <button type="button" class="btn btn-info" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
@@ -354,6 +362,7 @@
             modal.find('.modal-body #total_harga').text('Rp. ' + total_harga +',-')
             modal.find('.modal-body #nama_penerima').text(nama_penerima)
             modal.find('#cat_kd').val(kd_transaksi)
+            modal.find('#cat_total_harga').val(total_harga)
           });
 
           var formKonfirm = $('#modal-form-confirm');
@@ -375,7 +384,7 @@
                           'success'
                       ).then(OK => {
                         if(OK){
-                          window.location.href = "{{ route('dataKonfirmasi') }}";
+                          window.location.href = "{{ route('dataKonfirmasiPembayaran') }}";
                         }
                       });
                   }else{
@@ -386,7 +395,7 @@
                         'error'
                       ).then(OK => {
                         if(OK){
-                          window.location.href = "{{ route('dataKonfirmasi') }}";
+                          window.location.href = "{{ route('dataKonfirmasiPembayaran') }}";
                         }
                       });
                     }
@@ -398,7 +407,7 @@
         });
 
         function dataPesanan(kd_transaksi){
-            window.location.href = "http://localhost:8000/admin/konfirmasi_pembayaran/toko/" + kd_transaksi + "/dataPesanan";
+            window.location.href = "http://localhost:8000/admin/konfirmasiPembayaran/toko/" + kd_transaksi + "/dataPesanan";
         }
 
     </script>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTbBankTable extends Migration
+class CreateTbHistorisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateTbBankTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_bank', function (Blueprint $table) {
-            $table->string('no_rekening')->primary();
-            $table->string('nama_nasabah');
-            $table->string('nama_bank');
+        Schema::create('tb_historis', function (Blueprint $table) {
+            $table->bigIncrements('id_historis');
+            $table->string('kd_pesanan')->index();
+            $table->foreign('kd_pesanan')->references('kd_pesanan')->on('tb_pesanan');
+            $table->string('foto_bukti');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateTbBankTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_bank');
+        Schema::dropIfExists('tb_historis');
     }
 }

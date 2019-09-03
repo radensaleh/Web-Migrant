@@ -52,6 +52,11 @@ return [
             'provider' => 'koordinator',
         ],
 
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
 
         'api' => [
             'driver' => 'token',
@@ -94,10 +99,10 @@ return [
             'model' => App\Koordinator::class,
         ],
 
-        'users' => [
-            'driver' => 'database',
-            'table' => 'users',
-        ],
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*

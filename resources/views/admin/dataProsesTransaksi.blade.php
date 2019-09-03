@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Data Pembayaran | Admin Migrant Shop</title>
+    <title>Proses Transaksi | Admin Migrant Shop</title>
 
     <!-- <link rel="apple-touch-icon" href="/images/icon.png">
     <link rel="shortcut icon" href="/images/icon.png"> -->
@@ -86,11 +86,18 @@
                   <li>
                       <a href="{{ route('dataJenisBarang') }}"><i class="menu-icon fa fa-tags"></i>Data Jenis Barang </a>
                   </li>
+                  <li class="menu-title">Transaksi</li><!-- /.menu-title -->
                   <li>
-                      <a href="{{ route('dataKonfirmasi') }}"><i class="menu-icon fa fa-shopping-cart"></i>Konfirmasi Pembayaran </a>
+                      <a href="{{ route('dataKonfirmasiPembayaran') }}"><i class="menu-icon fa fa-check-circle"></i>Konfirmasi Pembayaran </a>
                   </li>
                   <li class="active">
-                      <a href="{{ route('dataPembayaran') }}"><i class="menu-icon fa fa-database"></i>Data Pembayaran </a>
+                      <a href="{{ route('dataProsesTransaksi') }}"><i class="menu-icon fa fa-truck"></i>Proses Transaksi </a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataTransaksiDiterima') }}"><i class="menu-icon fa fa-handshake-o"></i>Transaksi Diterima</a>
+                  </li>
+                  <li>
+                      <a href="{{ route('dataRiwayatTransfer') }}"><i class="menu-icon fa fa-credit-card-alt"></i>Riwayat Transfer </a>
                   </li>
               </ul>
             </div><!-- /.navbar-collapse -->
@@ -169,7 +176,7 @@
                     <div class="col-sm-4">
                         <div class="page-header float-left">
                             <div class="page-title">
-                                <h1>Data Pembayaran</h1>
+                                <h1>Proses Transaksi</h1>
                             </div>
                         </div>
                     </div>
@@ -178,7 +185,7 @@
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
                                     <li><a href="{{ route('dashboardAdmin') }}">Dashboard</a></li>
-                                    <li class="active">Data Pembayaran</li>
+                                    <li class="active">Proses Transaksi</li>
                                 </ol>
                             </div>
                         </div>
@@ -194,7 +201,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">Data Pembayaran</strong>
+                                <strong class="card-title">Proses Transaksi</strong>
                                 <!-- <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addData"><i class="fa fa-plus-circle"></i> Add</button></strong> -->
                             </div>
                             <div class="card-body">
@@ -351,7 +358,7 @@
         });
 
         function dataPesanan(kd_transaksi){
-            window.location.href = "http://localhost:8000/admin/dataPembayaran/toko/" + kd_transaksi + "/dataPesanan";
+            window.location.href = "http://localhost:8000/admin/dataProsesTransaksi/toko/" + kd_transaksi + "/dataPesanan";
         }
 
     </script>

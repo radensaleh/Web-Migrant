@@ -18,12 +18,13 @@ class CreateTbTokoTable extends Migration
             $table->bigInteger('id_token')->unsigned();
             $table->index('id_token');
             $table->foreign('id_token')->references('id_token')->on('tb_token');
-            $table->string('KTP');
+            $table->string('ktp');
             $table->string('nama_toko');
             $table->string('foto_toko');
             $table->string('kd_user')->index();
             $table->foreign('kd_user')->references('kd_user')->on('tb_user');
             $table->string('no_rekening');
+            $table->string('nama_nasabah');
             $table->string('nama_bank');
             $table->integer('city_id')->unsigned();
             $table->foreign('city_id')->references('city_id')->on('tb_kota');

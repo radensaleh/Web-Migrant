@@ -11,6 +11,8 @@ use App\JenisBarang;
 use App\User;
 use App\Transaksi;
 use App\Pesanan;
+use App\Keuntungan;
+use App\Historis;
 
 class AdminController extends Controller
 {
@@ -38,12 +40,20 @@ class AdminController extends Controller
               $query->where('id_status', 1);
           })->count();
 
-          $sudahTerkonfirm = Transaksi::whereHas('pesanan', function($query){
-              $query->where('id_status', '>', 1);
+          $prosesTransaksi = Transaksi::whereHas('pesanan', function($query){
+              $query->where('id_status', 2);
+              $query->orWhere('id_status', 3);
+              $query->orWhere('id_status', 4);
           })->count();
 
+          $dataTransaksi = Transaksi::whereHas('pesanan', function($query){
+              $query->where('id_status', 5);
+          })->count();
+
+          $riwayat = Historis::count();
+
           return view('admin.dashboard', compact(
-              'name','koordinator','toko','jenisBarang','konfirm', 'sudahTerkonfirm'
+              'name','koordinator','toko','jenisBarang','konfirm', 'prosesTransaksi', 'dataTransaksi', 'riwayat'
           ));
       }
     }
@@ -150,7 +160,7 @@ class AdminController extends Controller
     }
 
     //KONFIRMASI PEMBAYARAN
-    public function dataKonfirmasi(Request $request){
+    public function dataKonfirmasiPembayaran(Request $request){
       if(!$request->session()->exists('username')){
           return redirect()->route('loginPage');
       }else{
@@ -187,7 +197,7 @@ class AdminController extends Controller
                        $query->where('kd_transaksi', request('kd_transaksi'));
                       })->get();
 
-        return view('admin.dataPesanan', compact(
+        return view('admin.dataPesananKonfirmasi', compact(
             'name','pesanan','kd_transaksi'
         ));
       }
@@ -210,14 +220,14 @@ class AdminController extends Controller
                        $query->where('kd_transaksi', request('kd_transaksi'));
                       })->get();
 
-        return view('admin.dataPesananKonfirmasi', compact(
+        return view('admin.dataPesananProses', compact(
             'name','pesanan','kd_transaksi'
         ));
       }
     }
 
-    //DATA PEMBAYARAN
-    public function dataPembayaran(Request $request){
+    //DATA PROSES TRANSAKSI
+    public function dataProsesTransaksi(Request $request){
       if(!$request->session()->exists('username')){
           return redirect()->route('loginPage');
       }else{
@@ -228,10 +238,12 @@ class AdminController extends Controller
 
         $transaksi = Transaksi::
                      whereHas('pesanan', function($query){
-                       $query->where('id_status', '>', 1);
+                       $query->where('id_status', 2);
+                       $query->orWhere('id_status', 3);
+                       $query->orWhere('id_status', 4);
                       })->get();
 
-        return view('admin.dataPembayaran', compact(
+        return view('admin.dataProsesTransaksi', compact(
             'name','transaksi'
         ));
       }
@@ -244,17 +256,168 @@ class AdminController extends Controller
       $konfirm = Pesanan::where('kd_transaksi', $kd_transaksi)
                  ->update(['id_status' => 2]);
 
+      $total_harga = $request->total_harga;
+      $keuntungan  = ($total_harga * 5)/100;
+
       if( $konfirm ){
-        return response()->json([
-          'error'   => 0,
-          'message' => 'Konfirmasi Transaksi ' . $kd_transaksi . ' Berhasil',
-        ], 200);
+        $keuntungan = Keuntungan::create([
+          'kd_transaksi' => $kd_transaksi,
+          'keuntungan'   => $keuntungan
+        ]);
+
+        if($keuntungan){
+          return response()->json([
+            'error'   => 0,
+            'message' => 'Konfirmasi Transaksi ' . $kd_transaksi . ' Berhasil',
+          ], 200);
+        }
+
       }else{
         return response()->json([
           'error'   => 1,
           'message' => 'Konfirmasi Transaksi Gagal',
         ], 200);
       }
+    }
+
+    //DATA TRANSAKSI TELAH DITERIMA
+    public function dataTransaksiDiterima(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $transaksi = Transaksi::
+                     whereHas('pesanan', function($query){
+                       $query->where('id_status', 5);
+                      })->get();
+
+        return view('admin.dataTransaksiDiterima', compact(
+            'name','transaksi'
+        ));
+      }
+    }
+
+    //DATA PESANAN di Data Transaksi
+    public function dataPesanan3(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $kd_transaksi = $request->kd_transaksi;
+
+        $pesanan = Pesanan::
+                     whereHas('transaksi', function($query){
+                       $query->where('kd_transaksi', request('kd_transaksi'));
+                     })->where('id_status', 5)->get();
+
+        return view('admin.dataPesananTransaksi', compact(
+            'name','pesanan','kd_transaksi'
+        ));
+      }
+    }
+
+    //RIWAYAT TRANSFER
+    public function dataRiwayatTransfer(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $transaksi = Transaksi::
+                     whereHas('pesanan', function($query){
+                        $query->where('id_status', 6);
+                     })->get();
+
+        return view('admin.dataRiwayatTransfer', compact(
+            'name', 'transaksi'
+        ));
+      }
+    }
+
+    //DATA PESANAN di Riwayat Tranfer
+    public function dataPesanan4(Request $request){
+      if(!$request->session()->exists('username')){
+          return redirect()->route('loginPage');
+      }else{
+        $username = $request->session()->get('username');
+        $name  = DB::table('tb_admin')
+                    ->where('username', $username)
+                    ->value('nama_admin');
+
+        $kd_transaksi = $request->kd_transaksi;
+
+        $pesanan = Pesanan::
+                     whereHas('transaksi', function($query){
+                       $query->where('kd_transaksi', request('kd_transaksi'));
+                     })->where('id_status', 6)->get();
+
+        return view('admin.dataPesananTransfer', compact(
+            'name','pesanan','kd_transaksi'
+        ));
+      }
+    }
+
+    //UPLOAD BUKTI TRANSFER
+    public function uploadBuktiTF(Request $request){
+        $foto = $request->file('foto_bukti');
+        $kd_pesanan = $request->kd_pesanan;
+        $kd_transaksi = $request->kd_transaksi;
+
+        $historis = [
+            'kd_pesanan' => $kd_pesanan
+        ];
+
+        if($foto != ""){
+					$path = 'images/bukti_tf/';
+					$historis['foto_bukti'] = $kd_pesanan. '.' . $foto->getClientOriginalExtension();
+					$foto->move($path, $historis['foto_bukti']);
+
+          try{
+            $create = Historis::create($historis);
+
+            if($create){
+              $pesanan = Pesanan::where('kd_pesanan', $kd_pesanan)
+                         ->update(['id_status' => 6]);
+
+              return response()->json([
+                'error'   => 0,
+                'message' => 'Upload Bukti Tranfer Pesanan ' . $kd_pesanan . ' Berhasil',
+                'kd_transaksi' => $kd_transaksi
+              ], 200);
+            }else{
+              return response()->json([
+                'error'   => 2,
+                'message' => 'Upload Gagal',
+                'kd_transaksi' => $kd_transaksi
+              ], 200);
+            }
+          }catch(QueryException $e){
+            return response()->json([
+              'error'   => 1,
+              'message' => $e->errorInfo,
+              'kd_transaksi' => $kd_transaksi
+            ], 200);
+          }
+
+				}else{
+          return response()->json([
+            'error'   => 3,
+            'message' => 'Foto kosong',
+            'kd_transaksi' => $kd_transaksi
+          ], 200);
+        }
+
     }
 
 }

@@ -25,13 +25,13 @@ Route::post("validasiToken", "API\TokenAPIController@checkToken");
 Route::post("/Register", "API\UserController@register");
 
 //Update data User -> Require kd_user and Data to be Change
-Route::put("/UserUpdate", "API\UserController@updateUser");
+Route::post("/UserUpdate", "API\UserController@updateUser");
 
 //Register Toko
 Route::post("/RegisterToko", "API\TokoController@register");
 
 //Update Data Toko -> Require Kd_toko and Data to be Change
-Route::put("/Toko", "API\TokoController@update");
+Route::post("/Toko", "API\TokoController@update");
 
 //Get Data toko by id user
 Route::get("/Toko", "API\TokoController@getToko");
@@ -42,6 +42,9 @@ Route::get("/Bank", "API\BankController@index");
 //JenisBarang
 Route::get("/JenisBarang", "API\JenisBarangController@index");
 
+//Create JenisBarang
+Route::post("/JenisBarang", "API\JenisBarangController@createCategory");
+
 //Create Barang / Menambah Barang
 Route::post("/Barang", "API\BarangController@createBarang");
 
@@ -49,13 +52,13 @@ Route::post("/Barang", "API\BarangController@createBarang");
 Route::get("/Barang", "API\BarangController@index");
 
 //Menampilkan semua barang berdasarkan kd_toko
-Route::get("/Barang/{kd_toko}", "API\BarangController@show");
+Route::get("/getBarangByToko", "API\BarangController@show");
 
 //Update Barang
 Route::post("/BarangUpdate", "API\BarangController@update");
 
 //Delete Barang
-Route::delete("/BarangDelete/{kd_barang}","API\BarangController@deleteBarang");
+Route::delete("/BarangDelete","API\BarangController@deleteBarang");
 
 //menampilkan semua barang berdasarkan kategori
 Route::get("/BarangKategori","API\BarangController@showByCategory");
@@ -67,7 +70,7 @@ Route::get("/BarangID","API\BarangController@showById");
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 
 //Update Keranjang
-Route::put("/Keranjang", "API\KeranjangController@updateKeranjang");
+Route::post("/UpdateKeranjang", "API\KeranjangController@updateKeranjang");
 
 //Get Keranjang by kd_user
 Route::get("/Keranjang", "API\KeranjangController@index");
@@ -90,9 +93,18 @@ Route::delete("/ListKeranjang", "API\ListBarangKeranjang@destroy");
 //Create Pesanan
 Route::post("/Pesanan", "API\PesananController@createPesanan");
 
+//Upload no resi
+Route::post("/Resi", "API\PesananController@upload");
+
+//Konfirmasi Barang diterima
+Route::post("/Selesai", "API\PesananController@finish");
+
+//Get Pesanan by kd_toko
+Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
 //
 Route::get("/Provinsi", "API\ProvinsiAPIController@show");
 
+<<<<<<< HEAD
 Route::post("/Transaksi", "API\PesananController@createPesanan");
 
 //Get Pesanan By kd_user
@@ -103,3 +115,10 @@ Route::post("/Transaksiupload", "APi\TransaksiController@upload");
 
 //Upload no resi
 Route::post("/Resi", "API\PesananController@upload");
+=======
+//GetSuspendByToko
+Route::post("/Suspend", "API\SuspendController@getSuspendByToko");
+
+//Konfirmasi Pesanan Sedang Diproses Oleh Penjual
+Route::post("/ProsesPesanan", "API\PesananController@konfirmasiPesanan");
+>>>>>>> 470e1e79437b596c4239dba2d9f22c4e584c6f14
