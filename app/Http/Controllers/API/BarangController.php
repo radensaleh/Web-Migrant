@@ -19,7 +19,7 @@ class BarangController extends Controller
     //Get All barang on table tb_barang
     public function index()
     {
-        $barangs = Barang::all();
+        $barangs = Barang::where('status_barang', 0)->get();
 
         if($barangs==null) {
             return response()->json([
@@ -134,7 +134,7 @@ class BarangController extends Controller
     public function showByCategory()
     {
         $id_jenis=request()->id_jenis;
-        $barang = Barang::where('id_jenis',$id_jenis)->get();
+        $barang = Barang::where('id_jenis',$id_jenis)->where('status_barang', 0)->get();
         if($barang==null) {
             return response()->json([
                 'response' => true,
@@ -160,7 +160,7 @@ class BarangController extends Controller
     */
     public function show(Request $request)
     {
-        $barang = Barang::where('kd_toko', $request->kd_toko)->get();
+        $barang = Barang::where('kd_toko', $request->kd_toko)->where('status_barang', 0)->get();
 
         if($barang==null) {
             return response()->json([

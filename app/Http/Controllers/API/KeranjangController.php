@@ -202,9 +202,57 @@ class KeranjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    /*Parameter
+        -kd_user
+        -kd_barang
+    */
     public function deleteBarangKeranjang(Request $request)
     {
-        //
+        $keranjang = Keranjang::where('kd_user', $request->kd_user)->get();
+
+        for($i=0; $i<sizeof($keranjang); $i++) {
+            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
+
+            for($j=0; $j<sizeof($listBarangKeranjang); $j++) {
+                if ($request->kd_barang == $listBarangKeranjang[$j]->kd_barang && sizeof($listBarangKeranjang) == 1) {
+                    //Hapus Barang dan Hapus Keranjang
+                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
+                    $deleteKeranjang = Keranjang::destroy($keranjang[$i]->id_keranjang);
+
+                    if($deleteBarangKeranjang && $deleteKeranjang) {
+                        return response()->json([
+                            'response' => true,
+                            'message' => 'Barang dan Keranjang dihapus '
+                        ]);
+                    }
+                    else
+                    {
+                        return response()->json([
+                            'response' => false,
+                            'message' => 'Failed !'
+                        ]);
+                    }
+
+                }
+                else 
+                {
+                    //Hapus Barang
+                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
+                    if ($deleteBarangKeranjang) {
+                        return response()->json([
+                            'response' => true,
+                            'message' => 'Barang dikeranjang dihapus '
+                        ]);
+                    } 
+                    else {
+                        return response()->json([
+                            'response' => false,
+                            'message' => 'Failed !'
+                        ]);
+                    }
+                }
+            }
+        }
     }
 
     /**
