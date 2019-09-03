@@ -21,6 +21,7 @@ class CreateTbPesananTable extends Migration
             $table->string('kurir');
             $table->string('nama_service');
             $table->string('estimasi_pengiriman');
+            $table->string('alamat_lengkap');
             $table->integer('ongkir', false, true);
             $table->string('no_resi')->nullable();
             $table->integer('city_id')->unsigned();
