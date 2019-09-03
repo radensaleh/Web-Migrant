@@ -109,3 +109,6 @@ Route::post("/Suspend", "API\SuspendController@getSuspendByToko");
 
 //Konfirmasi Pesanan Sedang Diproses Oleh Penjual
 Route::post("/ProsesPesanan", "API\PesananController@konfirmasiPesanan");
+
+//Delete Barang dikeranjang
+Route::post("/deletebarangkeranjang", "API\KeranjangController@deleteBarangKeranjang");
