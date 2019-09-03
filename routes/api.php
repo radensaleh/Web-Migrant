@@ -104,21 +104,8 @@ Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
 //
 Route::get("/Provinsi", "API\ProvinsiAPIController@show");
 
-<<<<<<< HEAD
-Route::post("/Transaksi", "API\PesananController@createPesanan");
-
-//Get Pesanan By kd_user
-Route::post("/Pesanan", "API\PesananController@show");
-
-//Upload bukti pembayaran transaksi
-Route::post("/Transaksiupload", "APi\TransaksiController@upload");
-
-//Upload no resi
-Route::post("/Resi", "API\PesananController@upload");
-=======
 //GetSuspendByToko
 Route::post("/Suspend", "API\SuspendController@getSuspendByToko");
 
 //Konfirmasi Pesanan Sedang Diproses Oleh Penjual
 Route::post("/ProsesPesanan", "API\PesananController@konfirmasiPesanan");
->>>>>>> 470e1e79437b596c4239dba2d9f22c4e584c6f14

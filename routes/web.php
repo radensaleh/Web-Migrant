@@ -21,19 +21,6 @@ Route::get('/', function () {
   Route::resource('data-koordinator', 'KoordinatorController');
 
 // ADMIN
-<<<<<<< HEAD
-Route::get('/admin/login', 'AdminController@loginPage')->name('loginPage');
-Route::post('/admin/loginAdmin', 'AdminController@loginAdmin')->name('loginAdmin');
-Route::get('/admin/logoutAdmin', 'AdminController@logoutAdmin')->name('logoutAdmin');
-Route::get('/admin/dashboard', 'AdminController@dashboard')->name('dashboardAdmin');
-Route::get('/admin/dataKoordinator', 'AdminController@dataKoordinator')->name('dataKoordinator');
-Route::get('/admin/dataToko', 'AdminController@dataToko')->name('dataToko');
-Route::get('/admin/dataKonfirmasiPembayaran', 'AdminController@dataKonfirmasi')->name('dataKonfirmasi');
-Route::get('/admin/konfirmasi_pembayaran/toko/{kd_transaksi}/dataPesanan', 'AdminController@dataPesanan');
-Route::get('/admin/dataPembayaran', 'AdminController@dataPembayaran')->name('dataPembayaran');
-Route::get('/admin/dataPembayaran/toko/{kd_transaksi}/dataPesanan', 'AdminController@dataPesanan2');
-Route::post('/admin/transaksi/konfirmasiPembayaran', 'AdminController@konfirmPembayaran')->name('konfirmPembayaran');
-=======
   Route::get('/admin/login', 'AdminController@loginPage')->name('loginPage');
   Route::post('/admin/loginAdmin', 'AdminController@loginAdmin')->name('loginAdmin');
   Route::get('/admin/logoutAdmin', 'AdminController@logoutAdmin')->name('logoutAdmin');
@@ -59,7 +46,6 @@ Route::post('/admin/transaksi/konfirmasiPembayaran', 'AdminController@konfirmPem
   Route::get('/admin/riwayatTransfer', 'AdminController@dataRiwayatTransfer')->name('dataRiwayatTransfer');
   Route::get('/admin/riwayatTransfer/toko/{kd_transaksi}/dataPesanan', 'AdminController@dataPesanan4');
 
->>>>>>> 470e1e79437b596c4239dba2d9f22c4e584c6f14
 // Jenis Barang
   Route::get('/admin/dataJenisBarang', 'AdminController@dataJenisBarang')->name('dataJenisBarang');
 
@@ -72,22 +58,15 @@ Route::post('/admin/transaksi/konfirmasiPembayaran', 'AdminController@konfirmPem
   Route::get('/koordinator/dataToko', 'KoordinatorController@dataToko')->name('koorDataToko');
 
 // KOORDINATOR - DATA BARANG TOKO
-<<<<<<< HEAD
-Route::get('/koordinator/toko/{kd_toko}/dataBarang', 'TokoController@dataBarang');
-Route::get('/koordinator/toko/{kd_toko}/dataPesanan', 'TokoController@dataPesanan')->name('koorDataPesanan');
-// Route::get('/koordinator/toko/{kd_toko}/dataTransaksi', 'TokoController@dataTransaksi')->name('koorDataTransaksi');
-// Route::get('/koordinator/toko/{kd_toko}/{kd_transaksi}/dataPesanan', 'TokoController@dataPesanan');
-=======
   Route::get('/koordinator/toko/{kd_toko}/dataBarang', 'TokoController@dataBarang');
   Route::get('/koordinator/toko/{kd_toko}/dataPesanan', 'TokoController@dataPesanan')->name('koorDataPesanan');
   Route::post('/koordinator/toko/barang/suspend', 'TokoController@suspendBarang')->name('suspend');
   Route::post('/koordinator/toko/barang/verif', 'TokoController@verifBarang')->name('verif');
   // Route::get('/koordinator/toko/{kd_toko}/dataTransaksi', 'TokoController@dataTransaksi')->name('koorDataTransaksi');
   // Route::get('/koordinator/toko/{kd_toko}/{kd_transaksi}/dataPesanan', 'TokoController@dataPesanan');
->>>>>>> 470e1e79437b596c4239dba2d9f22c4e584c6f14
 
 // Raja Ongkir
   Route::get('/koodinator/apiRajaOngkir/getProvince', 'KoordinatorController@getProvince');
   Route::post('/koodinator/apiRajaOngkir/getKabKota', 'KoordinatorController@getKabKota');
   Route::post('/koodinator/apiRajaOngkir/getTypeDaerah', 'KoordinatorController@getTypeDaerah');
-  //Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');
+  Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');
