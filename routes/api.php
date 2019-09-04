@@ -112,3 +112,7 @@ Route::post("/ProsesPesanan", "API\PesananController@konfirmasiPesanan");
 
 //Delete Barang dikeranjang
 Route::post("/deletebarangkeranjang", "API\KeranjangController@deleteBarangKeranjang");
+
+//update kuantitas barang di keranjang
+Route::post("/updatekuantitasbarangkeranjang", "API\KeranjangController@updateStokBarangKeranjang");
+
