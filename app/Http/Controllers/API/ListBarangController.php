@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use App\ListBarang;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class ListBarangController extends Controller
@@ -12,9 +14,28 @@ class ListBarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    //Get Barang terlaris
+    public function barangTerlaris()
     {
-        //
+        $terlaris = DB::table('tb_list_barang')
+        ->sum('kuantitas')
+        ->groupBy('kd_barang')
+        ->orderBy('kuantitas', 'desc')
+        ->take(10)
+        ->get();
+
+        if($terlaris) {
+            return response()->json(
+                $terlaris
+            );
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Tidak ada barang terlaris'
+            ]);
+        }
     }
 
     /**

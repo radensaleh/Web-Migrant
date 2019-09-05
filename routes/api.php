@@ -118,3 +118,6 @@ Route::post("/updatekuantitasbarangkeranjang", "API\KeranjangController@updateSt
 
 //get Barang Berdasarkan Barang Baru
 Route::get("/newestBarang", "API\BarangController@getBarangTerbaru");
+
+//get barang terlaris
+Route::get("/terlaris", "API\ListBarangController@barangTerlaris");
