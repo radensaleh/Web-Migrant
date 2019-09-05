@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Barang;
 use App\ListBarangKeranjang;
@@ -243,16 +244,47 @@ class KeranjangController extends Controller
      * @return \Illuminate\Http\Response
      */
     //Update Keranjang
-    public function updateKeranjang(Request $request)
+    /**
+     * Parameter
+     *id_keranjang
+     *kd_barang
+     *kuantitas_baru
+     */
+    //Update Stok Barang yang akan dibeli dikeranjang
+    public function updateStokBarangKeranjang(Request $request)
     {
-        $keranjang = Keranjang::findOrFail($request->$kd_user);
-        $keranjang->update($request->all());
+        $kd_barang = $request->kd_barang;
+        $kuantitasBaru = $request->kuantitas_baru;
+        $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $request->$id_keranjang)->get();
+        
+        for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
+            if($kd_barang == $listBarangKeranjang[$i]->kd_barang) {
+                $kuantitasLama = $listBarangKeranjang[$i]->kuantitas;
+                $kuantitas = $kuantitasLama + $kuantitasBaru;
 
-        if($keranjang) {
-            return response()->json([
-                'response' => true,
-                'message' => 'Success update keranjang'
-            ],200);
+                //Ambil Stok Barang
+                $stokBarang = Barang::where('kd_barang', $kd_barang)->first();
+
+                if($kuantitas <= $stokBarang->stok) {
+                    $updateKuantitas = DB::table('tb_list_barang_keranjang')
+                ->where('id_keranjang', $request->id_keranjang)
+                ->where('kd_barang', $kd_barang)
+                ->update(['kuantitas' => $kuantitas]);
+                    if($updateKuantitas) {
+                        return response()->json([
+                            'response' => true,
+                            'message' => 'Berhasil update kuantitas'
+                        ]);
+                    }
+                } //end if
+                else
+                {
+                    return response()->json([
+                        'response' => false,
+                        'message' => 'Failed !'
+                    ]);
+                }
+            } // end if
         }
 
     }

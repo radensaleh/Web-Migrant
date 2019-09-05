@@ -57,7 +57,11 @@ class PesananController extends Controller
         $kd_user = $request->kd_user;
         $nama_penerima = $request->nama_penerima;
         $city_id = $request->city_id;
-        $ongkirs = $request->ongkir;
+        $ongkirs = $request->ongkir; ->array
+        $request->estimasi_pengiriman, ->array
+        $request->nama_service, -> array
+        $request->kurir
+        $request->alamat_lengkap
 
     */
     {
@@ -68,6 +72,7 @@ class PesananController extends Controller
         $est_pengiriman = $request->estimasi_pengiriman;
         $kurir = $request->kurir;
         $nama_service = $request->nama_service;
+        $alamatLengkap = $request->alamat_lengkap;
         //
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
@@ -134,9 +139,10 @@ class PesananController extends Controller
                 'ongkir' => $ongkirs[$j],
                 'city_id' => $city_id,
                 'id_status' => 1,
-                'estimasi_pengiriman' => $est_pengiriman,
+                'estimasi_pengiriman' => $est_pengiriman[$j],
                 'kurir' => $kurir,
-                'nama_service' => $nama_service,
+                'nama_service' => $nama_service[$j],
+                'alamat_lengkap' => $alamatLengkap
             ];
             $total_ongkir += $ongkirs[$j];
             $updatePesanan = Pesanan::findOrFail($kd_pesanan);
