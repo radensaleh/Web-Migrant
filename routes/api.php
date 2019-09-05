@@ -103,6 +103,7 @@ Route::post("/Selesai", "API\PesananController@finish");
 Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
 //
 Route::get("/Provinsi", "API\ProvinsiAPIController@show");
+Route::get("/Kota", "API\ProvinsiAPIController@getKota");
 
 //GetSuspendByToko
 Route::post("/Suspend", "API\SuspendController@getSuspendByToko");
@@ -115,4 +116,3 @@ Route::post("/deletebarangkeranjang", "API\KeranjangController@deleteBarangKeran
 
 //update kuantitas barang di keranjang
 Route::post("/updatekuantitasbarangkeranjang", "API\KeranjangController@updateStokBarangKeranjang");
-

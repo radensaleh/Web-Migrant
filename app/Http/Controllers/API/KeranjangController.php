@@ -10,7 +10,6 @@ use App\Barang;
 use App\ListBarangKeranjang;
 use App\Keranjang;
 use App\Toko;
-use Illuminate\Support\Facades\DB;
 
 class KeranjangController extends Controller
 {
@@ -120,7 +119,7 @@ class KeranjangController extends Controller
                 $id_keranjang = $keranjang[$i]->id_keranjang;
                 $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
 
-                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko 
+                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko
                 && $kd_user == $listBarangKeranjang->keranjang->kd_user)
                     {
                         if($kd_barang == $listBarangKeranjang->kd_barang) {
@@ -135,7 +134,7 @@ class KeranjangController extends Controller
                             ]);
 
                         }
-                        else 
+                        else
                         {
                             $data = array(
                                 'id_keranjang' => $id_keranjang,
@@ -143,7 +142,7 @@ class KeranjangController extends Controller
                                 'kuantitas' => $kuantitas,
                                 'harga' => $barang->harga_jual
                             );
-    
+
                             if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
                                 return response()->json([
                                     'response' => true,
@@ -235,7 +234,7 @@ class KeranjangController extends Controller
                     }
 
                 }
-                else 
+                else
                 {
                     //Hapus Barang
                     $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
@@ -244,7 +243,7 @@ class KeranjangController extends Controller
                             'response' => true,
                             'message' => 'Barang dikeranjang dihapus '
                         ]);
-                    } 
+                    }
                     else {
                         return response()->json([
                             'response' => false,
@@ -276,7 +275,7 @@ class KeranjangController extends Controller
         $kd_barang = $request->kd_barang;
         $kuantitasBaru = $request->kuantitas_baru;
         $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $request->$id_keranjang)->get();
-        
+
         for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
             if($kd_barang == $listBarangKeranjang[$i]->kd_barang) {
                 $kuantitasLama = $listBarangKeranjang[$i]->kuantitas;
