@@ -72,9 +72,6 @@ Route::get("/BarangID","API\BarangController@showById");
 //Create Keranjang
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 
-//Update Keranjang
-Route::post("/UpdateKeranjang", "API\KeranjangController@updateKeranjang");
-
 //Get Keranjang by kd_user
 Route::get("/Keranjang/{kd_user}", "API\KeranjangController@index");
 
