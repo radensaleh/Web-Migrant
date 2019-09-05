@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Barang;
+use App\ListBarang;
+use Illuminate\Support\Facades\DB;
 use App\Toko;
 use App\JenisBarang;
 use Carbon\Carbon;
@@ -106,18 +108,40 @@ class BarangController extends Controller
 /*Parameter
     -kd_barang
 */
-    public function showById(){
-      $kd_barang=request()->kd_barang;
-      $barang = Barang::where('kd_barang',$kd_barang)->first();
+    public function showById(Request $request){
+
+      $kd_barang= $request->kd_barang;
+      //Cek kd_barang ada di tb_list_barang ?
+      $listBarang = ListBarang::where('kd_barang',$kd_barang);
+      //handle barang yg gak ada di tb_list_barang
+      $barang2 = DB::table('tb_barang')
+      ->where('tb_barang.kd_barang', $kd_barang)
+      ->join('tb_toko', 'tb_toko.kd_toko', '=', 'tb_barang.kd_toko')
+      ->join('tb_kota', 'tb_kota.city_id', '=', 'tb_toko.city_id')
+      ->join('tb_provinsi', 'tb_provinsi.province_id', '=', 'tb_kota.province_id')
+      ->select('tb_barang.kd_barang','tb_barang.nama_barang','tb_barang.deskripsi',
+      'tb_barang.stok as tersedia','tb_barang.foto_barang', 'tb_toko.kd_toko','tb_toko.nama_toko',
+      'tb_toko.foto_toko', 'tb_kota.city_name', 'tb_kota.type', 'tb_provinsi.province')
+      ->first();
+
+      $barang = DB::table('tb_barang')
+      ->where('tb_barang.kd_barang', $kd_barang)
+      ->join('tb_list_barang', 'tb_list_barang.kd_barang', '=', 'tb_barang.kd_barang')
+      ->join('tb_toko', 'tb_toko.kd_toko', '=', 'tb_barang.kd_toko')
+      ->join('tb_kota', 'tb_kota.city_id', '=', 'tb_toko.city_id')
+      ->join('tb_provinsi', 'tb_provinsi.province_id', '=', 'tb_kota.province_id')
+      ->select('tb_barang.kd_barang','tb_barang.nama_barang','tb_barang.deskripsi',
+      'tb_barang.stok as tersedia','tb_barang.foto_barang', 'tb_toko.kd_toko','tb_toko.nama_toko',
+      'tb_toko.foto_toko', 'tb_kota.city_name', 'tb_kota.type', 'tb_provinsi.province', 'tb_list_barang.kuantitas as terjual')
+      ->first();
       if($barang==null) {
-          return response()->json([
-              'response' => true,
-              'message' => 'Barang tidak ada !'
-          ]);
+          return response()->json(
+              $barang2
+          );
       }
       else {
           return response()->json(
-              $barang
+            $barang
           );
       }
     }
