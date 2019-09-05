@@ -93,7 +93,7 @@ class BarangController extends Controller
                 'message' => 'Barang created successfull'
             ]);
         }
-        else 
+        else
         {
             return response()->json([
                 'response' => false,
@@ -237,10 +237,10 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getBarangTerbaru() 
+    public function getBarangTerbaru()
     {
         $newestBarang = Barang::where('status_barang', 0)
-        ->orderBy('created_at', 'asc')
+        ->orderBy('created_at', 'desc')
         ->take(10)
         ->get();
 

@@ -36,6 +36,9 @@ Route::post("/Toko", "API\TokoController@update");
 //Get Data toko by id user
 Route::get("/Toko", "API\TokoController@getToko");
 
+//Get All Toko
+Route::get("/AllToko", "API\TokoController@getAllToko");
+
 //Bank
 Route::get("/Bank", "API\BankController@index");
 
