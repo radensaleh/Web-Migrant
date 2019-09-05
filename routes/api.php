@@ -103,7 +103,7 @@ Route::post("/Selesai", "API\PesananController@finish");
 Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
 //
 Route::get("/Provinsi", "API\ProvinsiAPIController@show");
-Route::get("/Kota", "API\ProvinsiAPIController@getKota");
+Route::get("/Kota", "API\ProvinsiAPIController@getKot");
 
 //GetSuspendByToko
 Route::post("/Suspend", "API\SuspendController@getSuspendByToko");
