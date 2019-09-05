@@ -39,6 +39,16 @@ class TokoController extends Controller
         }
     }
 
+    public function getAllToko(Request $request){
+        $data = DB::table('tb_toko')
+                ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko', 'tb_toko.no_rekening', 'provinsi.province as provinsi', 'kota.city_name as kota', 'kota.type as type')
+                ->join('tb_kota as kota', 'kota.city_id', '=', 'tb_toko.city_id')
+                ->join('tb_provinsi as provinsi', 'provinsi.province_id', '=', 'kota.province_id')
+                ->get();
+
+        return response()->json($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -55,7 +65,7 @@ class TokoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
+
     public function register(Request $request)
     {
         /*
@@ -98,7 +108,7 @@ class TokoController extends Controller
                 'message' => 'User already have a store'
             ]);
         }
-        
+
         $toko = new Toko;
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
@@ -170,7 +180,7 @@ class TokoController extends Controller
         city_id; -> optional
         nama_bank; -> optional
         nama_nasabah -> optional
-        
+
     */
     {
         $toko = Toko::findOrFail($request->kd_toko);
