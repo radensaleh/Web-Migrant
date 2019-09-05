@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Proses Transaksi | Admin Migrant Shop</title>
 
-    <!-- <link rel="apple-touch-icon" href="/images/icon.png">
-    <link rel="shortcut icon" href="/images/icon.png"> -->
+    <link rel="apple-touch-icon" href="/images/icon_migran.png">
+    <link rel="shortcut icon" href="/images/icon_migran.png">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
@@ -110,9 +110,9 @@
         <header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                  <a class="navbar-brand" href="{{ route('dashboardAdmin')}}">// LOGO SLURR</a>
-                  <!-- <a class="navbar-brand" href="{{ route('dashboardKoordinator')}}"><img src="/images/Logo_MGOLEM_Web1.png" width="170" height="40" alt="Logo"></a>
-                  <a class="navbar-brand hidden" href="{{ route('dashboardKoordinator') }}"><img src="/images/logo2.png" alt="Logo"></a> -->
+                  <!-- <a class="navbar-brand" href="{{ route('dashboardAdmin')}}">// LOGO SLURR</a> -->
+                  <a class="navbar-brand" href="{{ route('dashboardAdmin')}}"><img src="/images/logo_migran.png" width="120" height="40" alt="Logo" style="margin-left:20px; padding-bottom:5px"></a>
+                  <a class="navbar-brand hidden" href="{{ route('dashboardAdmin') }}"><img src="/images/logo_migran.png" alt="Logo"></a>
                   <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
             </div>
