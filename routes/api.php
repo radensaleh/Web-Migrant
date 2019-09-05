@@ -116,3 +116,5 @@ Route::post("/deletebarangkeranjang", "API\KeranjangController@deleteBarangKeran
 //update kuantitas barang di keranjang
 Route::post("/updatekuantitasbarangkeranjang", "API\KeranjangController@updateStokBarangKeranjang");
 
+//get Barang Berdasarkan Barang Baru
+Route::get("/newestBarang", "API\BarangController@getBarangTerbaru");
