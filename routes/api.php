@@ -68,6 +68,7 @@ Route::get("/BarangKategori","API\BarangController@showByCategory");
 
 //menampilkan barang berdasarkan kd_barang
 Route::post("/BarangID","API\BarangController@showById");
+Route::get("/BarangID","API\BarangController@showById");
 
 //Create Keranjang
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
