@@ -39,11 +39,14 @@ class TransaksiController extends Controller
         -kd_transaksi,
         -foto_bukti
     */
-    public function upload(Request $request)
+    public function uploadPembayaran(Request $request)
     {
         $transaksi = Transaksi::findOrFail($request->kd_transaksi);
+        $fotoBukti = $request->file('foto_bukti');
+        $fotoBukti->move(public_path().'/images/bukti_tf', $fotoBukti->getClientOriginalName());
+        $transaksi->foto_bukti = $fotoBukti->getClientOriginalName();
 
-        if($transaksi->update($request->all())) {
+        if($transaksi->save()) {
             DB::table('tb_pesanan')->where('kd_transaksi', $request->kd_transaksi)->update(['id_status' => 2]);
             return response()->json([
                 'response' => true,

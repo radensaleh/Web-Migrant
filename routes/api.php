@@ -67,7 +67,6 @@ Route::delete("/BarangDelete","API\BarangController@deleteBarang");
 Route::get("/BarangKategori","API\BarangController@showByCategory");
 
 //menampilkan barang berdasarkan kd_barang
-Route::post("/BarangID","API\BarangController@showById");
 Route::get("/BarangID","API\BarangController@showById");
 
 //Create Keranjang
@@ -129,3 +128,6 @@ Route::get("/TransaksiById", "API\TransaksiController@getTransaksiById");
 
 //get barang terlaris
 Route::get("/terlaris", "API\ListBarangController@barangTerlaris");
+
+//Upload foto bukti transfer
+Route::post("/uploadBuktiBayar", "API\TransaksiController@uploadPembayaran");
