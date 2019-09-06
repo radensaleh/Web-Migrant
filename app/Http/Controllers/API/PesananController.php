@@ -68,10 +68,10 @@ class PesananController extends Controller
         $kd_user = $request->kd_user;
         $nama_penerima = $request->nama_penerima;
         $city_id = $request->city_id;
-        $ongkirs = $request->ongkir;
-        $est_pengiriman = $request->estimasi_pengiriman;
+        $ongkirs[] = $request->ongkir;
+        $est_pengiriman[] = $request->estimasi_pengiriman;
         $kurir = $request->kurir;
-        $nama_service = $request->nama_service;
+        $nama_service[] = $request->nama_service;
         $alamatLengkap = $request->alamat_lengkap;
         //
         $getDate = Carbon::now('Asia/Jakarta');

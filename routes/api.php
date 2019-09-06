@@ -106,7 +106,7 @@ Route::post("/Selesai", "API\PesananController@finish");
 Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
 //
 Route::get("/Provinsi", "API\ProvinsiAPIController@show");
-Route::get("/Kota", "API\ProvinsiAPIController@getKot");
+Route::get("/Kota", "API\ProvinsiAPIController@getKota");
 
 //GetSuspendByToko
 Route::post("/Suspend", "API\SuspendController@getSuspendByToko");
@@ -122,6 +122,12 @@ Route::post("/updatekuantitasbarangkeranjang", "API\KeranjangController@updateSt
 
 //get Barang Berdasarkan Barang Baru
 Route::get("/newestBarang", "API\BarangController@getBarangTerbaru");
+
+//getTransaksi
+Route::get("/Transaksi", "API\TransaksiController@getTransaksi");
+
+//getTransaksiById
+Route::get("/TransaksiById", "API\TransaksiController@getTransaksiById");
 
 //get barang terlaris
 Route::get("/terlaris", "API\ListBarangController@barangTerlaris");
