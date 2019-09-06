@@ -17,12 +17,13 @@ class ListBarangController extends Controller
     //Get Barang terlaris
     public function barangTerlaris()
     {
+
         $terlaris = DB::table('tb_list_barang')
-        ->sum('kuantitas')
+        ->join('tb_barang', 'tb_barang.kd_barang', '=', 'tb_list_barang.kd_barang')
+        ->select('tb_list_barang.*','tb_barang.nama_barang', 'tb_barang.foto_barang',DB::raw('SUM(kuantitas) as kuantitas'))
         ->groupBy('kd_barang')
         ->orderBy('kuantitas', 'desc')
-        ->take(10)
-        ->get();
+        ->take(10)->get();
 
         if($terlaris) {
             return response()->json(
