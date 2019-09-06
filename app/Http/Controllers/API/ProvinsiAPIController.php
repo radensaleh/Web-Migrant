@@ -29,4 +29,14 @@ class ProvinsiAPIController extends Controller
       $list
     );
   }
+
+  public function getKota(){
+    $city_id=request()->city_id;
+
+    $kota = Kota::where('city_id',$city_id)->first();
+
+    return response()->json(
+      $kota
+    );
+  }
 }

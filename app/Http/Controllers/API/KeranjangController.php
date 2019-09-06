@@ -9,6 +9,7 @@ use App\User;
 use App\Barang;
 use App\ListBarangKeranjang;
 use App\Keranjang;
+use App\Toko;
 
 class KeranjangController extends Controller
 {
@@ -20,8 +21,25 @@ class KeranjangController extends Controller
     //Get Keranjang by kd_user
     public function index()
     {
-        $kd_user = request()->kd_user;
-        $keranjang = Keranjang::where('kd_user',$kd_user)->first();
+      $kd_user=request()->kd_user;
+        $keranjang = Keranjang::where('kd_user',$kd_user)->get();
+
+        $listKeranjang=[];
+
+        for($i=0;$i<sizeof($keranjang);$i++){
+
+          $barang = DB::table('tb_barang')
+                    ->join('tb_list_barang_keranjang', 'tb_barang.kd_barang', '=', 'tb_list_barang_keranjang.kd_barang')
+                    ->select('*')
+                    ->where('tb_list_barang_keranjang.id_keranjang', $keranjang[$i]->id_keranjang)
+                    ->get();
+          $toko= Toko::where('kd_toko', $barang[0]->kd_toko)->first();
+            $listKeranjang[$i]=[
+              'id_keranjang' => $keranjang[$i]->id_keranjang,
+              'toko' => $toko,
+              'list_barang' => $barang
+            ];
+        }
 
         if ($keranjang==null) {
             return response()->json([
@@ -30,9 +48,9 @@ class KeranjangController extends Controller
             ]);
         }
         else {
-            return response()->json([
-                $keranjang
-            ]);
+            return response()->json(
+                $listKeranjang
+            );
         }
     }
 
@@ -303,8 +321,9 @@ class KeranjangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_keranjang)
+    public function destroy()
     {
+      $id_keranjang=request()->id_keranjang;
         $keranjang = Keranjang::destroy($id_keranjang);
 
         if ($keranjang) {
