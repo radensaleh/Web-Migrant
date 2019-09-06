@@ -20,7 +20,7 @@ class ListBarangController extends Controller
 
         $terlaris = DB::table('tb_list_barang')
         ->join('tb_barang', 'tb_barang.kd_barang', '=', 'tb_list_barang.kd_barang')
-        ->select('tb_list_barang.*','tb_barang.nama_barang', 'tb_barang.foto_barang',DB::raw('SUM(kuantitas) as kuantitas'))
+        ->select('tb_list_barang.kd_barang','tb_list_barang.harga as harga_jual','tb_barang.nama_barang', 'tb_barang.foto_barang',DB::raw('SUM(kuantitas) as terjual'))
         ->groupBy('kd_barang')
         ->orderBy('kuantitas', 'desc')
         ->take(10)->get();

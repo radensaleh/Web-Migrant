@@ -73,7 +73,7 @@ Route::get("/BarangID","API\BarangController@showById");
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 
 //Get Keranjang by kd_user
-Route::get("/Keranjang", "API\KeranjangController@index");
+Route::get("/KeranjangByUser", "API\KeranjangController@index");
 
 //Delete Keranjang
 Route::delete("/Keranjang", "API\KeranjangController@destroy");
