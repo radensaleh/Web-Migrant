@@ -8,6 +8,7 @@ use App\Barang;
 use App\Toko;
 use App\JenisBarang;
 use Carbon\Carbon;
+use DB;
 
 class BarangController extends Controller
 {
@@ -19,7 +20,12 @@ class BarangController extends Controller
     //Get All barang on table tb_barang
     public function index()
     {
-        $barangs = Barang::where('status_barang', 0)->get();
+        // $barangs = Barang::where('status_barang', 0)->get();
+        $barangs = DB::table('tb_barang')
+                  ->select('tb_barang.kd_barang', 'tb_barang.nama_barang', 'tb_barang.id_jenis', 'tb_barang.stok', 'tb_barang.harga_jual', 'tb_barang.deskripsi', 'tb_barang.foto_barang', 'tb_barang.berat_barang', 'tb_barang.status_barang', 'toko.nama_toko', 'toko.kd_toko')
+                  ->join('tb_toko as toko', 'toko.kd_toko', '=', 'tb_barang.kd_toko')
+                  ->where('status_barang', 0)
+                  ->get();
 
         if($barangs==null) {
             return response()->json([
@@ -134,7 +140,15 @@ class BarangController extends Controller
     public function showByCategory()
     {
         $id_jenis=request()->id_jenis;
-        $barang = Barang::where('id_jenis',$id_jenis)->where('status_barang', 0)->get();
+
+        //$barang = Barang::where('id_jenis',$id_jenis)->where('status_barang', 0)->get();
+        $barang = DB::table('tb_barang')
+                  ->select('tb_barang.kd_barang', 'tb_barang.nama_barang', 'tb_barang.id_jenis', 'tb_barang.stok', 'tb_barang.harga_jual', 'tb_barang.deskripsi', 'tb_barang.foto_barang', 'tb_barang.berat_barang', 'tb_barang.status_barang', 'toko.nama_toko', 'toko.kd_toko')
+                  ->join('tb_toko as toko', 'toko.kd_toko', '=', 'tb_barang.kd_toko')
+                  ->where('tb_barang.id_jenis', $id_jenis)
+                  ->where('status_barang', 0)
+                  ->get();
+
         if($barang==null) {
             return response()->json([
                 'response' => true,
