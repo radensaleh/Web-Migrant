@@ -67,13 +67,13 @@ Route::delete("/BarangDelete","API\BarangController@deleteBarang");
 Route::get("/BarangKategori","API\BarangController@showByCategory");
 
 //menampilkan barang berdasarkan kd_barang
-Route::post("/BarangID","API\BarangController@showById");
+Route::get("/BarangID","API\BarangController@showById");
 
 //Create Keranjang
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 
 //Get Keranjang by kd_user
-Route::get("/Keranjang/{kd_user}", "API\KeranjangController@index");
+Route::get("/KeranjangByUser", "API\KeranjangController@index");
 
 //Delete Keranjang
 Route::delete("/Keranjang/{id_keranjang}", "API\KeranjangController@destroy");

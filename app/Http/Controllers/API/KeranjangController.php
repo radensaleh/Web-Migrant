@@ -18,8 +18,9 @@ class KeranjangController extends Controller
      * @return \Illuminate\Http\Response
      */
     //Get Keranjang by kd_user
-    public function index($kd_user)
+    public function index()
     {
+        $kd_user = request()->kd_user;
         $keranjang = Keranjang::where('kd_user',$kd_user)->first();
 
         if ($keranjang==null) {
@@ -93,7 +94,7 @@ class KeranjangController extends Controller
             }
 
         } //end if
-        else 
+        else
         {
             /* Start for ke 1 */
             for($i=0; $i<sizeof($keranjang); $i++) {
@@ -103,7 +104,7 @@ class KeranjangController extends Controller
                 //untuk digunakan handle ketika user klik barang yang sama
                 $barangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
-                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko 
+                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko
                 && $kd_user == $listBarangKeranjang->keranjang->kd_user)
                     {
                         for($n=0; $n<sizeof($barangKeranjang); $n++) {
@@ -112,12 +113,12 @@ class KeranjangController extends Controller
                                 $kuantitas = $barangKeranjang[$n]->kuantitas+1;
                                 $barangKeranjang[$n]->kuantitas = $kuantitas;
                                 $barangKeranjang[$n]->save();
-    
+
                                 return response()->json([
                                     'response' => true,
                                     'message' => 'Berhasil ditambahkan !'
                                 ]);
-    
+
                             }
                         } //End For
 
@@ -129,7 +130,7 @@ class KeranjangController extends Controller
                                     'kuantitas' => $kuantitas,
                                     'harga' => $barang->harga_jual
                                 );
-        
+
                                 if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
                                     return response()->json([
                                         'response' => true,
@@ -222,7 +223,7 @@ class KeranjangController extends Controller
                     }
 
                 }
-                else 
+                else
                 {
                     //Hapus Barang
                     $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
@@ -231,7 +232,7 @@ class KeranjangController extends Controller
                             'response' => true,
                             'message' => 'Barang dikeranjang dihapus '
                         ]);
-                    } 
+                    }
                     else {
                         return response()->json([
                             'response' => false,
@@ -263,7 +264,7 @@ class KeranjangController extends Controller
         $kd_barang = $request->kd_barang;
         $kuantitasBaru = $request->kuantitas_baru;
         $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $request->$id_keranjang)->get();
-        
+
         for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
             if($kd_barang == $listBarangKeranjang[$i]->kd_barang) {
                 $kuantitasLama = $listBarangKeranjang[$i]->kuantitas;

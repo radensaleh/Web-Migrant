@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Barang;
 use App\ListBarang;
-use Illuminate\Support\Facades\DB;
 use App\Toko;
 use App\JenisBarang;
 use Carbon\Carbon;
