@@ -226,12 +226,15 @@ class KeranjangController extends Controller
         $keranjang = Keranjang::where('kd_user', $request->kd_user)->get();
 
         for($i=0; $i<sizeof($keranjang); $i++) {
-            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
+            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang[$i]->id_keranjang)->get();
 
             for($j=0; $j<sizeof($listBarangKeranjang); $j++) {
+
+                $get_id_list_keranjang = ListBarangKeranjang::where('kd_barang', $request->kd_barang)
+                ->where('id_keranjang', $keranjang[$i]->id_keranjang)->first();
                 if ($request->kd_barang == $listBarangKeranjang[$j]->kd_barang && sizeof($listBarangKeranjang) == 1) {
                     //Hapus Barang dan Hapus Keranjang
-                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
+                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($get_id_list_keranjang->id_list_keranjang);
                     $deleteKeranjang = Keranjang::destroy($keranjang[$i]->id_keranjang);
 
                     if($deleteBarangKeranjang && $deleteKeranjang) {
@@ -252,7 +255,7 @@ class KeranjangController extends Controller
                 else
                 {
                     //Hapus Barang
-                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
+                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($get_id_list_keranjang->id_list_keranjang);
                     if ($deleteBarangKeranjang) {
                         return response()->json([
                             'response' => true,
@@ -262,7 +265,7 @@ class KeranjangController extends Controller
                     else {
                         return response()->json([
                             'response' => false,
-                            'message' => 'Failed !'
+                            'message' => 'Failed ! di else'
                         ]);
                     }
                 }
