@@ -97,7 +97,7 @@ class BarangController extends Controller
         $fotoBrg = $request->file('foto_barang');
         $fotoBrg->move(public_path().'/images/barang', $fotoBrg->getClientOriginalName());
         $barang->foto_barang = $fotoBrg->getClientOriginalName();
-        
+
 
         if($barang->save()) {
             return response()->json([
@@ -130,7 +130,7 @@ class BarangController extends Controller
       ->join('tb_kota', 'tb_kota.city_id', '=', 'tb_toko.city_id')
       ->join('tb_provinsi', 'tb_provinsi.province_id', '=', 'tb_kota.province_id')
       ->select('tb_barang.kd_barang','tb_barang.nama_barang','tb_barang.deskripsi',
-      'tb_barang.stok as tersedia','tb_barang.foto_barang', 'tb_toko.kd_toko','tb_toko.nama_toko',
+      'tb_barang.stok','tb_barang.foto_barang', 'tb_toko.kd_toko','tb_toko.nama_toko',
       'tb_toko.foto_toko', 'tb_kota.city_name', 'tb_kota.type', 'tb_provinsi.province',
       'tb_barang.harga_jual', 'tb_barang.berat_barang')
       ->first();
@@ -142,7 +142,7 @@ class BarangController extends Controller
       ->join('tb_kota', 'tb_kota.city_id', '=', 'tb_toko.city_id')
       ->join('tb_provinsi', 'tb_provinsi.province_id', '=', 'tb_kota.province_id')
       ->select('tb_barang.kd_barang','tb_barang.nama_barang','tb_barang.deskripsi',
-      'tb_barang.stok as tersedia','tb_barang.foto_barang', 'tb_toko.kd_toko','tb_toko.nama_toko',
+      'tb_barang.stok','tb_barang.foto_barang', 'tb_toko.kd_toko','tb_toko.nama_toko',
       'tb_toko.foto_toko', 'tb_kota.city_name', 'tb_kota.type', 'tb_provinsi.province', DB::raw('SUM(tb_list_barang.kuantitas) as terjual'),
       'tb_barang.harga_jual', 'tb_barang.berat_barang')
       ->groupBy('tb_barang.kd_barang')
