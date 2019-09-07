@@ -73,7 +73,7 @@ Route::get("/BarangID","API\BarangController@showById");
 Route::post("/Keranjang","API\KeranjangController@tambahBarangKeranjang");
 
 //Get Keranjang by kd_user
-Route::get("/KeranjangByUser", "API\KeranjangController@index");
+Route::get("/Keranjang", "API\KeranjangController@index");
 
 //Delete Keranjang
 Route::delete("/Keranjang", "API\KeranjangController@destroy");
@@ -101,6 +101,10 @@ Route::post("/Selesai", "API\PesananController@finish");
 
 //Get Pesanan by kd_toko
 Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
+
+//Get Pesanan by kd User
+Route::get("/getPesananByUser", "API\PesananController@getPesananByUser");
+
 //
 Route::get("/Provinsi", "API\ProvinsiAPIController@show");
 Route::get("/Kota", "API\ProvinsiAPIController@getKota");

@@ -27,7 +27,7 @@ class PesananController extends Controller
         $kd_pesanan = $request->kd_pesanan;
 
         $pesanan = Pesanan::findOrFail($kd_pesanan);
-        
+
         if($pesanan) {
             $pesanan->id_status = 3;
             $pesanan->save();
@@ -69,10 +69,10 @@ class PesananController extends Controller
         $kd_user = $request->kd_user;
         $nama_penerima = $request->nama_penerima;
         $city_id = $request->city_id;
-        $ongkirs = $request->ongkir;
-        $est_pengiriman = $request->estimasi_pengiriman;
+        $ongkirs[] = $request->ongkir;
+        $est_pengiriman[] = $request->estimasi_pengiriman;
         $kurir = $request->kurir;
-        $nama_service = $request->nama_service;
+        $nama_service[] = $request->nama_service;
         $alamatLengkap = $request->alamat_lengkap;
         //
         $getDate = Carbon::now('Asia/Jakarta');
@@ -101,7 +101,7 @@ class PesananController extends Controller
             $tgl = str_replace('-','', $getDate);
             $jam = str_replace(':','', $tgl);
             $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$j;
-
+            $total_harga_pesanan = 0;
             //GetListBarangKeranjang
             $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang[$j]->id_keranjang)->get();
             //CreatePesanan
@@ -119,8 +119,8 @@ class PesananController extends Controller
                     'kd_barang' => $listBarangKeranjang[$i]->kd_barang,
                     'kuantitas' => $listBarangKeranjang[$i]->kuantitas,
                     'harga' => $listBarangKeranjang[$i]->harga
-                ); 
-                $total_harga_pesanan += $listBarangKeranjang[$i]->harga*$listBarangKeranjang[$i]->kuantitas;
+                );
+                $total_harga_pesanan += ($listBarangKeranjang[$i]->harga)*($listBarangKeranjang[$i]->kuantitas);
                 ListBarang::create($dataBarang);
                 //Update Stok Barang
                 $barang = Barang::where('kd_barang',$listBarangKeranjang[$i]->kd_barang)->first();
@@ -148,7 +148,6 @@ class PesananController extends Controller
             $total_ongkir += $ongkirs[$j];
             $updatePesanan = Pesanan::findOrFail($kd_pesanan);
             $updatePesanan->update($pesanan);
-            $total_harga_pesanan = 0;
         } //End For 1
         $comission_fee = ($total_harga_all_pesanan + $total_ongkir) * 5 / 100;
         $transaksi = [
@@ -196,14 +195,14 @@ class PesananController extends Controller
     public function upload(Request $request)
     {
         $pesanan = Pesanan::findOrFail($request->kd_pesanan);
-        
+
         if($pesanan->update($request->all())) {
             DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 4]);
             return response()->json([
                 'response' => true,
                 'message' => 'upload nomor resi success'
             ]);
-        } 
+        }
         else
         {
             return response()->json([
@@ -220,10 +219,10 @@ class PesananController extends Controller
      * @return \Illuminate\Http\Response
      */
     //Get Pesanan By kd_user
-    /* Parameter 
+    /* Parameter
         -kd_user
     */
-    public function show(Request $request)
+    public function getPesananByUser(Request $request)
     {
         $kd_user = $request->kd_user;
         $pesanan = Pesanan::where('id_status',1)
@@ -236,7 +235,7 @@ class PesananController extends Controller
                 $pesanan
             );
         }
-        else 
+        else
         {
             return response()->json([
                 'response' => false,
@@ -286,14 +285,14 @@ class PesananController extends Controller
     public function finish(Request $request)
     {
        $finish = DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 5]);
-       
+
        if($finish) {
            return response()->json([
                'response' => true,
                'message' => 'Barang sudah diterima '
            ]);
        }
-       else 
+       else
        {
            return response()->json([
                'response' => false,

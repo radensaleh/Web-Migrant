@@ -213,15 +213,19 @@ class KeranjangController extends Controller
         -kd_user
         -kd_barang
     */
-    public function deleteBarangKeranjang(Request $request)
+    public function deleteBarangKeranjang()
     {
-        $keranjang = Keranjang::where('kd_user', $request->kd_user)->get();
+        $kd_user=request()->kd_user;
+        $kd_barang=request()->kd_barang;
+        $id_keranjang=request()->id_keranjang;
 
+
+        $keranjang = Keranjang::where('kd_user', $kd_user)->get();
         for($i=0; $i<sizeof($keranjang); $i++) {
             $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
             for($j=0; $j<sizeof($listBarangKeranjang); $j++) {
-                if ($request->kd_barang == $listBarangKeranjang[$j]->kd_barang && sizeof($listBarangKeranjang) == 1) {
+                if ($kd_barang == $listBarangKeranjang[$j]->kd_barang && sizeof($listBarangKeranjang) == 1) {
                     //Hapus Barang dan Hapus Keranjang
                     $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
                     $deleteKeranjang = Keranjang::destroy($keranjang[$i]->id_keranjang);
@@ -281,12 +285,13 @@ class KeranjangController extends Controller
     {
         $kd_barang = $request->kd_barang;
         $kuantitasBaru = $request->kuantitas_baru;
-        $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $request->$id_keranjang)->get();
+        $id_keranjang=$request->id_keranjang;
+        $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
         for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
             if($kd_barang == $listBarangKeranjang[$i]->kd_barang) {
                 $kuantitasLama = $listBarangKeranjang[$i]->kuantitas;
-                $kuantitas = $kuantitasLama + $kuantitasBaru;
+                $kuantitas = $kuantitasBaru;
 
                 //Ambil Stok Barang
                 $stokBarang = Barang::where('kd_barang', $kd_barang)->first();
