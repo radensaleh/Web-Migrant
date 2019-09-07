@@ -131,3 +131,6 @@ Route::get("/terlaris", "API\ListBarangController@barangTerlaris");
 
 //Upload foto bukti transfer
 Route::post("/uploadBuktiBayar", "API\TransaksiController@uploadPembayaran");
+
+//getPesananByUser
+Route::post("/getPesananByUser", "API\PesananController@pesananByUser");
