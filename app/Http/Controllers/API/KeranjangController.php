@@ -85,111 +85,119 @@ class KeranjangController extends Controller
         $barang = Barang::where('kd_barang', $kd_barang)->first();
         $keranjang = Keranjang::where('kd_user', $kd_user)->get();
 
+        if($barang->stok >= $kuantitas) {
+            if(count($keranjang)==0) {
+                //CreateKeranjang
+                $data = array(
+                    'kd_user' => $kd_user
+                );
+                $createKeranjang = Keranjang::create($data);
+                //Insert Ke ListBarangKeranjang
+                $listBarangKeranjang = new ListBarangKeranjang;
+                $listBarangKeranjang->id_keranjang = $createKeranjang->id_keranjang;
+                $listBarangKeranjang->kd_barang= $kd_barang;
+                $listBarangKeranjang->kuantitas = $kuantitas;
+                $listBarangKeranjang->harga = $barang->harga_jual;
 
-        if(count($keranjang)==0) {
-            //CreateKeranjang
-            $data = array(
-                'kd_user' => $kd_user
-            );
-            $createKeranjang = Keranjang::create($data);
-            //Insert Ke ListBarangKeranjang
-            $listBarangKeranjang = new ListBarangKeranjang;
-            $listBarangKeranjang->id_keranjang = $createKeranjang->id_keranjang;
-            $listBarangKeranjang->kd_barang= $kd_barang;
-            $listBarangKeranjang->kuantitas = $kuantitas;
-            $listBarangKeranjang->harga = $barang->harga_jual;
+                if($listBarangKeranjang->save()) {
+                    return response()->json([
+                        'response' => true,
+                        'message' => 'Data Berhasil Dimasukkan ke Keranjang'
+                    ]);
+                } else {
+                    return response()->json([
+                        'response' => false,
+                        'message' => 'Failed !'
+                    ]);
+                }
 
-            if($listBarangKeranjang->save()) {
-                return response()->json([
-                    'response' => true,
-                    'message' => 'Data Berhasil Dimasukkan ke Keranjang'
-                ]);
-            } else {
-                return response()->json([
-                    'response' => false,
-                    'message' => 'Failed !'
-                ]);
-            }
+            } //end if
+            else
+            {
+                /* Start for ke 1 */
+                for($i=0; $i<sizeof($keranjang); $i++) {
+                    $id_keranjang = $keranjang[$i]->id_keranjang;
+                    $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
 
-        } //end if
-        else
-        {
-            /* Start for ke 1 */
-            for($i=0; $i<sizeof($keranjang); $i++) {
-                $id_keranjang = $keranjang[$i]->id_keranjang;
-                $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
+                    //untuk digunakan handle ketika user klik barang yang sama
+                    $barangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
-                //untuk digunakan handle ketika user klik barang yang sama
-                $barangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
+                    if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko
+                    && $kd_user == $listBarangKeranjang->keranjang->kd_user)
+                        {
+                            for($n=0; $n<sizeof($barangKeranjang); $n++) {
+                                if($kd_barang == $barangKeranjang[$n]->kd_barang) {
+                                    //Handle
+                                    $kuantitas = $barangKeranjang[$n]->kuantitas+1;
+                                    $barangKeranjang[$n]->kuantitas = $kuantitas;
+                                    $barangKeranjang[$n]->save();
 
-                if($barang->toko->kd_toko == $listBarangKeranjang->barang->toko->kd_toko
-                && $kd_user == $listBarangKeranjang->keranjang->kd_user)
-                    {
-                        for($n=0; $n<sizeof($barangKeranjang); $n++) {
-                            if($kd_barang == $barangKeranjang[$n]->kd_barang) {
-                                //Handle
-                                $kuantitas = $barangKeranjang[$n]->kuantitas+1;
-                                $barangKeranjang[$n]->kuantitas = $kuantitas;
-                                $barangKeranjang[$n]->save();
-
-                                return response()->json([
-                                    'response' => true,
-                                    'message' => 'Berhasil ditambahkan !'
-                                ]);
-
-                            }
-                        } //End For
-
-                        for ($z=0; $z<sizeof($barangKeranjang); $z++) {
-                            if($kd_barang != $barangKeranjang[$z]->kd_barang) {
-                                $data = array(
-                                    'id_keranjang' => $id_keranjang,
-                                    'kd_barang' => $kd_barang,
-                                    'kuantitas' => $kuantitas,
-                                    'harga' => $barang->harga_jual
-                                );
-
-                                if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
                                     return response()->json([
                                         'response' => true,
-                                        'message' => 'Data Berhasil Ditambah ke Keranjang'
+                                        'message' => 'Berhasil ditambahkan !'
                                     ]);
-                                } //end If
-                            } //end if
-                        } //end for
 
-                    } //End If
-            }// End For ke 1
+                                }
+                            } //End For
 
-            /* Start For ke 2*/
-            for($i=0; $i<sizeof($keranjang); $i++) {
-                $id_keranjang = $keranjang[$i]->id_keranjang;
-                $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
+                            for ($z=0; $z<sizeof($barangKeranjang); $z++) {
+                                if($kd_barang != $barangKeranjang[$z]->kd_barang) {
+                                    $data = array(
+                                        'id_keranjang' => $id_keranjang,
+                                        'kd_barang' => $kd_barang,
+                                        'kuantitas' => $kuantitas,
+                                        'harga' => $barang->harga_jual
+                                    );
 
-                if($barang->toko->kd_toko != $listBarangKeranjang->barang->toko->kd_toko && $kd_user == $listBarangKeranjang->keranjang->kd_user)
-                    {
-                        $dataKeranjang = array(
-                            'kd_user' => $kd_user
-                        );
+                                    if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
+                                        return response()->json([
+                                            'response' => true,
+                                            'message' => 'Data Berhasil Ditambah ke Keranjang'
+                                        ]);
+                                    } //end If
+                                } //end if
+                            } //end for
 
-                        $keranjang = Keranjang::create($dataKeranjang);
-                        $data = array(
-                            'id_keranjang' => $keranjang->id_keranjang,
-                            'kd_barang' => $kd_barang,
-                            'kuantitas' => $kuantitas,
-                            'harga' => $barang->harga_jual
-                        );
+                        } //End If
+                }// End For ke 1
 
-                        if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
-                            return response()->json([
-                                'response' => true,
-                                'message' => 'Data Berhasil Ditambah ke Keranjang'
-                            ]);
-                        } //end If
+                /* Start For ke 2*/
+                for($i=0; $i<sizeof($keranjang); $i++) {
+                    $id_keranjang = $keranjang[$i]->id_keranjang;
+                    $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->first();
 
-                    } //End If
-            }// End For ke 2
-        } //end else
+                    if($barang->toko->kd_toko != $listBarangKeranjang->barang->toko->kd_toko && $kd_user == $listBarangKeranjang->keranjang->kd_user)
+                        {
+                            $dataKeranjang = array(
+                                'kd_user' => $kd_user
+                            );
+
+                            $keranjang = Keranjang::create($dataKeranjang);
+                            $data = array(
+                                'id_keranjang' => $keranjang->id_keranjang,
+                                'kd_barang' => $kd_barang,
+                                'kuantitas' => $kuantitas,
+                                'harga' => $barang->harga_jual
+                            );
+
+                            if($createListBarangKeranjang = ListBarangKeranjang::create($data)) {
+                                return response()->json([
+                                    'response' => true,
+                                    'message' => 'Data Berhasil Ditambah ke Keranjang'
+                                ]);
+                            } //end If
+
+                        } //End If
+                }// End For ke 2
+            } //end else
+        } //End IF
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Limit'
+            ]);
+        }
     }
 
     /**
@@ -213,21 +221,20 @@ class KeranjangController extends Controller
         -kd_user
         -kd_barang
     */
-    public function deleteBarangKeranjang()
+    public function deleteBarangKeranjang(Request $request)
     {
-        $kd_user=request()->kd_user;
-        $kd_barang=request()->kd_barang;
-        $id_keranjang=request()->id_keranjang;
+        $keranjang = Keranjang::where('kd_user', $request->kd_user)->get();
 
-
-        $keranjang = Keranjang::where('kd_user', $kd_user)->get();
         for($i=0; $i<sizeof($keranjang); $i++) {
-            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
+            $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang[$i]->id_keranjang)->get();
 
             for($j=0; $j<sizeof($listBarangKeranjang); $j++) {
-                if ($kd_barang == $listBarangKeranjang[$j]->kd_barang && sizeof($listBarangKeranjang) == 1) {
+
+                $get_id_list_keranjang = ListBarangKeranjang::where('kd_barang', $request->kd_barang)
+                ->where('id_keranjang', $keranjang[$i]->id_keranjang)->first();
+                if ($request->kd_barang == $listBarangKeranjang[$j]->kd_barang && sizeof($listBarangKeranjang) == 1) {
                     //Hapus Barang dan Hapus Keranjang
-                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
+                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($get_id_list_keranjang->id_list_keranjang);
                     $deleteKeranjang = Keranjang::destroy($keranjang[$i]->id_keranjang);
 
                     if($deleteBarangKeranjang && $deleteKeranjang) {
@@ -248,7 +255,7 @@ class KeranjangController extends Controller
                 else
                 {
                     //Hapus Barang
-                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($listBarangKeranjang[$j]->id_list_keranjang);
+                    $deleteBarangKeranjang = ListBarangKeranjang::destroy($get_id_list_keranjang->id_list_keranjang);
                     if ($deleteBarangKeranjang) {
                         return response()->json([
                             'response' => true,
@@ -258,7 +265,7 @@ class KeranjangController extends Controller
                     else {
                         return response()->json([
                             'response' => false,
-                            'message' => 'Failed !'
+                            'message' => 'Failed ! di else'
                         ]);
                     }
                 }
@@ -285,13 +292,13 @@ class KeranjangController extends Controller
     {
         $kd_barang = $request->kd_barang;
         $kuantitasBaru = $request->kuantitas_baru;
-        $id_keranjang=$request->id_keranjang;
+        $id_keranjang=$request->$id_keranjang;
         $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
         for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
             if($kd_barang == $listBarangKeranjang[$i]->kd_barang) {
                 $kuantitasLama = $listBarangKeranjang[$i]->kuantitas;
-                $kuantitas = $kuantitasBaru;
+                $kuantitas = $kuantitasLama + $kuantitasBaru;
 
                 //Ambil Stok Barang
                 $stokBarang = Barang::where('kd_barang', $kd_barang)->first();
