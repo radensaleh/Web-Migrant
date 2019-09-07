@@ -29,8 +29,8 @@ class Toko extends Model
        return $this->belongsTo('App\Kota', 'city_id');
     }
 
-    public function toko(){
-       return $this->hasMany('App\Toko', 'kd_toko');
+    public function barang(){
+       return $this->hasMany('App\Barang', 'kd_toko');
     }
 
 }
