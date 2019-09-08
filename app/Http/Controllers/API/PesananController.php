@@ -9,6 +9,7 @@ use App\Transaksi;
 use App\Bank;
 use App\Keranjang;
 use App\Barang;
+use App\Http\Resources\PesananResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -308,8 +309,11 @@ class PesananController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function pesananByUser(Request $request)
     {
-        //
+        $kd_user = $request->kd_user;
+        return PesananResource::collection(Pesanan::whereHas('transaksi', function($query){
+            $query->where('kd_user', request('kd_user'));
+        })->with(['status','city'])->get());
     }
 }

@@ -43,9 +43,12 @@ class TokoController extends Controller
         $data = DB::table('tb_toko')
                 ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko',
                  'tb_toko.no_rekening', 'provinsi.province as provinsi', 'kota.city_name as kota',
-                 'kota.type as type') //total terjual belum
+                 'kota.type as type',DB::raw('COUNT(tb_transaksi.kd_transaksi) as terjual')) //total terjual belum
                 ->join('tb_kota as kota', 'kota.city_id', '=', 'tb_toko.city_id')
                 ->join('tb_barang', 'tb_barang.kd_toko', '=', 'tb_toko.kd_toko')
+                ->join('tb_list_barang', 'tb_list_barang.kd_barang', '=', 'tb_barang.kd_barang')
+             ->join('tb_pesanan', 'tb_pesanan.kd_pesanan', '=', 'tb_list_barang.kd_pesanan')
+             ->join('tb_transaksi', 'tb_transaksi.kd_transaksi', '=', 'tb_pesanan.kd_transaksi')
                 ->groupBy('tb_toko.kd_toko')
                 ->join('tb_provinsi as provinsi', 'provinsi.province_id', '=', 'kota.province_id')
                 ->get();
