@@ -338,9 +338,28 @@ class PesananController extends Controller
      */
     public function pesananByUser(Request $request)
     {
-        $kd_user = $request->kd_user;
+        $kd_user = request()->kd_user;
         return PesananResource::collection(Pesanan::whereHas('transaksi', function($query){
             $query->where('kd_user', request('kd_user'));
         })->with(['status','city'])->get());
+    }
+
+    public function pesananByKodePesanan() 
+    {
+        $kd_pesanan = request()->kd_pesanan;
+
+        $pesanan = Pesanan::where('kd_pesanan', $kd_pesanan)
+        ->with(['status', 'city'])->first();
+
+        if($pesanan) {
+            return new PesananResource($pesanan);
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed !'
+            ]);
+        }
     }
 }
