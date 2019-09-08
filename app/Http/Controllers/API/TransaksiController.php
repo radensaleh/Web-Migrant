@@ -43,8 +43,9 @@ class TransaksiController extends Controller
     {
         $transaksi = Transaksi::findOrFail($request->kd_transaksi);
         $fotoBukti = $request->file('foto_bukti');
-        $fotoBukti->move(public_path().'/images/bukti_tf', $fotoBukti->getClientOriginalName());
-        $transaksi->foto_bukti = $fotoBukti->getClientOriginalName();
+
+        $fotoBukti->move(public_path().'/images/bukti_tf', $request->kd_transaksi. "." .$fotoBukti->getClientOriginalExtension());
+        $transaksi->foto_bukti = $request->kd_transaksi. "." .$fotoBukti->getClientOriginalExtension();
 
         if($transaksi->save()) {
             DB::table('tb_pesanan')->where('kd_transaksi', $request->kd_transaksi)->update(['id_status' => 2]);

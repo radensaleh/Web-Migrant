@@ -69,4 +69,4 @@ Route::get('/', function () {
   Route::get('/koodinator/apiRajaOngkir/getProvince', 'KoordinatorController@getProvince');
   Route::post('/koodinator/apiRajaOngkir/getKabKota', 'KoordinatorController@getKabKota');
   Route::post('/koodinator/apiRajaOngkir/getTypeDaerah', 'KoordinatorController@getTypeDaerah');
-  // Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');
+  //Route::get('/api/rajaongkir/databases', 'RajaOngkirContoller@apiRajaOngkir');

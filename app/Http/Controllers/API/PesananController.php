@@ -30,7 +30,7 @@ class PesananController extends Controller
         $kd_pesanan = $request->kd_pesanan;
 
         $pesanan = Pesanan::findOrFail($kd_pesanan);
-        
+
         if($pesanan) {
             $pesanan->id_status = 3;
             $pesanan->save();
@@ -66,19 +66,19 @@ class PesananController extends Controller
         $request->nama_service, -> array
         $request->kurir
         $request->alamat_lengkap
-        $request->no_telepon
+        $request->nomor_hp
 
     */
     {
         $kd_user = $request->kd_user;
         $nama_penerima = $request->nama_penerima;
         $city_id = $request->city_id;
-        $ongkirs = $request->ongkir;
-        $est_pengiriman = $request->estimasi_pengiriman;
+        $ongkirs[] = $request->ongkir;
+        $est_pengiriman[] = $request->estimasi_pengiriman;
         $kurir = $request->kurir;
-        $nama_service = $request->nama_service;
+        $nama_service[] = $request->nama_service;
         $alamatLengkap = $request->alamat_lengkap;
-        $no_telp = $request->no_telepon;
+        $no_hp = $request->nomor_hp;
         //
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
@@ -124,7 +124,7 @@ class PesananController extends Controller
                     'kd_barang' => $listBarangKeranjang[$i]->kd_barang,
                     'kuantitas' => $listBarangKeranjang[$i]->kuantitas,
                     'harga' => $listBarangKeranjang[$i]->harga
-                ); 
+                );
                 $total_harga_pesanan += $listBarangKeranjang[$i]->harga*$listBarangKeranjang[$i]->kuantitas;
                 ListBarang::create($dataBarang);
                 //Update Stok Barang
@@ -149,7 +149,7 @@ class PesananController extends Controller
                 'kurir' => $kurir,
                 'nama_service' => $nama_service[$j],
                 'alamat_lengkap' => $alamatLengkap,
-                'nomor_telepon' => $no_telp
+                'nomor_hp' => $no_hp
             ];
             $total_ongkir += $ongkirs[$j];
             $updatePesanan = Pesanan::findOrFail($kd_pesanan);
@@ -202,14 +202,14 @@ class PesananController extends Controller
     public function upload(Request $request)
     {
         $pesanan = Pesanan::findOrFail($request->kd_pesanan);
-        
+
         if($pesanan->update($request->all())) {
             DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 4]);
             return response()->json([
                 'response' => true,
                 'message' => 'upload nomor resi success'
             ]);
-        } 
+        }
         else
         {
             return response()->json([
@@ -226,7 +226,7 @@ class PesananController extends Controller
      * @return \Illuminate\Http\Response
      */
     //Get Pesanan By kd_user
-    /* Parameter 
+    /* Parameter
         -kd_user
     */
     public function show(Request $request)
@@ -242,7 +242,7 @@ class PesananController extends Controller
                 $pesanan
             );
         }
-        else 
+        else
         {
             return response()->json([
                 'response' => false,
@@ -314,14 +314,14 @@ class PesananController extends Controller
     public function finish(Request $request)
     {
        $finish = DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 5]);
-       
+
        if($finish) {
            return response()->json([
                'response' => true,
                'message' => 'Barang sudah diterima '
            ]);
        }
-       else 
+       else
        {
            return response()->json([
                'response' => false,
