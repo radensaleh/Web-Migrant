@@ -271,6 +271,20 @@ class PesananController extends Controller
 
     }
 
+    public function getPesananByKdPesanan(){
+      $kd_pesanan = $request->kd_pesanan;
+      $pesanan = Pesanan::where('id_status', 2)
+      ->whereHas('list_barang', function($query) {
+          $query->whereHas('barang', function($query) {
+              $query->where('kd_toko', request('kd_toko'));
+          });
+      })->first();
+
+      return response()->json(
+          $pesanan
+      );
+    }
+
     /**
      * Update the specified resource in storage.
      *
