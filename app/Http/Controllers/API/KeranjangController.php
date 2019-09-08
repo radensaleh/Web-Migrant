@@ -292,23 +292,27 @@ class KeranjangController extends Controller
     {
         $kd_barang = $request->kd_barang;
         $kuantitasBaru = $request->kuantitas_baru;
+<<<<<<< HEAD
         $id_keranjang=$request->$id_keranjang;
+=======
+        $id_keranjang = $request->id_keranjang;
+>>>>>>> 28c40486d33132e82421df0bad872b4cac8882f0
         $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
         for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
             if($kd_barang == $listBarangKeranjang[$i]->kd_barang) {
-                $kuantitasLama = $listBarangKeranjang[$i]->kuantitas;
-                $kuantitas = $kuantitasLama + $kuantitasBaru;
+                $kuantitas = $kuantitasBaru;
 
-                //Ambil Stok Barang
+                //ambil stok Barang
                 $stokBarang = Barang::where('kd_barang', $kd_barang)->first();
 
                 if($kuantitas <= $stokBarang->stok) {
-                    $updateKuantitas = DB::table('tb_list_barang_keranjang')
+
+                $updateKuantitas = DB::table('tb_list_barang_keranjang')
                 ->where('id_keranjang', $request->id_keranjang)
                 ->where('kd_barang', $kd_barang)
                 ->update(['kuantitas' => $kuantitas]);
-                    if($updateKuantitas) {
+                    if($updateKuantitas==1) {
                         return response()->json([
                             'response' => true,
                             'message' => 'Berhasil update kuantitas'
@@ -319,12 +323,15 @@ class KeranjangController extends Controller
                 {
                     return response()->json([
                         'response' => false,
-                        'message' => 'Failed !'
+                        'message' => 'Failed kuantitas melebihi stok !'
                     ]);
                 }
             } // end if
-        }
-
+        } //End For
+        return response()->json([
+            'response' => false,
+            'message' => 'Tidak terupdate, kuantitas sama seperti sebelumnya !'
+        ]);
     }
 
     /**

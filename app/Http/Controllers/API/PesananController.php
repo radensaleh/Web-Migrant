@@ -7,8 +7,11 @@ use App\ListBarang;
 use App\ListBarangKeranjang;
 use App\Transaksi;
 use App\Bank;
+use App\Toko;
 use App\Keranjang;
 use App\Barang;
+use App\Http\Resources\PesananResource;
+use App\Http\Resources\PesananTokoResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -253,21 +256,43 @@ class PesananController extends Controller
      */
     //Get Pesanan By Toko
     /*Parameter
-        -kd_toko
+        -kd_user
     */
     public function getPesananByToko(Request $request)
     {
-        $kd_toko = $request->kd_toko;
-        $pesanan = Pesanan::where('id_status', 2)
-        ->whereHas('list_barang', function($query) {
-            $query->whereHas('barang', function($query) {
-                $query->where('kd_toko', request('kd_toko'));
-            });
-        })->first();
+        $kd_user = $request->kd_user;
+        $toko = Toko::where('kd_user', $kd_user)->first();
+        $kd_toko = $toko->kd_toko;
+        
 
-        return response()->json(
-            $pesanan
-        );
+        if($toko==null) {
+            return response()->json([
+                'response' => false,
+                'message' => 'User tidak punya toko'
+            ]);
+        }
+        else
+        {
+        $kode = 'TK20190905143502';
+        $pesanan = Pesanan::where('id_status', 2)
+        ->whereHas('list_barang', function($query) use ($kd_toko) {
+            $query->whereHas('barang', function($query) use ($kd_toko) {
+                $query->where('kd_toko', $kd_toko);
+            });
+        })
+        ->with(['city','status', 'list_barang', 'list_barang.barang'])->get();
+            if(sizeof($pesanan)==0) {
+                return response()->json([
+                    'response' => false,
+                    'message' => 'Tidak ada Pesanan !'
+                ]);
+            }
+            else
+            {
+                return PesananTokoResource::collection($pesanan);
+            }
+        
+        }
 
     }
 
@@ -321,8 +346,11 @@ class PesananController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function pesananByUser(Request $request)
     {
-        //
+        $kd_user = $request->kd_user;
+        return PesananResource::collection(Pesanan::whereHas('transaksi', function($query){
+            $query->where('kd_user', request('kd_user'));
+        })->with(['status','city'])->get());
     }
 }
