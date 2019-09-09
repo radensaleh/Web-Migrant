@@ -94,15 +94,15 @@ class BarangController extends Controller
         $barang->status_barang = 0;
 
         //fotoBarang
-        $fotoBrg = $request->file('foto_barang');
+        $fotoBrg = request()->file('foto_barang');
         $fotoBrg->move(public_path().'/images/barang', $fotoBrg->getClientOriginalName());
         $barang->foto_barang = $fotoBrg->getClientOriginalName();
-        
+
 
         if($barang->save()) {
             return response()->json([
                 'response' => true,
-                'message' => 'Barang created successfull'
+                'messages' => 'Barang created successfull'
             ]);
         }
         else

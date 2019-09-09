@@ -104,7 +104,7 @@ class PesananController extends Controller
             $tgl = str_replace('-','', $getDate);
             $jam = str_replace(':','', $tgl);
             $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$j;
-            $total_harga_pesanan = 0;
+
             //GetListBarangKeranjang
             $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang[$j]->id_keranjang)->get();
             //CreatePesanan
@@ -123,7 +123,7 @@ class PesananController extends Controller
                     'kuantitas' => $listBarangKeranjang[$i]->kuantitas,
                     'harga' => $listBarangKeranjang[$i]->harga
                 );
-                $total_harga_pesanan += ($listBarangKeranjang[$i]->harga)*($listBarangKeranjang[$i]->kuantitas);
+                $total_harga_pesanan += $listBarangKeranjang[$i]->harga*$listBarangKeranjang[$i]->kuantitas;
                 ListBarang::create($dataBarang);
                 //Update Stok Barang
                 $barang = Barang::where('kd_barang',$listBarangKeranjang[$i]->kd_barang)->first();
@@ -151,6 +151,7 @@ class PesananController extends Controller
             $total_ongkir += $ongkirs[$j];
             $updatePesanan = Pesanan::findOrFail($kd_pesanan);
             $updatePesanan->update($pesanan);
+            $total_harga_pesanan = 0;
         } //End For 1
         $comission_fee = ($total_harga_all_pesanan + $total_ongkir) * 5 / 100;
         $transaksi = [
@@ -225,7 +226,7 @@ class PesananController extends Controller
     /* Parameter
         -kd_user
     */
-    public function getPesananByUser(Request $request)
+    public function show(Request $request)
     {
         $kd_user = $request->kd_user;
         $pesanan = Pesanan::where('id_status',1)
@@ -263,7 +264,7 @@ class PesananController extends Controller
         $kd_user = $request->kd_user;
         $toko = Toko::where('kd_user', $kd_user)->first();
         $kd_toko = $toko->kd_toko;
-        
+
 
         if($toko==null) {
             return response()->json([
@@ -274,7 +275,8 @@ class PesananController extends Controller
         else
         {
         $kode = 'TK20190905143502';
-        $pesanan = Pesanan::where('id_status', 2)
+        $pesanan = Pesanan::where('id_status', 2)->orWhere('id_status', 3)
+        ->orWhere('id_status', 4)->orWhere('id_status', 5)
         ->whereHas('list_barang', function($query) use ($kd_toko) {
             $query->whereHas('barang', function($query) use ($kd_toko) {
                 $query->where('kd_toko', $kd_toko);
@@ -291,23 +293,9 @@ class PesananController extends Controller
             {
                 return PesananTokoResource::collection($pesanan);
             }
-        
+
         }
 
-    }
-
-    public function getPesananByKdPesanan(){
-      $kd_pesanan = $request->kd_pesanan;
-      $pesanan = Pesanan::where('id_status', 2)
-      ->whereHas('list_barang', function($query) {
-          $query->whereHas('barang', function($query) {
-              $query->where('kd_toko', request('kd_toko'));
-          });
-      })->first();
-
-      return response()->json(
-          $pesanan
-      );
     }
 
     /**

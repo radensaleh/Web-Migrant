@@ -292,7 +292,7 @@ class KeranjangController extends Controller
     {
         $kd_barang = $request->kd_barang;
         $kuantitasBaru = $request->kuantitas_baru;
-        $id_keranjang=$request->$id_keranjang;
+        $id_keranjang=$request->id_keranjang;
         $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $id_keranjang)->get();
 
         for($i=0; $i<sizeof($listBarangKeranjang); $i++) {
