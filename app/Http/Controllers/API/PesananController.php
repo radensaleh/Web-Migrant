@@ -337,8 +337,9 @@ class PesananController extends Controller
     public function pesananByUser(Request $request)
     {
         $kd_user = $request->kd_user;
-        return PesananResource::collection(Pesanan::whereHas('transaksi', function($query){
+        Pesanan::whereHas('transaksi', function($query){
             $query->where('kd_user', request('kd_user'));
-        })->with(['status','city'])->get());
+        })->with(['status','city'])->get()
+        return PesananResource::collection();
     }
 }

@@ -137,4 +137,7 @@ Route::get("/terlaris", "API\ListBarangController@barangTerlaris");
 Route::post("/uploadBuktiBayar", "API\TransaksiController@uploadPembayaran");
 
 //getPesananByUser
-Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
+Route::get("/getPesananByUser", "API\PesananController@pesananByUser");
+
+//getPesananByKodePesanan
+Route::get("/getPesananByKodePesanan", "API\PesananController@pesananByKodePesanan");
