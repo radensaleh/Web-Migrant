@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\API;
-
 use App\Pesanan;
 use App\ListBarang;
 use App\ListBarangKeranjang;
@@ -17,7 +15,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 class PesananController extends Controller
 {
     /**
@@ -29,13 +26,10 @@ class PesananController extends Controller
     public function konfirmasiPesanan(Request $request)
     {
         $kd_pesanan = $request->kd_pesanan;
-
         $pesanan = Pesanan::findOrFail($kd_pesanan);
-
         if($pesanan) {
             $pesanan->id_status = 3;
             $pesanan->save();
-
             return response()->json([
                 'response' => true,
                 'message' => 'Berhasil Konfirmasi Pesanan'
@@ -49,13 +43,11 @@ class PesananController extends Controller
             ]);
         }
     }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-
     //CreatePesanan
     public function createPesanan(Request $request)
     /*Parameter
@@ -68,7 +60,6 @@ class PesananController extends Controller
         $request->kurir
         $request->alamat_lengkap
         $request->nomor_hp
-
     */
     {
         $kd_user = $request->kd_user;
@@ -85,15 +76,12 @@ class PesananController extends Controller
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
         $kd_transaksi = 'TRX'.str_replace(' ','',$jam);
-
-
         //Data dari Keranjang untuk dimasukkan ke pesanan dan listBarang
         $keranjang = Keranjang::where('kd_user', $kd_user)->get();
         $total_harga_pesanan = 0;
         $total_ongkir = 0;
         $total_harga_all_pesanan = 0;
         $comission_fee = 0;
-
         //Create Transaksi
         $dataTransaksi = array(
             'kd_transaksi' => $kd_transaksi,
@@ -101,13 +89,11 @@ class PesananController extends Controller
             'nama_penerima' => $nama_penerima
         );
         Transaksi::create($dataTransaksi);
-
         for($j=0; $j<sizeof($keranjang); $j++) {
             $getDate = Carbon::now('Asia/Jakarta');
             $tgl = str_replace('-','', $getDate);
             $jam = str_replace(':','', $tgl);
             $kd_pesanan = 'PSN'.str_replace(' ','',$jam).$j;
-
             //GetListBarangKeranjang
             $listBarangKeranjang = ListBarangKeranjang::where('id_keranjang', $keranjang[$j]->id_keranjang)->get();
             //CreatePesanan
@@ -133,7 +119,6 @@ class PesananController extends Controller
                 $stokBarang = $barang->stok;
                 $updateStok = array (
                     'stok' => $stokBarang-$listBarangKeranjang[$i]->kuantitas);
-
                 $updateBarang = Barang::findOrFail($listBarangKeranjang[$i]->kd_barang);
                 $updateBarang->update($updateStok);
             } //End For 2
@@ -168,7 +153,6 @@ class PesananController extends Controller
         ];
         $updateTransaksi = Transaksi::findOrFail($kd_transaksi);
         $bank = Bank::first();
-
         if($updateTransaksi->update($transaksi)) {
             for($i=0; $i<sizeof($keranjang); $i++) {
                 DB::table('tb_list_barang_keranjang')->where('id_keranjang', $keranjang[$i]->id_keranjang)->delete();
@@ -186,9 +170,7 @@ class PesananController extends Controller
                 'message' => 'Transaction Failed !'
             ]);
         } //end else
-
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -203,7 +185,6 @@ class PesananController extends Controller
     public function upload(Request $request)
     {
         $pesanan = Pesanan::findOrFail($request->kd_pesanan);
-
         if($pesanan->update($request->all())) {
             DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 4]);
             return response()->json([
@@ -219,7 +200,6 @@ class PesananController extends Controller
             ]);
         }
     }
-
     /**
      * Display the specified resource.
      *
@@ -237,7 +217,6 @@ class PesananController extends Controller
         ->whereHas('transaksi', function($query) {
             $query->where('kd_user', request('kd_user'));
         })->get();
-
         if($pesanan) {
             return response()->json(
                 $pesanan
@@ -250,9 +229,7 @@ class PesananController extends Controller
                 'message' => 'Tidak ada pesanan !'
             ]);
         }
-
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -268,7 +245,6 @@ class PesananController extends Controller
         $kd_user = $request->kd_user;
         $toko = Toko::where('kd_user', $kd_user)->first();
         $kd_toko = $toko->kd_toko;
-        
 
         if($toko==null) {
             return response()->json([
@@ -296,11 +272,9 @@ class PesananController extends Controller
             {
                 return PesananTokoResource::collection($pesanan);
             }
-        
+
         }
-
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -315,7 +289,6 @@ class PesananController extends Controller
     public function finish(Request $request)
     {
        $finish = DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 5]);
-
        if($finish) {
            return response()->json([
                'response' => true,
@@ -330,7 +303,6 @@ class PesananController extends Controller
            ]);
        }
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -340,18 +312,19 @@ class PesananController extends Controller
     public function pesananByUser(Request $request)
     {
         $kd_user = request()->kd_user;
-        return PesananResource::collection(Pesanan::whereHas('transaksi', function($query){
+        return PesananResource::collection(Pesanan::where('id_status', 2)
+        ->orWhere('id_status', 3)
+        ->orWhere('id_status', 4)
+        ->orWhere('id_status', 5)
+        ->whereHas('transaksi', function($query){
             $query->where('kd_user', request('kd_user'));
         })->with(['status','city'])->get());
     }
-
-    public function pesananByKodePesanan() 
+    public function pesananByKodePesanan()
     {
         $kd_pesanan = request()->kd_pesanan;
-
         $pesanan = Pesanan::where('kd_pesanan', $kd_pesanan)
         ->with(['status', 'city'])->first();
-
         if($pesanan) {
             return new PesananResource($pesanan);
         }
