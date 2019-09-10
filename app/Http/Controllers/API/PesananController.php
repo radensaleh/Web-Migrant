@@ -12,6 +12,7 @@ use App\Keranjang;
 use App\Barang;
 use App\Http\Resources\PesananResource;
 use App\Http\Resources\PesananTokoResource;
+use App\Http\Resources\ListBarangResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -353,6 +354,25 @@ class PesananController extends Controller
 
         if($pesanan) {
             return new PesananResource($pesanan);
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed !'
+            ]);
+        }
+    }
+    public function barangByKodePesanan()
+    //Params
+    //kd_pesanan
+    {
+        $kd_pesanan = request()->kd_pesanan;
+
+        $barang = ListBarang::where('kd_pesanan', $kd_pesanan)->with('barang')->get();
+
+        if($barang) {
+            return ListBarangResource::collection($barang);
         }
         else
         {
