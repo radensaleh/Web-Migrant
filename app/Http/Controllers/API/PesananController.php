@@ -242,7 +242,7 @@ class PesananController extends Controller
     */
     public function getPesananByToko(Request $request)
     {
-        $kd_user = $request->kd_user;
+        $kd_user = request()->kd_user;
         $toko = Toko::where('kd_user', $kd_user)->first();
         $kd_toko = $toko->kd_toko;
 
@@ -314,13 +314,15 @@ class PesananController extends Controller
     public function pesananByUser(Request $request)
     {
         $kd_user = request()->kd_user;
-        return PesananResource::collection(Pesanan::where('id_status', 2)
+        return PesananResource::collection(
+          Pesanan::whereHas('transaksi', function($query){
+              $query->where('kd_user', request('kd_user'));
+          })
+        ->where('id_status', 2)
         ->orWhere('id_status', 3)
         ->orWhere('id_status', 4)
         ->orWhere('id_status', 5)
-        ->whereHas('transaksi', function($query){
-            $query->where('kd_user', request('kd_user'));
-        })->with(['status','city'])->get());
+        ->with(['status','city'])->get());
     }
     public function pesananByKodePesanan()
     {
