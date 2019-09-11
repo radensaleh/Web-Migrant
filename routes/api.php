@@ -146,3 +146,6 @@ Route::get("/getPesananByKodePesanan", "API\PesananController@pesananByKodePesan
 
 //getBarangByKodePesanan
 Route::get("/getBarangByKodePesanan", "API\PesananController@barangByKodePesanan");
+
+//getBarangTokoByKodeUser
+Route::get("/barangTokoByKodeUser", "API\BarangController@getBarangTokoByKodeUser");

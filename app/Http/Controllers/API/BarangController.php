@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Barang;
 use App\ListBarang;
+use App\Http\Resources\BarangResource;
 use App\Toko;
 use App\JenisBarang;
 use Carbon\Carbon;
@@ -324,6 +325,31 @@ class BarangController extends Controller
                 'message' => 'Tidak ada Barang !'
             ]);
         }
+    }
+
+    public function getBarangTokoByKodeUser() 
+
+    {
+        //params
+        //-kd_user
+        $kd_user = request()->kd_user;
+
+        $barang = Barang::whereHas('toko', function($query) {
+            $query->where('kd_user', request('kd_user'));
+        })->get();
+
+        if(!$barang) {
+            return BarangResource::collection($barang);
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Tidak ada barang atau user tidak mempunyai toko'
+            ]);
+        }
+
+
     }
 
 }
