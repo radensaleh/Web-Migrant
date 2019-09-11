@@ -236,9 +236,9 @@ class BarangController extends Controller
             ]);
         }
         else {
-            return response()->json([
+            return response()->json(
                 $barang
-            ]);
+            );
         }
     }
 
