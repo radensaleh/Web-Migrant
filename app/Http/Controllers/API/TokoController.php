@@ -104,13 +104,13 @@ class TokoController extends Controller
         if($token==null) {
             return response()->json([
                 'response' =>false,
-                'mesaage' =>'Token is not available !'
+                'message' =>'Token is not available !'
             ]);
         }
         else if ($token->status=='1') {
             return response()->json([
                 'response' => false,
-                'mesaage' => 'Token already used !'
+                'message' => 'Token already used !'
             ]);
         }
 

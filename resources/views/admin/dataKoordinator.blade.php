@@ -525,9 +525,9 @@
           // });
 
           // API RAJAONGKIR
-            var getProvince = "http://localhost:8000/koodinator/apiRajaOngkir/getProvince"
-            var getKabKota  = "http://localhost:8000/koodinator/apiRajaOngkir/getKabKota"
-            var getTypeDaerah= "http://localhost:8000/koodinator/apiRajaOngkir/getTypeDaerah"
+            var getProvince = "http://192.168.8.100:8000/koodinator/apiRajaOngkir/getProvince"
+            var getKabKota  = "http://192.168.8.100:8000/koodinator/apiRajaOngkir/getKabKota"
+            var getTypeDaerah= "http://192.168.8.100:8000/koodinator/apiRajaOngkir/getTypeDaerah"
           //------
 
           var formAdd    = $('#modal-form-add');
@@ -640,9 +640,9 @@
               var loadImg;
 
               if(foto != ""){
-                loadImg = "http://localhost:8000/images/koordinator/"+foto
+                loadImg = "http://192.168.8.100:8000/images/koordinator/"+foto
               }else{
-                loadImg = "http://localhost:8000/images/not_found.jpg"
+                loadImg = "http://192.168.8.100:8000/images/not_found.jpg"
               }
 
               modal.find('.modal-body #foto').attr("src", loadImg)

@@ -496,7 +496,7 @@
                             'success'
                         ).then(OK => {
                           if(OK){
-                              window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                              window.location.href = "http://192.168.8.100:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
                           }
                         });
                     }else if( res.error == 1){
@@ -507,7 +507,7 @@
                           'error'
                         ).then(OK => {
                           if(OK){
-                              window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                              window.location.href = "http://192.168.8.100:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
                           }
                         });
                     }else if( res.error == 2){
@@ -518,7 +518,7 @@
                           'error'
                         ).then(OK => {
                           if(OK){
-                              window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                              window.location.href = "http://192.168.8.100:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
                           }
                         });
                     }else{
@@ -529,7 +529,7 @@
                         'error'
                       ).then(OK => {
                         if(OK){
-                            window.location.href = "http://localhost:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
+                            window.location.href = "http://192.168.8.100:8000/admin/dataTransaksi/toko/" + res.kd_transaksi + "/dataPesanan";
                         }
                       });
                     }

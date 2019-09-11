@@ -207,7 +207,7 @@
                                           <td>{{ ++$key }}</td>
                                           <td>{{ $data->token }}</td>
                                           <!-- <td>{{ $data->nama_lengkap }}</td> -->
-                                          <td><?php if($data->status == 0) echo 'Belum dipakai'; else 'Sudah dipakai'; ?></td>
+                                          <td><?php if($data->status == 0) echo 'Belum dipakai'; else echo 'Sudah dipakai'; ?></td>
                                           <td>
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteData" data-id_token = "{{ $data->id_token }}"><i class="fa fa-trash"></i> Delete</button>
                                           </td>
