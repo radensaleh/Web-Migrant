@@ -100,7 +100,7 @@ Route::post("/Resi", "API\PesananController@upload");
 Route::post("/Selesai", "API\PesananController@finish");
 
 //Get Pesanan by kd_toko
-Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
+Route::get("/getPesananToko", "API\PesananController@getPesananByToko");
 
 Route::get("/getBarangByKdPesanan", "API\BarangController@getBarangByKdPesanan");
 
