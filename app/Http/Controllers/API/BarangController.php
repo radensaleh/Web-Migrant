@@ -159,6 +159,28 @@ class BarangController extends Controller
       }
     }
 
+    public function getBarangByKdPesanan(){
+      $kd_pesanan = request()->kd_pesanan;
+
+      $barang=DB::table('tb_barang')
+        ->select('list_barang.kd_pesanan', 'tb_barang.nama_barang', 'tb_barang.kd_barang', 'tb_barang.id_jenis', 'list_barang.kuantitas', 'list_barang.harga')
+        ->join('tb_list_barang as list_barang', 'list_barang.kd_barang', '=', 'tb_barang..kd_barang')
+        ->where('list_barang.kd_pesanan', $kd_pesanan)
+        ->get();
+
+        if($barang==null) {
+            return response()->json([
+                'response' => true,
+                'message' => 'Barang tidak ada !'
+            ]);
+        }
+        else {
+            return response()->json(
+                $barang
+            );
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

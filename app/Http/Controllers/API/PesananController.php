@@ -10,6 +10,7 @@ use App\Keranjang;
 use App\Barang;
 use App\Http\Resources\PesananResource;
 use App\Http\Resources\PesananTokoResource;
+use App\Http\Resources\ListBarangResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -254,7 +255,9 @@ class PesananController extends Controller
         else
         {
         $kode = 'TK20190905143502';
-        $pesanan = Pesanan::where('id_status', 2)
+        $pesanan = Pesanan::where('id_status', 2)->orWhere('id_status', 3)
+        ->orWhere('id_status', 4)
+        ->orWhere('id_status', 5)
         ->whereHas('list_barang', function($query) use ($kd_toko) {
             $query->whereHas('barang', function($query) use ($kd_toko) {
                 $query->where('kd_toko', $kd_toko);
@@ -326,6 +329,25 @@ class PesananController extends Controller
         ->with(['status', 'city'])->first();
         if($pesanan) {
             return new PesananResource($pesanan);
+        }
+        else
+        {
+            return response()->json([
+                'response' => false,
+                'message' => 'Failed !'
+            ]);
+        }
+    }
+    public function barangByKodePesanan()
+    //Params
+    //kd_pesanan
+    {
+        $kd_pesanan = request()->kd_pesanan;
+
+        $barang = ListBarang::where('kd_pesanan', $kd_pesanan)->with('barang')->get();
+
+        if($barang) {
+            return ListBarangResource::collection($barang);
         }
         else
         {

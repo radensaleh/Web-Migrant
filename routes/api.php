@@ -102,6 +102,8 @@ Route::post("/Selesai", "API\PesananController@finish");
 //Get Pesanan by kd_toko
 Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
 
+Route::get("/getBarangByKdPesanan", "API\BarangController@getBarangByKdPesanan");
+
 //Get Pesanan by kd User
 // Route::get("/getPesananByUser", "API\PesananController@pesananByUser");
 
@@ -141,3 +143,6 @@ Route::get("/getPesananByUser", "API\PesananController@pesananByUser");
 
 //getPesananByKodePesanan
 Route::get("/getPesananByKodePesanan", "API\PesananController@pesananByKodePesanan");
+
+//getBarangByKodePesanan
+Route::get("/getBarangByKodePesanan", "API\PesananController@barangByKodePesanan");
