@@ -255,7 +255,9 @@ class PesananController extends Controller
         else
         {
         $kode = 'TK20190905143502';
-        $pesanan = Pesanan::where('id_status', 2)
+        $pesanan = Pesanan::where('id_status', 2)->orWhere('id_status', 3)
+        ->orWhere('id_status', 4)
+        ->orWhere('id_status', 5)
         ->whereHas('list_barang', function($query) use ($kd_toko) {
             $query->whereHas('barang', function($query) use ($kd_toko) {
                 $query->where('kd_toko', $kd_toko);

@@ -49,7 +49,7 @@ class BarangController extends Controller
      */
     //Create Barang
     /*Parameter
-        -kd_toko
+        -kd_user
         -nama_barang
         -id_jenis
         -stok
@@ -68,15 +68,15 @@ class BarangController extends Controller
         $barang->kd_barang = $kd_barang;
 
         //findKode Toko
-        $kd_toko = Toko::where('kd_toko',($request->kd_toko))->first();
+        $kd_toko = Toko::where('kd_user', $request->kd_user)->value('kd_toko');
         if($kd_toko==null) {
             return response()->json([
-                'response' => true,
+                'response' => false,
                 'message' => 'Cant Find Kode Toko !'
             ]);
         }
 
-        $barang->kd_toko = $request->kd_toko;
+        $barang->kd_toko = $kd_toko;
         $barang->nama_barang = $request->input('nama_barang');
 
         //Find ID Jenis
@@ -96,14 +96,14 @@ class BarangController extends Controller
 
         //fotoBarang
         $fotoBrg = request()->file('foto_barang');
-        $fotoBrg->move(public_path().'/images/barang', $fotoBrg->getClientOriginalName());
-        $barang->foto_barang = $fotoBrg->getClientOriginalName();
+        $fotoBrg->move(public_path().'/images/barang', $kd_barang . "." . $fotoBrg->getClientOriginalExtension());
+        $barang->foto_barang = $kd_barang . "." . $fotoBrg->getClientOriginalExtension();
 
 
         if($barang->save()) {
             return response()->json([
                 'response' => true,
-                'messages' => 'Barang created successfull'
+                'message' => 'Barang created successfull'
             ]);
         }
         else
@@ -160,6 +160,28 @@ class BarangController extends Controller
       }
     }
 
+    public function getBarangByKdPesanan(){
+      $kd_pesanan = request()->kd_pesanan;
+
+      $barang=DB::table('tb_barang')
+        ->select('list_barang.kd_pesanan', 'tb_barang.nama_barang', 'tb_barang.kd_barang', 'tb_barang.id_jenis', 'list_barang.kuantitas', 'list_barang.harga')
+        ->join('tb_list_barang as list_barang', 'list_barang.kd_barang', '=', 'tb_barang..kd_barang')
+        ->where('list_barang.kd_pesanan', $kd_pesanan)
+        ->get();
+
+        if($barang==null) {
+            return response()->json([
+                'response' => true,
+                'message' => 'Barang tidak ada !'
+            ]);
+        }
+        else {
+            return response()->json(
+                $barang
+            );
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -206,7 +228,8 @@ class BarangController extends Controller
     */
     public function show(Request $request)
     {
-        $barang = Barang::where('kd_toko', $request->kd_toko)->where('status_barang', 0)->get();
+        $kd_toko = Toko::where('kd_user', $request->kd_user)->value('kd_toko');
+        $barang = Barang::where('kd_toko', $kd_toko)->where('status_barang', 0)->get();
 
         if($barang==null) {
             return response()->json([
@@ -215,9 +238,9 @@ class BarangController extends Controller
             ]);
         }
         else {
-            return response()->json([
+            return response()->json(
                 $barang
-            ]);
+            );
         }
     }
 

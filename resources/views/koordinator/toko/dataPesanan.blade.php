@@ -397,7 +397,7 @@
         });
 
         function dataListBarang(kd_pesanan, kd_transaksi, kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/" + kd_transaksi + "/" + kd_pesanan + "/dataBarang";
+            window.location.href = "http://10.0.9.78:8000/koordinator/toko/"+  kd_toko +"/" + kd_transaksi + "/" + kd_pesanan + "/dataBarang";
         }
 
     </script>

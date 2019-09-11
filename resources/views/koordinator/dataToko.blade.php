@@ -364,9 +364,9 @@
             var loadImg;
 
             if(foto_toko != ""){
-              loadImg = "http://localhost:8000/images/toko/"+foto_toko
+              loadImg = "http://192.168.8.100:8000/images/toko/"+foto_toko
             }else{
-              loadImg = "http://localhost:8000/images/not_found.jpg"
+              loadImg = "http://192.168.8.100:8000/images/not_found.jpg"
             }
 
             modal.find('.modal-body #foto').attr("src", loadImg)
@@ -385,11 +385,11 @@
         });
 
         function dataBarang(kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/dataBarang";
+            window.location.href = "http://192.168.8.100:8000/koordinator/toko/"+  kd_toko +"/dataBarang";
         }
 
         function dataPesanan(kd_toko){
-            window.location.href = "http://localhost:8000/koordinator/toko/"+  kd_toko +"/dataPesanan";
+            window.location.href = "http://192.168.8.100:8000/koordinator/toko/"+  kd_toko +"/dataPesanan";
         }
 
     </script>

@@ -350,9 +350,9 @@
             var loadImg;
 
             if(foto_bukti != ""){
-              loadImg = "http://localhost:8000/images/bukti_tf/"+foto_bukti
+              loadImg = "http://192.168.8.100:8000/images/bukti_tf/"+foto_bukti
             }else{
-              loadImg = "http://localhost:8000/images/not_found.jpg"
+              loadImg = "http://192.168.8.100:8000/images/not_found.jpg"
             }
 
             modal.find('.modal-body #foto').attr("src", loadImg)
@@ -407,7 +407,7 @@
         });
 
         function dataPesanan(kd_transaksi){
-            window.location.href = "http://localhost:8000/admin/konfirmasiPembayaran/toko/" + kd_transaksi + "/dataPesanan";
+            window.location.href = "http://192.168.8.100:8000/admin/konfirmasiPembayaran/toko/" + kd_transaksi + "/dataPesanan";
         }
 
     </script>
