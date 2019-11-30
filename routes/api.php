@@ -49,7 +49,7 @@ Route::get("/JenisBarang", "API\JenisBarangController@index");
 Route::post("/JenisBarang", "API\JenisBarangController@createCategory");
 
 //Create Barang / Menambah Barang
-Route::post("/Barang", "API\BarangController@createBarang");
+Route::post("/Barang", "API\BarangController@createBarang2");
 
 //Get All Barang
 Route::get("/Barang", "API\BarangController@index");

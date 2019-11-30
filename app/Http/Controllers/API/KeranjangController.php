@@ -85,7 +85,19 @@ class KeranjangController extends Controller
         $barang = Barang::where('kd_barang', $kd_barang)->first();
         $keranjang = Keranjang::where('kd_user', $kd_user)->get();
 
-        if($barang->stok >= $kuantitas) {
+        $masukan = DB::table('produk_masuk')
+                   ->select(DB::raw('SUM(qty_produk) as qty_masuk'))
+                   ->where('id_produk', $kd_barang)
+                   ->value('qty_masuk');
+
+        $keluar = DB::table('produk_keluar')
+                   ->select(DB::raw('SUM(qty_produk_keluar) as qty_keluar'))
+                   ->where('id_produk', $kd_barang)
+                   ->value('qty_keluar');
+
+        $stok = $masukan - $keluar;
+
+        if($stok >= $kuantitas) {
             if(count($keranjang)==0) {
                 //CreateKeranjang
                 $data = array(
@@ -300,9 +312,22 @@ class KeranjangController extends Controller
                 $kuantitas = $kuantitasBaru;
 
                 //ambil stok Barang
-                $stokBarang = Barang::where('kd_barang', $kd_barang)->first();
+                //$stokBarang = Barang::where('kd_barang', $kd_barang)->first();
+                //$stokBarang->stok;
 
-                if($kuantitas <= $stokBarang->stok) {
+                $masukan = DB::table('produk_masuk')
+                           ->select(DB::raw('SUM(qty_produk) as qty_masuk'))
+                           ->where('id_produk', $kd_barang)
+                           ->value('qty_masuk');
+
+                $keluar = DB::table('produk_keluar')
+                           ->select(DB::raw('SUM(qty_produk_keluar) as qty_keluar'))
+                           ->where('id_produk', $kd_barang)
+                           ->value('qty_keluar');
+
+                $stok = $masukan - $keluar;
+
+                if($kuantitas <= $stok) {
 
                 $updateKuantitas = DB::table('tb_list_barang_keranjang')
                 ->where('id_keranjang', $request->id_keranjang)

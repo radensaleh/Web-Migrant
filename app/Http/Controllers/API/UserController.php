@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User as UserResource;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Ixudra\Curl\Facades\Curl;
 
 
 class UserController extends Controller
@@ -27,14 +28,14 @@ class UserController extends Controller
     {
         $email = $request->input('email');
         $password = $request->input('password');
-        
+
 
        $auth = auth()->guard('users');
        $credentials = [
             'email' => $email,
-            'password' => $password        
+            'password' => $password
        ];
-        
+
         if(!$auth->attempt($credentials)) {
             return response()->json([
                 'status' => '404',
@@ -73,7 +74,6 @@ class UserController extends Controller
         -password
         -city_id
         -detail_alamat
-
     */
     {
         $user = new User;
@@ -81,7 +81,8 @@ class UserController extends Controller
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
-        $kd_user = 'USR'.str_replace(' ','',$jam);
+        $rand = $jam . rand(1, 1000);
+        $kd_user = 'USR'.str_replace(' ','',$rand);
 
         $user->kd_user = $kd_user;
         $user->nama_lengkap = $request->input('nama_lengkap');
@@ -94,19 +95,36 @@ class UserController extends Controller
         // $user->foto_user = $request->input('foto_user');
         $user->status = 0;
 
-        if($user->save()) {
+
+        //input tabel pemilik toko pos
+        $pos = DB::table('pemilik_toko')
+               ->insert([
+                 'id_pemilik_toko' => $kd_user,
+                 'username' => $request->input('email'),
+                 'nama_lengkap' => $request->input('nama_lengkap'),
+                 'password' => $request->input('password'),
+                 'no_hp' => $request->input('nomer_hp')
+               ]);
+
+         // $pos = Curl::to('http://migranshop.com/api/register.php')
+         //             ->withData(array(
+         //                'id_pemilik_toko' => $kd_user,
+         //                'nama_lengkap' => $request->input('nama_lengkap'),
+         //                'username' => $request->input('email'),
+         //                'password' => $request->input('password'),
+         //                'no_hp' => $request->input('nomer_hp')
+         //             ))
+         //             ->post();
+
+        if($user->save() && $pos) {
             return response()->json([
-                'kd_user' => $kd_user,
-                'status' => 'sukses'
-              ]
-            );
-        } else
-        {
-            return response()->json(
-              [
-                'response' => false,
-                'message' => 'Registration Failed !']
-            );
+                'status' => '200',
+                'nama_lengkap' => $request->input('nama_lengkap')
+            ]);
+        } else {
+            return response()->json([
+                'status' => '404',
+            ]);
         }
 
     }
@@ -135,7 +153,7 @@ class UserController extends Controller
                 'message' => "Berhasil Update Data User"
             ], 200);
         }
-        else 
+        else
         {
             return response()->json([
                 'response' => false,

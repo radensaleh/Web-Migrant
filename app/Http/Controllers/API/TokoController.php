@@ -40,17 +40,25 @@ class TokoController extends Controller
     }
 
     public function getAllToko(Request $request){
+        // $data = DB::table('tb_toko')
+        //         ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko',
+        //          'tb_toko.no_rekening', 'provinsi.province as provinsi', 'kota.city_name as kota',
+        //          'kota.type as type',DB::raw('COUNT(tb_transaksi.kd_transaksi) as terjual')) //total terjual belum
+        //         ->join('tb_kota as kota', 'kota.city_id', '=', 'tb_toko.city_id')
+        //         ->join('tb_barang', 'tb_barang.kd_toko', '=', 'tb_toko.kd_toko')
+        //         ->join('tb_list_barang', 'tb_list_barang.kd_barang', '=', 'tb_barang.kd_barang')
+        //      ->join('tb_pesanan', 'tb_pesanan.kd_pesanan', '=', 'tb_list_barang.kd_pesanan')
+        //      ->join('tb_transaksi', 'tb_transaksi.kd_transaksi', '=', 'tb_pesanan.kd_transaksi')
+        //         ->groupBy('tb_toko.kd_toko')
+        //         ->join('tb_provinsi as provinsi', 'provinsi.province_id', '=', 'kota.province_id')
+        //         ->get();
+
         $data = DB::table('tb_toko')
-                ->select('tb_toko.kd_toko', 'tb_toko.KTP', 'tb_toko.nama_toko','tb_toko.foto_toko',
-                 'tb_toko.no_rekening', 'provinsi.province as provinsi', 'kota.city_name as kota',
-                 'kota.type as type',DB::raw('COUNT(tb_transaksi.kd_transaksi) as terjual')) //total terjual belum
+                ->select('kd_toko', 'nama_toko', 'foto_toko', 'provinsi.province as provinsi', 'kota.city_name as kota',
+                'kota.type as type', 'status_toko')
                 ->join('tb_kota as kota', 'kota.city_id', '=', 'tb_toko.city_id')
-                ->join('tb_barang', 'tb_barang.kd_toko', '=', 'tb_toko.kd_toko')
-                ->join('tb_list_barang', 'tb_list_barang.kd_barang', '=', 'tb_barang.kd_barang')
-             ->join('tb_pesanan', 'tb_pesanan.kd_pesanan', '=', 'tb_list_barang.kd_pesanan')
-             ->join('tb_transaksi', 'tb_transaksi.kd_transaksi', '=', 'tb_pesanan.kd_transaksi')
-                ->groupBy('tb_toko.kd_toko')
                 ->join('tb_provinsi as provinsi', 'provinsi.province_id', '=', 'kota.province_id')
+                ->take(5)
                 ->get();
 
         // $data2 = DB::table('tb_toko')
@@ -131,7 +139,8 @@ class TokoController extends Controller
         $getDate = Carbon::now('Asia/Jakarta');
         $tgl = str_replace('-','', $getDate);
         $jam = str_replace(':','', $tgl);
-        $kd_toko = 'TK'.str_replace(' ','',$jam);
+        $rand = $jam . rand(1, 1000);
+        $kd_toko = 'TK'.str_replace(' ','',$rand);
 
         $toko->kd_toko = $kd_toko;
         $toko->id_token = $token->id_token;
@@ -142,6 +151,10 @@ class TokoController extends Controller
         $toko->city_id = $request->city_id;
         $toko->nama_bank = $request->nama_bank;
         $toko->nama_nasabah = $request->nama_nasabah;
+        $toko->status_toko = "Pusat";
+        $toko->alamat_toko = $request->alamat_toko;
+        $toko->deskripsi_toko = $request->deskripsi_toko;
+        $toko->foto_toko = "";
 
         if($toko->save()) {
             DB::table('tb_user')->where('kd_user', $request->kd_user)->update(['status' => '1']);
