@@ -28,7 +28,7 @@ class PesananController extends Controller
         $kd_pesanan = $request->kd_pesanan;
         $pesanan = Pesanan::findOrFail($kd_pesanan);
         if($pesanan) {
-            $pesanan->id_status = 3;
+            $pesanan->id_status = 4;
             $pesanan->save();
             return response()->json([
                 'response' => true,
@@ -196,7 +196,7 @@ class PesananController extends Controller
     {
         $pesanan = Pesanan::findOrFail($request->kd_pesanan);
         if($pesanan->update($request->all())) {
-            DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 4]);
+            DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 5]);
             return response()->json([
                 'response' => true,
                 'message' => 'upload nomor resi success'
@@ -252,7 +252,7 @@ class PesananController extends Controller
     */
     public function getPesananByToko(Request $request)
     {
-        $kd_user = $request->kd_user;
+        $kd_user = request()->kd_user;
         $toko = Toko::where('kd_user', $kd_user)->first();
         $kd_toko = $toko->kd_toko;
 
@@ -268,6 +268,8 @@ class PesananController extends Controller
         $pesanan = Pesanan::where('id_status', 2)->orWhere('id_status', 3)
         ->orWhere('id_status', 4)
         ->orWhere('id_status', 5)
+        ->orWhere('id_status', 6)
+        ->orWhere('id_status', 7)
         ->whereHas('list_barang', function($query) use ($kd_toko) {
             $query->whereHas('barang', function($query) use ($kd_toko) {
                 $query->where('kd_toko', $kd_toko);
@@ -300,7 +302,7 @@ class PesananController extends Controller
     */
     public function finish(Request $request)
     {
-       $finish = DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 5]);
+       $finish = DB::table('tb_pesanan')->where('kd_pesanan', $request->kd_pesanan)->update(['id_status' => 7]);
        if($finish) {
            return response()->json([
                'response' => true,
@@ -324,7 +326,7 @@ class PesananController extends Controller
     public function pesananByUser(Request $request)
     {
         $kd_user = request()->kd_user;
-        $pesanan = Pesanan::whereIn('id_status', [2,3,4,5])
+        $pesanan = Pesanan::whereIn('id_status', [2,3,4,5,6,7])
         ->whereHas('transaksi', function($query){
             $query->where('kd_user', request('kd_user'));
         })->with(['status','city'])->get();

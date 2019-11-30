@@ -49,7 +49,7 @@ Route::get("/JenisBarang", "API\JenisBarangController@index");
 Route::post("/JenisBarang", "API\JenisBarangController@createCategory");
 
 //Create Barang / Menambah Barang
-Route::post("/Barang", "API\BarangController@createBarang");
+Route::post("/Barang", "API\BarangController@createBarang2");
 
 //Get All Barang
 Route::get("/Barang", "API\BarangController@index");
@@ -100,7 +100,7 @@ Route::post("/Resi", "API\PesananController@upload");
 Route::post("/Selesai", "API\PesananController@finish");
 
 //Get Pesanan by kd_toko
-Route::post("/getPesananToko", "API\PesananController@getPesananByToko");
+Route::get("/getPesananToko", "API\PesananController@getPesananByToko");
 
 Route::get("/getBarangByKdPesanan", "API\BarangController@getBarangByKdPesanan");
 

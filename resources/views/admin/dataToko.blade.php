@@ -365,9 +365,9 @@
             var loadImg;
 
             if(foto_toko != ""){
-              loadImg = "http://192.168.8.100:8000/images/toko/"+foto_toko
+              loadImg = "http://192.168.8.101:8000/images/toko/"+foto_toko
             }else{
-              loadImg = "http://192.168.8.100:8000/images/not_found.jpg"
+              loadImg = "http://192.168.8.101:8000/images/not_found.jpg"
             }
 
             modal.find('.modal-body #foto').attr("src", loadImg)

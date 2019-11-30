@@ -172,6 +172,7 @@ class AdminController extends Controller
         $transaksi = Transaksi::
                      whereHas('pesanan', function($query){
                        $query->where('id_status', 1);
+                       $query->orWhere('id_status', 2);
                       })->get();
 
         return view('admin.dataKonfirmasiPembayaran', compact(
@@ -238,9 +239,9 @@ class AdminController extends Controller
 
         $transaksi = Transaksi::
                      whereHas('pesanan', function($query){
-                       $query->where('id_status', 2);
-                       $query->orWhere('id_status', 3);
+                       $query->where('id_status', 3);
                        $query->orWhere('id_status', 4);
+                       $query->orWhere('id_status', 5);
                       })->get();
 
         return view('admin.dataProsesTransaksi', compact(
@@ -254,7 +255,7 @@ class AdminController extends Controller
       $kd_transaksi = $request->kd_transaksi;
 
       $konfirm = Pesanan::where('kd_transaksi', $kd_transaksi)
-                 ->update(['id_status' => 2]);
+                 ->update(['id_status' => 3]);
 
       $total_harga = $request->total_harga;
       $keuntungan  = ($total_harga * 5)/100;
@@ -292,7 +293,7 @@ class AdminController extends Controller
 
         $transaksi = Transaksi::
                      whereHas('pesanan', function($query){
-                       $query->where('id_status', 5);
+                       $query->where('id_status', 6);
                       })->get();
 
         return view('admin.dataTransaksiDiterima', compact(
@@ -316,7 +317,7 @@ class AdminController extends Controller
         $pesanan = Pesanan::
                      whereHas('transaksi', function($query){
                        $query->where('kd_transaksi', request('kd_transaksi'));
-                     })->where('id_status', 5)->get();
+                     })->where('id_status', 6)->get();
 
         return view('admin.dataPesananTransaksi', compact(
             'name','pesanan','kd_transaksi'
@@ -336,7 +337,7 @@ class AdminController extends Controller
 
         $transaksi = Transaksi::
                      whereHas('pesanan', function($query){
-                        $query->where('id_status', 6);
+                        $query->where('id_status', 7);
                      })->get();
 
         return view('admin.dataRiwayatTransfer', compact(
