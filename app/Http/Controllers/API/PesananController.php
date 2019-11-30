@@ -65,8 +65,9 @@ class PesananController extends Controller
         $kd_user = $request->kd_user;
         $nama_penerima = $request->nama_penerima;
         $city_id = $request->city_id;
-        $ongkirs = $request->ongkir;
-        $est_pengiriman[] = $request->estimasi_pengiriman;
+        //$ongkirs = $request->ongkir;
+        $ongkirs = [0,1,2,3];
+        $est_pengiriman = $request->estimasi_pengiriman;
         $kurir = $request->kurir;
         $nama_service[] = $request->nama_service;
         $alamatLengkap = $request->alamat_lengkap;
@@ -78,8 +79,8 @@ class PesananController extends Controller
         $kd_transaksi = 'TRX'.str_replace(' ','',$jam);
 
         return response()->json([
-                'ongkir' => $ongkirs,
-                'estimasi_pengiriman' => $est_pengiriman,
+                'ongkir' => $ongkirs[0],
+                'estimasi_pengiriman' => $est_pengiriman[0],
                 'nama_service' => $nama_service,
                 'bank' => $kd_user
         ]);
