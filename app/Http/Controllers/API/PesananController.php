@@ -79,11 +79,11 @@ class PesananController extends Controller
         $kd_transaksi = 'TRX'.str_replace(' ','',$jam);
 
         return response()->json([
-                'ongkir' => $ongkirs[0],
-                'estimasi_pengiriman' => $est_pengiriman[0],
-                'nama_service' => $nama_service,
-                'bank' => $kd_user
-        ]);
+                 'response' => true,
+                 'message' => $est_pengiriman,
+                 
+                 'bank' => $ongkirs
+             ]);
 
 
         // //Data dari Keranjang untuk dimasukkan ke pesanan dan listBarang
