@@ -27,17 +27,53 @@ class KeranjangController extends Controller
         $listKeranjang=[];
 
         for($i=0;$i<sizeof($keranjang);$i++){
-
+          $dataBarang = array();
           $barang = DB::table('tb_barang')
                     ->join('tb_list_barang_keranjang', 'tb_barang.kd_barang', '=', 'tb_list_barang_keranjang.kd_barang')
                     ->select('*')
                     ->where('tb_list_barang_keranjang.id_keranjang', $keranjang[$i]->id_keranjang)
                     ->get();
+
+          foreach ($barang as $value) {
+              $masukan = DB::table('produk_masuk')
+                         ->select(DB::raw('SUM(qty_produk) as qty_masuk'))
+                         ->where('id_produk', $value->kd_barang)
+                         ->value('qty_masuk');
+
+              $keluar = DB::table('produk_keluar')
+                        ->select(DB::raw('SUM(qty_produk_keluar) as qty_keluar'))
+                        ->where('id_produk', $value->kd_barang)
+                        ->value('qty_keluar');
+
+              $stok = $masukan - $keluar;
+
+              $data['kd_barang']    = $value->kd_barang;
+              $data['kd_toko']      = $value->kd_toko;
+              $data['nama_barang']  = $value->nama_barang;
+              $data['id_jenis']     = $value->id_jenis;
+              $data['harga_jual']   = $value->harga_jual;
+              $data['deskripsi']    = $value->deskripsi;
+              $data['foto_barang']  = $value->foto_barang;
+              $data['berat_barang'] = $value->berat_barang;
+              $data['status_barang']= $value->status_barang;
+              $data['satuan_barang']= $value->satuan_barang;
+              $data['harga_modal_barang']= $value->harga_modal_barang;
+              $data['status_stok']  = $value->status_stok;
+              $data['stok']         = $stok;
+              $data['created_at']   = $value->created_at;
+              $data['updated_at']   = $value->updated_at;
+              $data['id_list_keranjang']= $value->id_list_keranjang;
+              $data['id_keranjang'] = $value->id_keranjang;
+              $data['kuantitas']    = $value->kuantitas;
+              $data['harga']        = $value->harga;
+              $dataBarang[] = $data;
+          }
+
           $toko= Toko::where('kd_toko', $barang[0]->kd_toko)->first();
             $listKeranjang[$i]=[
               'id_keranjang' => $keranjang[$i]->id_keranjang,
               'toko' => $toko,
-              'list_barang' => $barang
+              'list_barang' => $dataBarang
             ];
         }
 
@@ -344,14 +380,14 @@ class KeranjangController extends Controller
                 {
                     return response()->json([
                         'response' => false,
-                        'message' => 'Failed kuantitas melebihi stok !'
+                        'message' => 'Gagal, Kuantitas melebihi stok!'
                     ]);
                 }
             } // end if
         } //End For
         return response()->json([
             'response' => false,
-            'message' => 'Tidak terupdate, kuantitas sama seperti sebelumnya !'
+            'message' => 'Gagal, Kuantitas tidak bisa minus!'
         ]);
     }
 
