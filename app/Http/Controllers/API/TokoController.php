@@ -58,7 +58,7 @@ class TokoController extends Controller
                 'kota.type as type', 'status_toko')
                 ->join('tb_kota as kota', 'kota.city_id', '=', 'tb_toko.city_id')
                 ->join('tb_provinsi as provinsi', 'provinsi.province_id', '=', 'kota.province_id')
-                ->take(5)
+                // ->take(5)
                 ->get();
 
         // $data2 = DB::table('tb_toko')

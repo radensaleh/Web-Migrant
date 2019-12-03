@@ -290,7 +290,27 @@ class BarangController extends Controller
       ->groupBy('tb_barang.kd_barang')
       ->get();
 
-      if($barang==null) {
+      if(sizeof($barang) == 0) {
+          foreach ($barang2 as $value) {
+            $data['kd_barang']    = $value->kd_barang;
+            $data['nama_barang']  = $value->nama_barang;
+            $data['deskripsi']    = $value->deskripsi;
+            $data['foto_barang']  = $value->foto_barang;
+            $data['kd_toko']      = $value->kd_toko;
+            $data['nama_toko']    = $value->nama_toko;
+            $data['foto_toko']    = $value->foto_toko;
+            $data['city_name']    = $value->city_name;
+            $data['type']         = $value->type;
+            $data['province']     = $value->province;
+            $data['harga_jual']   = $value->harga_jual;
+            $data['berat_barang'] = $value->berat_barang;
+            $data['stok']         = $stok;
+          }
+
+          return response()->json(
+              $data
+          );
+      } else {
           foreach ($barang as $value) {
             $data['kd_barang']    = $value->kd_barang;
             $data['nama_barang']  = $value->nama_barang;
@@ -306,26 +326,6 @@ class BarangController extends Controller
             $data['berat_barang'] = $value->berat_barang;
             $data['stok']         = $stok;
             $data['terjual']      = $value->terjual;
-          }
-
-          return response()->json(
-              $data
-          );
-      } else {
-          foreach ($barang2 as $value) {
-            $data['kd_barang']    = $value->kd_barang;
-            $data['nama_barang']  = $value->nama_barang;
-            $data['deskripsi']    = $value->deskripsi;
-            $data['foto_barang']  = $value->foto_barang;
-            $data['kd_toko']      = $value->kd_toko;
-            $data['nama_toko']    = $value->nama_toko;
-            $data['foto_toko']    = $value->foto_toko;
-            $data['city_name']    = $value->city_name;
-            $data['type']         = $value->type;
-            $data['province']     = $value->province;
-            $data['harga_jual']   = $value->harga_jual;
-            $data['berat_barang'] = $value->berat_barang;
-            $data['stok']         = $stok;
           }
 
           return response()->json(

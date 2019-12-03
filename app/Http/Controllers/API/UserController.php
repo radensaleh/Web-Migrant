@@ -95,6 +95,10 @@ class UserController extends Controller
         // $user->foto_user = $request->input('foto_user');
         $user->status = 0;
 
+        //cek email
+        $cekEmail = DB::table('tb_user')
+                    ->where('email', $request->input('email'))
+                    ->count();
 
         //input tabel pemilik toko pos
         $pos = DB::table('pemilik_toko')
@@ -115,18 +119,25 @@ class UserController extends Controller
          //                'no_hp' => $request->input('nomer_hp')
          //             ))
          //             ->post();
-
-        if($user->save() && $pos) {
-            return response()->json([
-                'status' => '200',
-                'nama_lengkap' => $request->input('nama_lengkap')
-            ]);
-        } else {
+        if($cekEmail > 0){
             return response()->json([
                 'status' => '404',
+                'message' => 'Email sudah terdaftar'
             ]);
+        }else{
+          if($user->save() && $pos) {
+              return response()->json([
+                  'status' => '200',
+                  'nama_lengkap' => $request->input('nama_lengkap'),
+                  'kd_user' => $kd_user
+              ]);
+          } else {
+              return response()->json([
+                  'status' => '404',
+                  'message' => 'Registrasi Gagal'
+              ]);
+          }
         }
-
     }
 
 //Update User Identity

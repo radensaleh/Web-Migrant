@@ -150,13 +150,12 @@ class PesananController extends Controller
             $updatePesanan->update($pesanan);
             $total_harga_pesanan = 0;
         } //End For 1
-        $comission_fee = floor(($total_harga_all_pesanan + $total_ongkir) * 5 / 100);
         $transaksi = [
             'kd_transaksi' => $kd_transaksi,
             'kd_user' => $kd_user,
             'tgl_transaksi' => Carbon::now('Asia/Jakarta'),
             //Total Harga Transaksi, sudah plus keuntungan migrant
-            'total_harga' => $total_harga_all_pesanan + $total_ongkir + $comission_fee,
+            'total_harga' => $total_harga_all_pesanan + $total_ongkir,
             'nama_penerima' => $nama_penerima
         ];
         $updateTransaksi = Transaksi::findOrFail($kd_transaksi);
