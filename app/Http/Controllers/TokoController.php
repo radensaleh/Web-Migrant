@@ -29,17 +29,52 @@ class TokoController extends Controller
         $kd_toko = $request->kd_toko;
 
         $barang = DB::table('tb_barang')
-                    ->select('kd_barang', 'kd_toko', 'nama_barang', 'jenis.jenis_barang as jenis_barang', 'stok', 'harga_jual', 'deskripsi', 'foto_barang', 'berat_barang', 'status_barang')
+                    ->select('kd_barang', 'kd_toko', 'nama_barang', 'jenis.jenis_barang as jenis_barang', 'harga_jual', 'deskripsi', 'foto_barang', 'berat_barang', 'status_barang', 'satuan_barang', 'harga_modal_barang', 'status_stok')
                     ->join('tb_jenis_barang as jenis', 'jenis.id_jenis', '=', 'tb_barang.id_jenis')
                     ->where('kd_toko', $kd_toko)
                     ->get();
+
+        $dataBarang = array();
+        foreach ($barang as $value) {
+              $masukan = DB::table('produk_masuk')
+                         ->select(DB::raw('SUM(qty_produk) as qty_masuk'))
+                         ->where('id_produk', $value->kd_barang)
+                         ->value('qty_masuk');
+
+              $keluar = DB::table('produk_keluar')
+                         ->select(DB::raw('SUM(qty_produk_keluar) as qty_keluar'))
+                         ->where('id_produk', $value->kd_barang)
+                         ->value('qty_keluar');
+
+              $stok = $masukan - $keluar;
+
+              $data['kd_barang']    = $value->kd_barang;
+              $data['nama_barang']  = $value->nama_barang;
+              $data['jenis_barang'] = $value->jenis_barang;
+              $data['harga_jual']   = $value->harga_jual;
+              $data['deskripsi']    = $value->deskripsi;
+              $data['foto_barang']  = $value->foto_barang;
+              $data['berat_barang'] = $value->berat_barang;
+              $data['status_barang']= $value->status_barang;
+              $data['satuan_barang']= $value->satuan_barang;
+              $data['harga_modal_barang']= $value->harga_modal_barang;
+              $data['status_stok']  = $value->status_stok;
+              $data['stok']         = $stok;
+            //   $data['nama_toko']    = $value->nama_toko;
+              $data['kd_toko']      = $value->kd_toko;
+              $dataBarang[] = $data;
+        }
+
+        $objBarang = collect($dataBarang)->map(function ($barang) {
+            return (object) $barang;
+        });
 
         $nama_toko = DB::table('tb_toko')
                      ->where('kd_toko', $kd_toko)
                      ->value('nama_toko');
 
         return view('koordinator.toko.dataBarang', compact(
-            'name', 'kd_koordinator', 'barang', 'nama_toko'
+            'name', 'kd_koordinator', 'objBarang', 'nama_toko'
         ));
 
       }
